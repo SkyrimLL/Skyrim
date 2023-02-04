@@ -106,8 +106,8 @@ Actor kPlayer
 ; @overrides SKI_ConfigBase
 event OnConfigInit()
 	Pages = new string[2]
-	Pages[0] = "Parasites"
-	Pages[1] = "Quests"
+	Pages[0] = "$Parasites"
+	Pages[1] = "$Quests"
 
 endEvent
 
@@ -119,11 +119,11 @@ event OnVersionUpdate(int a_version)
 	if (a_version >= 2021 && CurrentVersion < 2021) 
 		Debug.Trace(self + ": Updating script to version 2021")
 		Pages = new string[5]
-		Pages[0] = "Triggers"
-		Pages[1] = "Quests" 
-		Pages[2] = "Chaurus Queen" 
-		Pages[3] = "Body Changes"
-		Pages[4] = "Debug"
+		Pages[0] = "$Triggers"
+		Pages[1] = "$Quests" 
+		Pages[2] = "$Chaurus Queen" 
+		Pages[3] = "$Body Changes"
+		Pages[4] = "$Debug"
 	endIf
 endEvent
  
@@ -140,11 +140,11 @@ event OnPageReset(string a_page)
 	Debug.Trace(self + ": Updating script to version 2021")
 	Debug.Trace(self + ": CurrentVersion = " + CurrentVersion)
 	Pages = new string[5]
-	Pages[0] = "Triggers"
-	Pages[1] = "Quests" 
-	Pages[2] = "Chaurus Queen" 
-	Pages[3] = "Body Changes"
-	Pages[4] = "Debug"
+	Pages[0] = "$Triggers"
+	Pages[1] = "$Quests" 
+	Pages[2] = "$Chaurus Queen" 
+	Pages[3] = "$Body Changes"
+	Pages[4] = "$Debug"
 
 
 	; Load custom logo in DDS format
@@ -255,219 +255,219 @@ event OnPageReset(string a_page)
 
 	Int iChaurusQueenStage = StorageUtil.GetIntValue(kPlayer, "_SLP_iChaurusQueenStage")
 
-	If (a_page == "Triggers")
+	If (a_page == "$Triggers")
 
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
-		AddHeaderOption(" Chance of infection")
-		AddSliderOptionST("STATE_SPIDEREGG_CHANCE","Spider Eggs (Vaginal plug)", _chanceSpiderEgg,"{0} %")
-		AddSliderOptionST("STATE_SPIDERPENIS_CHANCE","Spider Penis (Vaginal plug)", _chanceSpiderPenis,"{0} %")
-		AddSliderOptionST("STATE_CHAURUSWORM_CHANCE","Chaurus Worm (Anal plug)", _chanceChaurusWorm,"{0} %")
-		AddSliderOptionST("STATE_CHAURUSWORMVAG_CHANCE","Vaginal Chaurus Worm (Vaginal plug)", _chanceChaurusWormVag,"{0} %")
-		AddSliderOptionST("STATE_TENTACLEMONSTER_CHANCE","Tentacle Monster (Harness)", _chanceTentacleMonster,"{0} %") 
-		AddSliderOptionST("STATE_LIVINGARMOR_CHANCE","Living Armor (Harness)", _chanceLivingArmor,"{0} %")
-		AddSliderOptionST("STATE_FACEHUGGER_CHANCE","Hip Hugger (Belt)", _chanceFaceHugger,"{0} %")
-		AddSliderOptionST("STATE_FACEHUGGERGAG_CHANCE","Face Hugger (Gag)", _chanceFaceHuggerGag,"{0} %")
-		AddSliderOptionST("STATE_BARNACLES_CHANCE","Blackreach Spores (Harness)", _chanceBarnacles,"{0} %")
+		AddHeaderOption("$ Chance of infection")
+		AddSliderOptionST("STATE_SPIDEREGG_CHANCE","$Spider Eggs (Vaginal plug)", _chanceSpiderEgg,"{0} %")
+		AddSliderOptionST("STATE_SPIDERPENIS_CHANCE","$Spider Penis (Vaginal plug)", _chanceSpiderPenis,"{0} %")
+		AddSliderOptionST("STATE_CHAURUSWORM_CHANCE","$Chaurus Worm (Anal plug)", _chanceChaurusWorm,"{0} %")
+		AddSliderOptionST("STATE_CHAURUSWORMVAG_CHANCE","$Vaginal Chaurus Worm (Vaginal plug)", _chanceChaurusWormVag,"{0} %")
+		AddSliderOptionST("STATE_TENTACLEMONSTER_CHANCE","$Tentacle Monster (Harness)", _chanceTentacleMonster,"{0} %") 
+		AddSliderOptionST("STATE_LIVINGARMOR_CHANCE","$Living Armor (Harness)", _chanceLivingArmor,"{0} %")
+		AddSliderOptionST("STATE_FACEHUGGER_CHANCE","$Hip Hugger (Belt)", _chanceFaceHugger,"{0} %")
+		AddSliderOptionST("STATE_FACEHUGGERGAG_CHANCE","$Face Hugger (Gag)", _chanceFaceHuggerGag,"{0} %")
+		AddSliderOptionST("STATE_BARNACLES_CHANCE","$Blackreach Spores (Harness)", _chanceBarnacles,"{0} %")
 
-		AddHeaderOption(" Spriggan Curse")
-		AddSliderOptionST("STATE_SPRIGGANROOTARMS_CHANCE","Spriggan Hands (Cuffs)", _chanceSprigganRootArms,"{0} %")
+		AddHeaderOption("$ Spriggan Curse")
+		AddSliderOptionST("STATE_SPRIGGANROOTARMS_CHANCE","$Spriggan Hands (Cuffs)", _chanceSprigganRootArms,"{0} %")
 		; AddSliderOptionST("STATE_SPRIGGANROOTFEET_CHANCE","Spriggan Feet (Cuffs)", _chanceSprigganRootFeet,"{0} %")
-		AddSliderOptionST("STATE_SPRIGGANROOTBODY_CHANCE","Spriggan Body (Harness)", _chanceSprigganRootBody,"{0} %")
-		AddSliderOptionST("STATE_SPRIGGANROOTGAG_CHANCE","Spriggan Mask (Gag)", _chanceSprigganRootGag,"{0} %")
+		AddSliderOptionST("STATE_SPRIGGANROOTBODY_CHANCE","$Spriggan Body (Harness)", _chanceSprigganRootBody,"{0} %")
+		AddSliderOptionST("STATE_SPRIGGANROOTGAG_CHANCE","$Spriggan Mask (Gag)", _chanceSprigganRootGag,"{0} %")
 
-		AddHeaderOption(" Estrus Chaurus compatibility")
-		AddSliderOptionST("STATE_ESTRUSTENTACLES_CHANCE","Estrus Tentacles (EC+)", _chanceEstrusTentacles,"{0} %") 
-		AddSliderOptionST("STATE_ESTRUSSLIME_CHANCE","Estrus Slime (EC+)", _chanceEstrusSlime,"{0} %")
+		AddHeaderOption("$ Estrus Chaurus compatibility")
+		AddSliderOptionST("STATE_ESTRUSTENTACLES_CHANCE","$Estrus Tentacles (EC+)", _chanceEstrusTentacles,"{0} %") 
+		AddSliderOptionST("STATE_ESTRUSSLIME_CHANCE","$Estrus Slime (EC+)", _chanceEstrusSlime,"{0} %")
 
 
 		SetCursorPosition(1)
-		AddHeaderOption(" Infect/Cure")
-		AddToggleOptionST("STATE_SPIDEREGG_TOGGLE","Infect/Cure Spider Egg", _toggleSpiderEgg as Float)
-		AddToggleOptionST("STATE_SPIDERPENIS_TOGGLE","Infect/Cure Spider Penis", _toggleSpiderPenis as Float)
-		AddToggleOptionST("STATE_CHAURUSWORM_TOGGLE","Infect/Cure Chaurus Worm", _toggleChaurusWorm as Float)
-		AddToggleOptionST("STATE_CHAURUSWORMVAG_TOGGLE","Infect/Cure Vaginal Chaurus Worm", _toggleChaurusWormVag as Float)
-		AddToggleOptionST("STATE_TENTACLEMONSTER_TOGGLE","Infect/Cure Tentacle Monster", _toggleTentacleMonster as Float)
-		AddToggleOptionST("STATE_LIVINGARMOR_TOGGLE","Infect/Cure Living Armor", _toggleLivingArmor as Float)
-		AddToggleOptionST("STATE_FACEHUGGER_TOGGLE","Infect/Cure Hip Hugger", _toggleFaceHugger as Float)
-		AddToggleOptionST("STATE_FACEHUGGERGAG_TOGGLE","Infect/Cure Face Hugger", _toggleFaceHuggerGag as Float)
-		AddToggleOptionST("STATE_BARNACLES_TOGGLE","Infect/Cure Blackreach Spores", _toggleBarnacles as Float)
-		AddHeaderOption(" Spriggan Curse")
-		AddToggleOptionST("STATE_SPRIGGANROOTARMS_TOGGLE","Infect/Cure Spriggan Hands", _toggleSprigganRootArms as Float)
+		AddHeaderOption("$ Infect/Cure")
+		AddToggleOptionST("STATE_SPIDEREGG_TOGGLE","$Infect/Cure Spider Egg", _toggleSpiderEgg as Float)
+		AddToggleOptionST("STATE_SPIDERPENIS_TOGGLE","$Infect/Cure Spider Penis", _toggleSpiderPenis as Float)
+		AddToggleOptionST("STATE_CHAURUSWORM_TOGGLE","$Infect/Cure Chaurus Worm", _toggleChaurusWorm as Float)
+		AddToggleOptionST("STATE_CHAURUSWORMVAG_TOGGLE","$Infect/Cure Vaginal Chaurus Worm", _toggleChaurusWormVag as Float)
+		AddToggleOptionST("STATE_TENTACLEMONSTER_TOGGLE","$Infect/Cure Tentacle Monster", _toggleTentacleMonster as Float)
+		AddToggleOptionST("STATE_LIVINGARMOR_TOGGLE","$Infect/Cure Living Armor", _toggleLivingArmor as Float)
+		AddToggleOptionST("STATE_FACEHUGGER_TOGGLE","$Infect/Cure Hip Hugger", _toggleFaceHugger as Float)
+		AddToggleOptionST("STATE_FACEHUGGERGAG_TOGGLE","$Infect/Cure Face Hugger", _toggleFaceHuggerGag as Float)
+		AddToggleOptionST("STATE_BARNACLES_TOGGLE","$Infect/Cure Blackreach Spores", _toggleBarnacles as Float)
+		AddHeaderOption("$ Spriggan Curse")
+		AddToggleOptionST("STATE_SPRIGGANROOTARMS_TOGGLE","$Infect/Cure Spriggan Hands", _toggleSprigganRootArms as Float)
 		; AddToggleOptionST("STATE_SPRIGGANROOTFEET_TOGGLE","Infect/Cure Spriggan Feet", _toggleSprigganRootFeet as Float, OPTION_FLAG_DISABLED)
-		AddToggleOptionST("STATE_SPRIGGANROOTBODY_TOGGLE","Infect/Cure Spriggan Body", _toggleSprigganRootBody as Float)
-		AddToggleOptionST("STATE_SPRIGGANROOTGAG_TOGGLE","Infect/Cure Spriggan Mask", _toggleSprigganRootGag as Float)
-		AddToggleOptionST("STATE_SPRIGGANROOTDEBUG_TOGGLE","Toggle Spriggan Root infection", _toggleSprigganRootDebug as Float)
+		AddToggleOptionST("STATE_SPRIGGANROOTBODY_TOGGLE","$Infect/Cure Spriggan Body", _toggleSprigganRootBody as Float)
+		AddToggleOptionST("STATE_SPRIGGANROOTGAG_TOGGLE","$Infect/Cure Spriggan Mask", _toggleSprigganRootGag as Float)
+		AddToggleOptionST("STATE_SPRIGGANROOTDEBUG_TOGGLE","$Toggle Spriggan Root infection", _toggleSprigganRootDebug as Float)
 
-		AddHeaderOption(" Events control")
-		AddSliderOptionST("STATE_FLARE_DELAY","Flare Delay", _flareDelay ,"{1}")
-		AddToggleOptionST("STATE_CHAURUSQUEEN_INFECTION_TOGGLE","Sex can infect NPCs", _toggleChaurusQueenInfectNPCs as Float)
+		AddHeaderOption("$ Events control")
+		AddSliderOptionST("STATE_FLARE_DELAY","$Flare Delay", _flareDelay ,"{1}")
+		AddToggleOptionST("STATE_CHAURUSQUEEN_INFECTION_TOGGLE","$Sex can infect NPCs", _toggleChaurusQueenInfectNPCs as Float)
 
 
-	ElseIf (a_page == "Quests")
+	ElseIf (a_page == "$Quests")
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
-		AddHeaderOption(" Kyne Blessing ")
+		AddHeaderOption("$ Kyne Blessing ")
 
-		AddTextOption("     Total infections: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iInfections") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Spider Egg Infections: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iSpiderEggInfections") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Anal Chaurus Worm Infections: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iChaurusWormInfections") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Vaginal Chaurus Worm Infections: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iChaurusWormVagInfections") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Hip Hugger: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iFaceHuggerInfections") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Face Hugger: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iFaceHuggerInfections") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Blackreach Spores: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iBarnaclesInfections") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Spriggan Roots: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iSprigganRootInfections") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Living Armor Infections: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iLivingArmorInfections") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Tentacle Monster Infections: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iTentacleMonsterInfections") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Estrus Tentacles Attacks: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iEstrusTentaclesInfections") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Estrus Eggs Infections: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iEstrusChaurusEggInfections") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Estrus Slime Infections: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iEstrusSlimeInfections") as Int, "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Total infections: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iInfections") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Spider Egg Infections: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iSpiderEggInfections") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Anal Chaurus Worm Infections: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iChaurusWormInfections") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Vaginal Chaurus Worm Infections: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iChaurusWormVagInfections") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Hip Hugger: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iFaceHuggerInfections") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Face Hugger: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iFaceHuggerInfections") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Blackreach Spores: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iBarnaclesInfections") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Spriggan Roots: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iSprigganRootInfections") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Living Armor Infections: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iLivingArmorInfections") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Tentacle Monster Infections: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iTentacleMonsterInfections") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Estrus Tentacles Attacks: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iEstrusTentaclesInfections") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Estrus Eggs Infections: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iEstrusChaurusEggInfections") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Estrus Slime Infections: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iEstrusSlimeInfections") as Int +"}", "", OPTION_FLAG_DISABLED)
 
 		SetCursorPosition(1)
-		AddHeaderOption(" Brood Maiden ")
-		AddTextOption("     Lastelle Eggs: " + _SLP_GV_numChaurusEggsLastelle.GetValue() as Int, "", OPTION_FLAG_DISABLED)
+		AddHeaderOption("$ Brood Maiden ")
+		AddTextOption("$     Lastelle Eggs: {" + _SLP_GV_numChaurusEggsLastelle.GetValue() as Int +"}", "", OPTION_FLAG_DISABLED)
 
-		AddHeaderOption(" Long term curses")
-		AddTextOption("     Chaurus Queen Infection: " + iChaurusQueenStage as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Spriggan Infection: " + StorageUtil.GetIntValue(kPlayer, "_SLP_toggleSprigganRoot") as Int, "", OPTION_FLAG_DISABLED)
-
-
+		AddHeaderOption("$ Long term curses")
+		AddTextOption("$     Chaurus Queen Infection: {" + iChaurusQueenStage as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Spriggan Infection: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_toggleSprigganRoot") as Int +"}", "", OPTION_FLAG_DISABLED)
 
 
-	ElseIf (a_page == "Chaurus Queen")
+
+
+	ElseIf (a_page == "$Chaurus Queen")
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
-		AddHeaderOption(" Triggers ")
+		AddHeaderOption("$ Triggers ")
 		if (iChaurusQueenStage==0)
-			AddToggleOptionST("STATE_CHAURUSQUEENDEBUG_TOGGLE","Unlock Chaurus Queen items", _toggleChaurusQueenDebug as Float)
+			AddToggleOptionST("STATE_CHAURUSQUEENDEBUG_TOGGLE","$Unlock Chaurus Queen items", _toggleChaurusQueenDebug as Float)
 		else
-			AddToggleOptionST("STATE_CHAURUSQUEENDEBUG_TOGGLE","Unlock Chaurus Queen items", _toggleChaurusQueenDebug as Float, OPTION_FLAG_DISABLED)
+			AddToggleOptionST("STATE_CHAURUSQUEENDEBUG_TOGGLE","$Unlock Chaurus Queen items", _toggleChaurusQueenDebug as Float, OPTION_FLAG_DISABLED)
 		endif
 		
 		if (_toggleChaurusQueenDebug) || (iChaurusQueenStage>0)
-			AddToggleOptionST("STATE_CHAURUSQUEENVAG_TOGGLE","Infect/Cure Vaginal Chaurus Queen", _toggleChaurusQueenVag as Float)
+			AddToggleOptionST("STATE_CHAURUSQUEENVAG_TOGGLE","$Infect/Cure Vaginal Chaurus Queen", _toggleChaurusQueenVag as Float)
 		else
-			AddToggleOptionST("STATE_CHAURUSQUEENVAG_TOGGLE","Infect/Cure Vaginal Chaurus Queen", _toggleChaurusQueenVag as Float, OPTION_FLAG_DISABLED)
+			AddToggleOptionST("STATE_CHAURUSQUEENVAG_TOGGLE","$Infect/Cure Vaginal Chaurus Queen", _toggleChaurusQueenVag as Float, OPTION_FLAG_DISABLED)
 		endif
 
 		if (_toggleChaurusQueenDebug) || (iChaurusQueenStage>=3)
-			AddToggleOptionST("STATE_CHAURUSQUEENSKIN_TOGGLE","Infect/Cure Chaurus Queen Skin", _toggleChaurusQueenSkin as Float)
+			AddToggleOptionST("STATE_CHAURUSQUEENSKIN_TOGGLE","$Infect/Cure Chaurus Queen Skin", _toggleChaurusQueenSkin as Float)
 		else
-			AddToggleOptionST("STATE_CHAURUSQUEENSKIN_TOGGLE","Infect/Cure Chaurus Queen Skin", _toggleChaurusQueenSkin as Float, OPTION_FLAG_DISABLED)
+			AddToggleOptionST("STATE_CHAURUSQUEENSKIN_TOGGLE","$Infect/Cure Chaurus Queen Skin", _toggleChaurusQueenSkin as Float, OPTION_FLAG_DISABLED)
 		endif
 
 		if (_toggleChaurusQueenDebug) || (iChaurusQueenStage>=4)
-			AddToggleOptionST("STATE_CHAURUSQUEENGAG_TOGGLE","Infect/Cure Chaurus Queen Mask", _toggleChaurusQueenGag as Float)
-			AddToggleOptionST("STATE_CHAURUSQUEENARMOR_TOGGLE","Infect/Cure Chaurus Queen Armor", _toggleChaurusQueenArmor as Float)
+			AddToggleOptionST("STATE_CHAURUSQUEENGAG_TOGGLE","$Infect/Cure Chaurus Queen Mask", _toggleChaurusQueenGag as Float)
+			AddToggleOptionST("STATE_CHAURUSQUEENARMOR_TOGGLE","$Infect/Cure Chaurus Queen Armor", _toggleChaurusQueenArmor as Float)
 		else
-			AddToggleOptionST("STATE_CHAURUSQUEENGAG_TOGGLE","Infect/Cure Chaurus Queen Mask", _toggleChaurusQueenGag as Float, OPTION_FLAG_DISABLED)
-			AddToggleOptionST("STATE_CHAURUSQUEENARMOR_TOGGLE","Infect/Cure Chaurus Queen Armor", _toggleChaurusQueenArmor as Float, OPTION_FLAG_DISABLED)
+			AddToggleOptionST("STATE_CHAURUSQUEENGAG_TOGGLE","$Infect/Cure Chaurus Queen Mask", _toggleChaurusQueenGag as Float, OPTION_FLAG_DISABLED)
+			AddToggleOptionST("STATE_CHAURUSQUEENARMOR_TOGGLE","$Infect/Cure Chaurus Queen Armor", _toggleChaurusQueenArmor as Float, OPTION_FLAG_DISABLED)
 		endif
 
 		if (_toggleChaurusQueenDebug) || (iChaurusQueenStage>=5)
-			AddToggleOptionST("STATE_CHAURUSQUEENBODY_TOGGLE","Infect/Cure Chaurus Queen Full Body", _toggleChaurusQueenBody as Float)
+			AddToggleOptionST("STATE_CHAURUSQUEENBODY_TOGGLE","$Infect/Cure Chaurus Queen Full Body", _toggleChaurusQueenBody as Float)
 		else
-			AddToggleOptionST("STATE_CHAURUSQUEENBODY_TOGGLE","Infect/Cure Chaurus Queen Full Body", _toggleChaurusQueenBody as Float, OPTION_FLAG_DISABLED)
+			AddToggleOptionST("STATE_CHAURUSQUEENBODY_TOGGLE","$Infect/Cure Chaurus Queen Full Body", _toggleChaurusQueenBody as Float, OPTION_FLAG_DISABLED)
 		endif
 
-		AddHeaderOption(" Wings")
+		AddHeaderOption("$ Wings")
 		if (_toggleChaurusQueenDebug) || (iChaurusQueenStage>=5)
-			AddToggleOptionST("STATE_AUTO_REMOVE_WINGS","Auto Remove Wings", _autoRemoveDragonWings as Float)
+			AddToggleOptionST("STATE_AUTO_REMOVE_WINGS","$Auto Remove Wings", _autoRemoveDragonWings as Float)
 		else
-			AddToggleOptionST("STATE_AUTO_REMOVE_WINGS","Auto Remove Wings", _autoRemoveDragonWings as Float, OPTION_FLAG_DISABLED)
+			AddToggleOptionST("STATE_AUTO_REMOVE_WINGS","$Auto Remove Wings", _autoRemoveDragonWings as Float, OPTION_FLAG_DISABLED)
 		endif
 
 		if (StorageUtil.GetIntValue(none, "_SLP_isAnimatedDragonWings") ==  1) 
-			AddTextOption("     Animated Dragon Wings detected", "", OPTION_FLAG_DISABLED)
+			AddTextOption("$     Animated Dragon Wings detected", "", OPTION_FLAG_DISABLED)
 		endif
 
 		if (StorageUtil.GetIntValue(none, "_SLP_isRealFlying") ==  1) 
-			AddTextOption("     Real Flying detected", "", OPTION_FLAG_DISABLED)
+			AddTextOption("$     Real Flying detected", "", OPTION_FLAG_DISABLED)
 		endif
 
 		if (StorageUtil.GetIntValue(none, "_SLP_isAnimatedWingsUltimate") ==  1) 
-			AddTextOption("     Animated Wings Ultimate detected", "", OPTION_FLAG_DISABLED)
+			AddTextOption("$     Animated Wings Ultimate detected", "", OPTION_FLAG_DISABLED)
 		endif
 
 		SetCursorPosition(1)
-		AddHeaderOption(" Options")
+		AddHeaderOption("$ Options")
 		if (_toggleChaurusQueenDebug) || (iChaurusQueenStage>=5)
-			AddSliderOptionST("STATE_MAX_BROODSPAWNS","Brood size", _maxBroodSpawns ,"{1}")
-			AddToggleOptionST("STATE_CHAURUSQUEENBASESKIN_TOGGLE","Enable Base Skin replacement", _toggleChaurusQueenBaseSkin as Float)
+			AddSliderOptionST("STATE_MAX_BROODSPAWNS","$Brood size", _maxBroodSpawns ,"{1}")
+			AddToggleOptionST("STATE_CHAURUSQUEENBASESKIN_TOGGLE","$Enable Base Skin replacement", _toggleChaurusQueenBaseSkin as Float)
 		else
-			AddSliderOptionST("STATE_MAX_BROODSPAWNS","Brood size", _maxBroodSpawns ,"{1}", OPTION_FLAG_DISABLED)
-			AddToggleOptionST("STATE_CHAURUSQUEENBASESKIN_TOGGLE","Enable Base Skin replacement", _toggleChaurusQueenBaseSkin as Float, OPTION_FLAG_DISABLED)
+			AddSliderOptionST("STATE_MAX_BROODSPAWNS","$Brood size", _maxBroodSpawns ,"{1}", OPTION_FLAG_DISABLED)
+			AddToggleOptionST("STATE_CHAURUSQUEENBASESKIN_TOGGLE","$Enable Base Skin replacement", _toggleChaurusQueenBaseSkin as Float, OPTION_FLAG_DISABLED)
 		endif
 
-		AddHeaderOption(" Status")
-		AddTextOption("     Chaurus Queen Stage: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iChaurusQueenStage") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Days since start: " + (Game.QueryStat("Days Passed") - StorageUtil.GetIntValue(kPlayer, "_SLP_iChaurusQueenDate")) as Int, "", OPTION_FLAG_DISABLED)
+		AddHeaderOption("$ Status")
+		AddTextOption("$     Chaurus Queen Stage: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iChaurusQueenStage") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Days since start: {" + (Game.QueryStat("Days Passed") - StorageUtil.GetIntValue(kPlayer, "_SLP_iChaurusQueenDate")) as Int +"}", "", OPTION_FLAG_DISABLED)
 
-		AddTextOption("     Chaurus Queen Weapons equipped: " + StorageUtil.GetIntValue(kPlayer, "_SLP_toggleChaurusQueenWeapon") as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Spider Eggs: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iSpiderEggCount" ) as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Chaurus Eggs: " + StorageUtil.GetIntValue(kPlayer, "_SLP_iChaurusEggCount" ) as Int, "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Chaurus Queen Weapons equipped: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_toggleChaurusQueenWeapon") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Spider Eggs: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iSpiderEggCount" ) as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Chaurus Eggs: {" + StorageUtil.GetIntValue(kPlayer, "_SLP_iChaurusEggCount" ) as Int +"}", "", OPTION_FLAG_DISABLED)
 
-	ElseIf (a_page == "Body Changes")
+	ElseIf (a_page == "$Body Changes")
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
-		AddHeaderOption(" NiOverride node scales")
-		AddHeaderOption(" Breast")
-		AddSliderOptionST("STATE_TENTACLEMONSTER_BREAST","Max breast size (Tentacle monster)", _breastMaxTentacleMonster,"{1}")
-		AddSliderOptionST("STATE_LIVINGARMOR_BREAST","Max breast size (Living Armor)", _breastMaxLivingArmor,"{1}")
+		AddHeaderOption("$ NiOverride node scales")
+		AddHeaderOption("$ Breast")
+		AddSliderOptionST("STATE_TENTACLEMONSTER_BREAST","$Max breast size (Tentacle monster)", _breastMaxTentacleMonster,"{1}")
+		AddSliderOptionST("STATE_LIVINGARMOR_BREAST","$Max breast size (Living Armor)", _breastMaxLivingArmor,"{1}")
 
-		AddHeaderOption(" Belly")
-		AddSliderOptionST("STATE_SPIDEREGG_BELLY","Max belly size (Spider egg)", _bellyMaxSpiderEgg,"{1}")
-		AddSliderOptionST("STATE_CHAURUSWORMVAG_BELLY","Max belly size (Vaginal chaurus worm)", _bellyMaxChaurusWormVag,"{1}")
-		AddSliderOptionST("STATE_FACEHUGGER_BELLY","Max belly size (Face Hugger)", _bellyMaxFaceHugger,"{1}")
-		AddSliderOptionST("STATE_CHAURUSQUEEN_BELLY","Max belly size (Chaurus Queen)", _bellyMaxChaurusQueen,"{1}")
+		AddHeaderOption("$ Belly")
+		AddSliderOptionST("STATE_SPIDEREGG_BELLY","$Max belly size (Spider egg)", _bellyMaxSpiderEgg,"{1}")
+		AddSliderOptionST("STATE_CHAURUSWORMVAG_BELLY","$Max belly size (Vaginal chaurus worm)", _bellyMaxChaurusWormVag,"{1}")
+		AddSliderOptionST("STATE_FACEHUGGER_BELLY","$Max belly size (Face Hugger)", _bellyMaxFaceHugger,"{1}")
+		AddSliderOptionST("STATE_CHAURUSQUEEN_BELLY","$Max belly size (Chaurus Queen)", _bellyMaxChaurusQueen,"{1}")
 
-		AddHeaderOption(" Butt")
-		AddSliderOptionST("STATE_CHAURUSWORM_BUTT","Max butt size (Chaurus worm)", _buttMaxChaurusWorm,"{1}")
+		AddHeaderOption("$ Butt")
+		AddSliderOptionST("STATE_CHAURUSWORM_BUTT","$Max butt size (Chaurus worm)", _buttMaxChaurusWorm,"{1}")
 
 		SetCursorPosition(1)
 
 		if (StorageUtil.GetIntValue(none, "_SLH_iHormones") == 1)
-			AddTextOption("     SexLab Hormones deteted", "", OPTION_FLAG_DISABLED)
+			AddTextOption("$     SexLab Hormones deteted", "", OPTION_FLAG_DISABLED)
 		else
-			AddTextOption("     Install SexLab Hormones to enable these options", "", OPTION_FLAG_DISABLED)
+			AddTextOption("$     Install SexLab Hormones to enable these options", "", OPTION_FLAG_DISABLED)
 		endif
 
-		AddHeaderOption(" Skin")
+		AddHeaderOption("$ Skin")
 		if (StorageUtil.GetIntValue(none, "_SLH_iHormones") == 1)
-			AddToggleOptionST("STATE_SKINCOLOR_CHANGES_TOGGLE","Enable Skin Color changes", _toggleSkinColorChanges as Float)
+			AddToggleOptionST("STATE_SKINCOLOR_CHANGES_TOGGLE","$Enable Skin Color changes", _toggleSkinColorChanges as Float)
 		else
-			AddToggleOptionST("STATE_SKINCOLOR_CHANGES_TOGGLE","Enable Skin Color changes", _toggleSkinColorChanges as Float, OPTION_FLAG_DISABLED)
+			AddToggleOptionST("STATE_SKINCOLOR_CHANGES_TOGGLE","$Enable Skin Color changes", _toggleSkinColorChanges as Float, OPTION_FLAG_DISABLED)
 		endif
 
-		AddHeaderOption(" Hair")
+		AddHeaderOption("$ Hair")
 		if (StorageUtil.GetIntValue(none, "_SLH_iHormones") == 1)
-			AddToggleOptionST("STATE_HAIRLOSS_CHANGES_TOGGLE","Enable Hairloss", _toggleHairloss as Float)
+			AddToggleOptionST("STATE_HAIRLOSS_CHANGES_TOGGLE","$Enable Hairloss", _toggleHairloss as Float)
 		else
-			AddToggleOptionST("STATE_HAIRLOSS_CHANGES_TOGGLE","Enable Hairloss", _toggleHairloss as Float, OPTION_FLAG_DISABLED)
+			AddToggleOptionST("STATE_HAIRLOSS_CHANGES_TOGGLE","$Enable Hairloss", _toggleHairloss as Float, OPTION_FLAG_DISABLED)
 		endif
-	ElseIf (a_page == "Debug")
+	ElseIf (a_page == "$Debug")
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
-		AddHeaderOption(" Factions")
-		AddTextOption("     Player in Spider Faction: " + fctUtils.checkIfFriendlyFaction( kPlayer, "Spider" ) as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Player in Chaurus Faction: " + fctUtils.checkIfFriendlyFaction( kPlayer, "Chaurus" ) as Int, "", OPTION_FLAG_DISABLED)
-		AddTextOption("     Player in Spriggan Faction: " + fctUtils.checkIfFriendlyFaction( kPlayer, "Spriggan" ) as Int, "", OPTION_FLAG_DISABLED)
+		AddHeaderOption("$ Factions")
+		AddTextOption("$     Player in Spider Faction: {" + fctUtils.checkIfFriendlyFaction( kPlayer, "Spider" ) as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Player in Chaurus Faction: {" + fctUtils.checkIfFriendlyFaction( kPlayer, "Chaurus" ) as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Player in Spriggan Faction: {" + fctUtils.checkIfFriendlyFaction( kPlayer, "Spriggan" ) as Int +"}", "", OPTION_FLAG_DISABLED)
 
-		AddHeaderOption(" Body scale frameworks")
+		AddHeaderOption("$ Body scale frameworks")
 		AddTextOption("    NiNodeOverride: " + StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON") as Int, "", OPTION_FLAG_DISABLED)
 		AddTextOption("     SexLab Inflation Framework: " + StorageUtil.GetIntValue(none, "_SLH_SlifON")  as Int, "", OPTION_FLAG_DISABLED)
 
 		SetCursorPosition(1)
-		AddHeaderOption(" Maintenance ")
-		AddToggleOptionST("STATE_REFRESH_ALL","Refresh all equipped parasites", _toggleRefreshAll as Float)
-		AddToggleOptionST("STATE_CLEAR_ALL","Clear all parasites", _toggleClearAll as Float)
+		AddHeaderOption("$ Maintenance ")
+		AddToggleOptionST("STATE_REFRESH_ALL","$Refresh all equipped parasites", _toggleRefreshAll as Float)
+		AddToggleOptionST("STATE_CLEAR_ALL","$Clear all parasites", _toggleClearAll as Float)
 
 		AddHeaderOption(" ")
-		AddToggleOptionST("STATE_OUTFITS_TOGGLE","Custom Priest Outfits", _togglePriestOutfits as Float)
-		AddToggleOptionST("STATE_REGISTER_EVENTS","Register custom device events", _registerEventsToggle as Float)
+		AddToggleOptionST("STATE_OUTFITS_TOGGLE","$Custom Priest Outfits", _togglePriestOutfits as Float)
+		AddToggleOptionST("STATE_REGISTER_EVENTS","$Register custom device events", _registerEventsToggle as Float)
 
 		AddHeaderOption(" ")
-		AddToggleOptionST("STATE_RESET","Reset changes", _resetToggle as Float)
+		AddToggleOptionST("STATE_RESET","$Reset changes", _resetToggle as Float)
 	endIf
 endEvent
 
@@ -496,7 +496,7 @@ state STATE_SPIDEREGG_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Spider Eggs parasites for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Spider Eggs parasites for roleplay or testing purposes.")
 	endEvent
 
 endState
@@ -522,7 +522,7 @@ state STATE_SPIDEREGG_BELLY ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Max size of belly node (for NiOverride compatiblity)")
+		SetInfoText("$Max size of belly node (for NiOverride compatiblity)")
 	endEvent
 endState
 ; AddSliderOptionST("STATE_SPIDEREGG_CHANCE","Chance of infection", _chanceSpiderEgg,"{0} %")
@@ -546,7 +546,7 @@ state STATE_SPIDEREGG_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of infection from sex with Spiders")
+		SetInfoText("$Chance of infection from sex with Spiders")
 	endEvent
 endState
 
@@ -574,7 +574,7 @@ state STATE_SPIDERPENIS_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure detached Spider Penis for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure detached Spider Penis for roleplay or testing purposes.")
 	endEvent
 
 endState
@@ -599,7 +599,7 @@ state STATE_SPIDERPENIS_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of a detached penis from sex with Spiders")
+		SetInfoText("$Chance of a detached penis from sex with Spiders")
 	endEvent
 endState
 
@@ -627,7 +627,7 @@ state STATE_CHAURUSWORM_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Chaurus Worm for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Chaurus Worm for roleplay or testing purposes.")
 	endEvent
 
 endState
@@ -653,7 +653,7 @@ state STATE_CHAURUSWORM_BUTT ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Max size of butt node (for NiOverride compatiblity)")
+		SetInfoText("$Max size of butt node (for NiOverride compatiblity)")
 	endEvent
 endState
 ; AddSliderOptionST("STATE_CHAURUSWORM_CHANCE","Chance of infection", _chanceChaurusWorm,"{0} %")
@@ -677,7 +677,7 @@ state STATE_CHAURUSWORM_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of a chaurus worm from sex with Chaurus")
+		SetInfoText("$Chance of a chaurus worm from sex with Chaurus")
 	endEvent
 endState
 
@@ -702,7 +702,7 @@ state STATE_CHAURUSWORMVAG_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of a vaginal chaurus worm from sex with Chaurus")
+		SetInfoText("$Chance of a vaginal chaurus worm from sex with Chaurus")
 	endEvent
 endState
 
@@ -730,7 +730,7 @@ state STATE_CHAURUSWORMVAG_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure vaginal Chaurus Worm for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure vaginal Chaurus Worm for roleplay or testing purposes.")
 	endEvent
 
 endState
@@ -757,7 +757,7 @@ state STATE_CHAURUSWORMVAG_BELLY ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Max size of belly node (for NiOverride compatiblity)")
+		SetInfoText("$Max size of belly node (for NiOverride compatiblity)")
 	endEvent
 endState
 
@@ -783,7 +783,7 @@ state STATE_ESTRUSTENTACLES_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of attacks by Estrus Tentacles")
+		SetInfoText("$Chance of attacks by Estrus Tentacles")
 	endEvent
 endState
 
@@ -811,7 +811,7 @@ state STATE_TENTACLEMONSTER_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Tentacle Monster for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Tentacle Monster for roleplay or testing purposes.")
 	endEvent
 
 endState
@@ -836,7 +836,7 @@ state STATE_TENTACLEMONSTER_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of attacks by Tentacle Monsters")
+		SetInfoText("$Chance of attacks by Tentacle Monsters")
 	endEvent
 endState
 ; AddSliderOptionST("STATE_TENTACLEMONSTER_BREAST","Node size", _breastMaxTentacleMonster,"{0}")
@@ -861,7 +861,7 @@ state STATE_TENTACLEMONSTER_BREAST ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Max size of breast node (for NiOverride compatiblity)")
+		SetInfoText("$Max size of breast node (for NiOverride compatiblity)")
 	endEvent
 endState
 
@@ -886,7 +886,7 @@ state STATE_ESTRUSSLIME_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of attacks by Estrus Slime")
+		SetInfoText("$Chance of attacks by Estrus Slime")
 	endEvent
 endState
 
@@ -914,7 +914,7 @@ state STATE_LIVINGARMOR_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Living Armor for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Living Armor for roleplay or testing purposes.")
 	endEvent
 
 endState
@@ -939,7 +939,7 @@ state STATE_LIVINGARMOR_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of attacks by Living Armor")
+		SetInfoText("$Chance of attacks by Living Armor")
 	endEvent
 endState
 ; AddSliderOptionST("STATE_TENTACLEMONSTER_BREAST","Node size", _breastMaxLivingArmor,"{0}")
@@ -964,7 +964,7 @@ state STATE_LIVINGARMOR_BREAST ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Max size of breast node (for NiOverride compatiblity)")
+		SetInfoText("$Max size of breast node (for NiOverride compatiblity)")
 	endEvent
 endState
 
@@ -992,7 +992,7 @@ state STATE_FACEHUGGER_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Hip Hugger for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Hip Hugger for roleplay or testing purposes.")
 	endEvent
 
 endState
@@ -1017,7 +1017,7 @@ state STATE_FACEHUGGER_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of attacks by Hip Hugger")
+		SetInfoText("$Chance of attacks by Hip Hugger")
 	endEvent
 endState
 ; AddToggleOptionST("STATE_FACEHUGGERGAG_TOGGLE","Face Hugger", _toggleFaceHugger as Float, OPTION_FLAG_DISABLED)
@@ -1044,7 +1044,7 @@ state STATE_FACEHUGGERGAG_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Face Hugger for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Face Hugger for roleplay or testing purposes.")
 	endEvent
 
 endState
@@ -1070,7 +1070,7 @@ state STATE_FACEHUGGERGAG_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of attacks by Face Hugger")
+		SetInfoText("$Chance of attacks by Face Hugger")
 	endEvent
 endState
 
@@ -1098,7 +1098,7 @@ state STATE_FACEHUGGER_BELLY ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Max size of belly node (for NiOverride compatiblity)")
+		SetInfoText("$Max size of belly node (for NiOverride compatiblity)")
 	endEvent
 endState
 
@@ -1126,7 +1126,7 @@ state STATE_BARNACLES_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Blackreach Spores (Barnacles) for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Blackreach Spores (Barnacles) for roleplay or testing purposes.")
 	endEvent
 endState
 
@@ -1152,7 +1152,7 @@ state STATE_BARNACLES_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of attacks by Barnacles")
+		SetInfoText("$Chance of attacks by Barnacles")
 	endEvent
 endState
 
@@ -1180,7 +1180,7 @@ state STATE_SPRIGGANROOTGAG_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Spriggan Mask for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Spriggan Mask for roleplay or testing purposes.")
 	endEvent
 endState
 
@@ -1206,7 +1206,7 @@ state STATE_SPRIGGANROOTGAG_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of infection by Spriggan Mask")
+		SetInfoText("$Chance of infection by Spriggan Mask")
 	endEvent
 endState
 
@@ -1234,7 +1234,7 @@ state STATE_SPRIGGANROOTARMS_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Spriggan Hands for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Spriggan Hands for roleplay or testing purposes.")
 	endEvent
 endState
 
@@ -1260,7 +1260,7 @@ state STATE_SPRIGGANROOTARMS_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of infection by Spriggan Hands")
+		SetInfoText("$Chance of infection by Spriggan Hands")
 	endEvent
 endState
 
@@ -1288,7 +1288,7 @@ state STATE_SPRIGGANROOTFEET_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Spriggan Feet for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Spriggan Feet for roleplay or testing purposes.")
 	endEvent
 endState
 
@@ -1314,7 +1314,7 @@ state STATE_SPRIGGANROOTFEET_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of infection by Spriggan Feet")
+		SetInfoText("$Chance of infection by Spriggan Feet")
 	endEvent
 endState
 
@@ -1342,7 +1342,7 @@ state STATE_SPRIGGANROOTBODY_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Spriggan Body for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Spriggan Body for roleplay or testing purposes.")
 	endEvent
 endState
 
@@ -1368,7 +1368,7 @@ state STATE_SPRIGGANROOTBODY_CHANCE ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Chance of infection by Spriggan Body")
+		SetInfoText("$Chance of infection by Spriggan Body")
 	endEvent
 endState
 
@@ -1398,7 +1398,7 @@ state STATE_SPRIGGANROOTDEBUG_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually turn the Spriggan Root infection on or off for role playing or debugging purposes.")
+		SetInfoText("$Manually turn the Spriggan Root infection on or off for role playing or debugging purposes.")
 	endEvent
 
 endState
@@ -1458,7 +1458,7 @@ state STATE_CHAURUSQUEENDEBUG_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Overrides the quest based locks of various armor elements for the Queen of Chaurus. Use only for testing purposes as activating the armor elements too eary may break the quest.")
+		SetInfoText("$Overrides the quest based locks of various armor elements for the Queen of Chaurus. Use only for testing purposes as activating the armor elements too eary may break the quest.")
 	endEvent
 
 endState
@@ -1488,7 +1488,7 @@ state STATE_CHAURUSQUEENVAG_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure vaginal Chaurus Queen for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure vaginal Chaurus Queen for roleplay or testing purposes.")
 	endEvent
 
 endState
@@ -1517,7 +1517,7 @@ state STATE_CHAURUSQUEENGAG_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Chaurus Queen mask for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Chaurus Queen mask for roleplay or testing purposes.")
 	endEvent
 
 endState
@@ -1546,7 +1546,7 @@ state STATE_CHAURUSQUEENSKIN_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Chaurus Queen Skin for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Chaurus Queen Skin for roleplay or testing purposes.")
 	endEvent
 
 endState
@@ -1576,7 +1576,7 @@ state STATE_CHAURUSQUEENARMOR_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Chaurus Queen Armor for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Chaurus Queen Armor for roleplay or testing purposes.")
 	endEvent
 
 endState
@@ -1605,7 +1605,7 @@ state STATE_CHAURUSQUEENBODY_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Manually Infect/Cure Chaurus Queen Body for roleplay or testing purposes.")
+		SetInfoText("$Manually Infect/Cure Chaurus Queen Body for roleplay or testing purposes.")
 	endEvent
 
 endState
@@ -1634,7 +1634,7 @@ state STATE_CHAURUSQUEEN_BELLY ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Max size of belly node (for NiOverride compatiblity)")
+		SetInfoText("$Max size of belly node (for NiOverride compatiblity)")
 	endEvent
 endState
 
@@ -1659,7 +1659,7 @@ state STATE_MAX_BROODSPAWNS ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Max number of spawns in your Brood. Adjust depending on your memory and script lag.")
+		SetInfoText("$Max number of spawns in your Brood. Adjust depending on your memory and script lag.")
 	endEvent
 endState
 
@@ -1680,7 +1680,7 @@ state STATE_AUTO_REMOVE_WINGS ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Automatically remove equipped wings when removing the Queen Body if a compatible mod is detected (unchecked means the wings will remain equipped after the Queen Body is removed).")
+		SetInfoText("$Automatically remove equipped wings when removing the Queen Body if a compatible mod is detected (unchecked means the wings will remain equipped after the Queen Body is removed).")
 	endEvent
 endState
 
@@ -1706,7 +1706,7 @@ state STATE_FLARE_DELAY ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Delays checks for 'flare' events from certain parasites (roughly in real time minutes). Use values between 0 and 1 to accelerate flares. Use 0 to turn flares off.")
+		SetInfoText("$Delays checks for 'flare' events from certain parasites (roughly in real time minutes). Use values between 0 and 1 to accelerate flares. Use 0 to turn flares off.")
 	endEvent
 endState
 
@@ -1727,7 +1727,7 @@ state STATE_SKINCOLOR_CHANGES_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Enable skin color changes for the Spriggan and Chaurus Queen infections (If Hormones is installed)")
+		SetInfoText("$Enable skin color changes for the Spriggan and Chaurus Queen infections (If Hormones is installed)")
 	endEvent
 
 endState
@@ -1749,7 +1749,7 @@ state STATE_HAIRLOSS_CHANGES_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Enable hairloss effect for the Spriggan and Chaurus Queen infections (If Hormones is installed)")
+		SetInfoText("$Enable hairloss effect for the Spriggan and Chaurus Queen infections (If Hormones is installed)")
 	endEvent
 
 endState
@@ -1771,7 +1771,7 @@ state STATE_CHAURUSQUEENBASESKIN_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Enable base skin mesh replacement for the Chaurus Queen (with chest feelers retracted)")
+		SetInfoText("$Enable base skin mesh replacement for the Chaurus Queen (with chest feelers retracted)")
 	endEvent
 
 endState
@@ -1793,7 +1793,7 @@ state STATE_CHAURUSQUEEN_INFECTION_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Allows parasite infections to spread to NPCs through sex.")
+		SetInfoText("$Allows parasite infections to spread to NPCs through sex.")
 	endEvent
 
 endState
@@ -1815,7 +1815,7 @@ state STATE_REFRESH_ALL ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Refresh the state of current parasites and re-equip or clean up if necessary.")
+		SetInfoText("$Refresh the state of current parasites and re-equip or clean up if necessary.")
 	endEvent
 endState
 
@@ -1834,7 +1834,7 @@ state STATE_CLEAR_ALL ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Force clearing of all parasites (use for debug or in case of emergency).")
+		SetInfoText("$Force clearing of all parasites (use for debug or in case of emergency).")
 	endEvent
 endState
 
@@ -1857,7 +1857,7 @@ state STATE_OUTFITS_TOGGLE ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Customize outfits of priests in Whiterun, Windhelm, Riften and Solitude with mesh from TERA (no Undo implemented yet).")
+		SetInfoText("$Customize outfits of priests in Whiterun, Windhelm, Riften and Solitude with mesh from TERA (no Undo implemented yet).")
 	endEvent
 endState
 
@@ -1876,7 +1876,7 @@ state STATE_REGISTER_EVENTS ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Trigger registration of new devious devices custom events.")
+		SetInfoText("$Trigger registration of new devious devices custom events.")
 	endEvent
 
 endState
@@ -1893,7 +1893,7 @@ state STATE_RESET ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Reset settings.")
+		SetInfoText("$Reset settings.")
 	endEvent
 
 endState
