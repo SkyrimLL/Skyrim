@@ -760,6 +760,10 @@ event OnPageReset(string a_page)
  		AddTextOption("$ MagickaRate = {" + PlayerActor.GetActorValue("MagickaRate")  as Float +"}", "", OPTION_FLAG_DISABLED)
 		AddEmptyOption()
 
+ 		AddTextOption("$ Arousal = {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_iArousal") as Int +"}", "", OPTION_FLAG_DISABLED)
+ 		AddTextOption("$ ArousalRate = {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fArousalRate") as Float +"}", "", OPTION_FLAG_DISABLED) 
+		AddEmptyOption()
+
  		AddTextOption("$ Days as a Bimbo: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformGameDays")  as Int +"}", "", OPTION_FLAG_DISABLED)
 		AddTextOption("$ Cycles as a Bimbo: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformCycle")  as Int +"}", "", OPTION_FLAG_DISABLED)
 		AddTextOption("$ Bimbo Level: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformLevel")  as Int +"}", "", OPTION_FLAG_DISABLED)		

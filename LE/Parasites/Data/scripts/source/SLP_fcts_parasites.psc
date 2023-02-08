@@ -1311,19 +1311,29 @@ EndFunction
 
 Function tryPlayerSpriggan(Actor Target)
 	Actor kPlayer = Game.GetPlayer()
+	ObjectReference kPlayerRef = kPlayer as ObjectReference
+
  	Int iChaurusQueenStage = StorageUtil.GetIntValue(kPlayer, "_SLP_iChaurusQueenStage")
  	Int iInfectThreshold = StorageUtil.GetFloatValue(kPlayer, "_SLP_chanceSprigganRootArms" ) as int
+ 	Float fTargetDistance = kPlayerRef.GetDistance(Target as ObjectReference)
 
  	if (StorageUtil.GetIntValue(kPlayer, "_SLP_toggleSprigganRoot")==1)
  		; Spriggan infection is on already, skipping
  		return
  	endif
 
+  	if ( fTargetDistance  > 50.0)
+ 		; Prevent Spriggan infection from large distances - Spriggan has to be in close proximity
+ 		debugTrace(" [tryPlayerSpriggan] Spriggan too far for infection - fTargetDistance: " + fTargetDistance)
+ 		return
+ 	endif
+
+
 
 	if fctUtils.checkIfSpriggan ( Target ) 
 
 		If (Utility.RandomInt(0,100)<=iInfectThreshold)  
-			Debug.Notification("[SLP] Spriggan Infection" )
+			; Debug.Notification("[SLP] Spriggan Infection" )
 
 		    Target.StopCombat()   
 		    ; Target.SetPlayerTeammate(true )  
@@ -1340,10 +1350,10 @@ Function tryPlayerSpriggan(Actor Target)
  
 			; ParasiteSex(kPlayer, Target)			
 		else
-			Debug.Notification("[SLP] Spriggan Infection - Failed" )
-			debugTrace("[SLP] Spriggan Infection - Failed" )
-			debugTrace("[SLP]       iInfectThreshold: " + iInfectThreshold)
-			debugTrace("[SLP]       checkIfSpriggan: " + fctUtils.checkIfSpriggan ( Target )) 
+			; Debug.Notification("[SLP] Spriggan Infection - Failed" )
+			debugTrace(" [tryPlayerSpriggan] Spriggan Infection - Failed" )
+			debugTrace(" [tryPlayerSpriggan]       iInfectThreshold: " + iInfectThreshold)
+			debugTrace(" [tryPlayerSpriggan]       checkIfSpriggan: " + fctUtils.checkIfSpriggan ( Target )) 
 				
 		endif
 

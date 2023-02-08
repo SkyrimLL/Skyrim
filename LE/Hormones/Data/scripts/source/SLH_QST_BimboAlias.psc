@@ -1258,12 +1258,16 @@ Function SetHairLength(Int hairLength)
 		endif
 
 		if StorageUtil.GetIntValue(none, "YpsCurrentHairLengthStage") < hairLength
+			debugTrace(" Sending YPS Hair Length event")
+
 			StorageUtil.SetIntValue(none, "yps_SilentMode", 1)
 			SendModEvent("yps-SetHaircutEvent", "", hairLength)
 
 			Utility.Wait(1.0)
 			StorageUtil.SetIntValue(none, "yps_SilentMode", 0)
 		endif
+	else
+		debugTrace(" Dimdo hair event aborted - _SLH_iUseHair = 0")
 	EndIf
 EndFunction
 

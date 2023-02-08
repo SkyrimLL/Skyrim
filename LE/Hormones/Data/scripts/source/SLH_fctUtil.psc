@@ -304,74 +304,99 @@ bool function isFHUCumFilledEnabled(actor kActor)
 endFunction
 
 bool function isPregnantBySoulGemOven(actor kActor) 
-  	if kActor && kActor != none
+	bIsPregnant = False
+  if kActor && kActor != none
 		if (StorageUtil.GetIntValue(none, "_SLS_isSoulgemOvenON") ==  1) 
 			spell SpellBellyEncumber = StorageUtil.GetFormValue(none, "_SLS_dcc_sgo_SpellBellyEncumber") as Spell
 			spell SpellBellyBonus = StorageUtil.GetFormValue(none, "_SLS_dcc_sgo_SpellBellyBonus") as Spell
 			spell SpellBreastInfluence = StorageUtil.GetFormValue(none, "_SLS_dcc_sgo_SpellBreastInfluence") as Spell
 			if (SpellBellyEncumber != none)
-				return kActor.HasSpell(SpellBellyEncumber) || kActor.HasSpell(SpellBellyBonus) || kActor.HasSpell(SpellBreastInfluence)
+				bIsPregnant = kActor.HasSpell(SpellBellyEncumber) || kActor.HasSpell(SpellBellyBonus) || kActor.HasSpell(SpellBreastInfluence)
 			endif
 		endIf
 	endIf
-	return false
+	debugTrace(" Check Pregnant by Soul Gem Oven: " + bIsPregnant)
+	return bIsPregnant
 endFunction
 
 bool function isPregnantBySimplePregnancy(actor kActor) 
-  	return StorageUtil.HasFloatValue(kActor, "SP_Visual")
+	bIsPregnant = False
+  bIsPregnant = StorageUtil.HasFloatValue(kActor, "SP_Visual")
+	debugTrace(" Check Pregnant by Simple Pregnancy: " + bIsPregnant)
+	return bIsPregnant
 
 endFunction
 
 bool function isPregnantByBeeingFemale(actor kActor)
+	bIsPregnant = False
   if ( (StorageUtil.GetIntValue(none, "_SLS_isBeeingFemaleON")==1 ) &&  ( (StorageUtil.GetIntValue(kActor, "FW.CurrentState")>=4) && (StorageUtil.GetIntValue(kActor, "FW.CurrentState")<=8))  )
-    return true
+    bIsPregnant = true
   endIf
-  return false
+	debugTrace(" Check Pregnant by Beeing Female: " + bIsPregnant)
+	return bIsPregnant
 endFunction
 
 bool function isPregnantByFertilityMode(actor kActor)
+	bIsPregnant = False
 	if kActor && kActor != none
 		if (StorageUtil.GetIntValue(none, "_SLS_isFertitiltyModeON") ==  1) 
 			spell FertilityModePregnancySpell1 = StorageUtil.GetFormValue(none, "_SLS_getFertilityModePregnancySpell1") as Spell
 			spell FertilityModePregnancySpell2 = StorageUtil.GetFormValue(none, "_SLS_getFertilityModePregnancySpell2") as Spell
 			spell FertilityModePregnancySpell3 = StorageUtil.GetFormValue(none, "_SLS_getFertilityModePregnancySpell3") as Spell
 			if (FertilityModePregnancySpell1 != none)
-				return kActor.HasSpell(FertilityModePregnancySpell1) || kActor.HasSpell(FertilityModePregnancySpell2) || kActor.HasSpell(FertilityModePregnancySpell3)
+				bIsPregnant = kActor.HasSpell(FertilityModePregnancySpell1) || kActor.HasSpell(FertilityModePregnancySpell2) || kActor.HasSpell(FertilityModePregnancySpell3)
 			endif
 		endIf
 	endIf
-	return false
+	debugTrace(" Check Pregnant by Fertility Mode: " + bIsPregnant)
+	return bIsPregnant
 endFunction
 
 
 
 bool function isPregnantByEstrusChaurus(actor kActor)
+	bIsPregnant = False
 	if kActor && kActor != none
 		if (StorageUtil.GetIntValue(none, "_SLS_isEstrusChaurusON") ==  1) 
 			spell ChaurusBreeder = StorageUtil.GetFormValue(none, "_SLS_getEstrusChaurusBreederSpell") as Spell
 			if (ChaurusBreeder != none)
-				return kActor.HasSpell(ChaurusBreeder)
+				bIsPregnant = kActor.HasSpell(ChaurusBreeder)
 			endif
 		endIf
 	endIf
-	return false
+	debugTrace(" Check Pregnant by Estrus Chaurus: " + bIsPregnant)
+	return bIsPregnant
 endFunction
 
 bool function isExternalChangeModActive(actor kActor)
 	bIsPregnant = false
 	bool bIsActorWeigth = false
+	bool bIsExternalChanges = false
+	Float fCurrentWeight
+	Actor kPlayer = Game.GetPlayer()
+
 	if kActor && kActor != none
 		ActorBase pActorBase = kActor.GetActorBase()
-		Float fCurrentWeight = pActorBase.GetWeight()
+		fCurrentWeight = pActorBase.GetWeight()
 		bIsPregnant = ( isPregnantBySoulGemOven(kActor) || isPregnantBySimplePregnancy(kActor) || isPregnantByBeeingFemale(kActor)  || isPregnantByFertilityMode(kActor) || isPregnantByEstrusChaurus(kActor))
 		bIsActorWeigth = ((fCurrentWeight!=StorageUtil.GetFloatValue(kActor, "_SLH_fWeight")) && (StorageUtil.GetFloatValue(kActor, "_SLH_fManualWeightChange") == -1))
 	endIf
-	Actor kPlayer = Game.GetPlayer()
 
 	bIsPregnant = bIsPregnant || ((StorageUtil.GetIntValue(kPlayer, "PSQ_SuccubusON") == 1) && (StorageUtil.GetIntValue(kPlayer, "PSQ_SoulGemPregnancyON") == 1))
+	StorageUtil.SetIntValue(kActor, "_SLH_isPregnant", bIsPregnant as Int)
 
-	Return bIsPregnant || (GV_changeOverrideToggle.GetValue() == 0) || bIsActorWeigth
+	bIsExternalChanges = bIsPregnant || (GV_changeOverrideToggle.GetValue() == 0) || bIsActorWeigth
 
+	debugTrace(" == Check External Body Changes")
+	debugTrace(" bIsPregnant: " + bIsPregnant)
+	debugTrace(" GV_changeOverrideToggle.GetValue(): " + GV_changeOverrideToggle.GetValue())
+	debugTrace(" fCurrentWeight: " + fCurrentWeight)
+	debugTrace(" _SLH_fWeight: " + StorageUtil.GetFloatValue(kActor, "_SLH_fWeight"))
+	debugTrace(" _SLH_fManualWeightChange: " + StorageUtil.GetFloatValue(kActor, "_SLH_fManualWeightChange"))
+	debugTrace(" bIsActorWeigth: " + bIsActorWeigth)
+	debugTrace(" --> External change flag: " + bIsExternalChanges)
+
+	return bIsExternalChanges
 endFunction
 
 function manageSexLabAroused(Actor kActor, int aiModRank = -1)
@@ -441,6 +466,9 @@ function manageSexLabAroused(Actor kActor, int aiModRank = -1)
 	Debug.Trace("[SLH] >>> 		SexDrive:" + StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneSexDrive" ))
 
 	slaUtil.UpdateActorExposureRate(kActor, fArousalRateMod)
+	
+	StorageUtil.SetIntValue(kActor, "_SLH_iArousal",slaUtil.GetActorExposure(kActor))
+	StorageUtil.SetFloatValue(kActor, "_SLH_fArousalRate",slaUtil.GetActorExposureRate(kActor))
 
 endFunction
 

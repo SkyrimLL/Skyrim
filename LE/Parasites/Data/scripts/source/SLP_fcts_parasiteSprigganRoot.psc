@@ -226,7 +226,7 @@ Bool Function infectSprigganRootArms( Actor kActor  )
 		Return False
 	Endif
 
-	If (fctDevious.ActorHasKeywordByString( kActor, "ArmCuff"  ))
+	If (fctDevious.ActorHasKeywordByString( kActor, "ArmCuff"  )) || (fctDevious.ActorHasKeywordByString( kActor, "Gloves"  ))
 		Debug.Trace("[SLP]	Already wearing ArmCuffs - Aborting")
 		Return False
 	Endif
@@ -434,7 +434,7 @@ Bool Function infectSprigganRootBody( Actor kActor  )
 		Return False
 	Endif
 
-	If (fctDevious.ActorHasKeywordByString( kActor, "Harness"  ))
+	If (fctDevious.ActorHasKeywordByString( kActor, "Harness"  )) || (fctDevious.ActorHasKeywordByString( kActor, "Corset"  ))
 		Debug.Trace("[SLP]	Already wearing a Harness - Aborting")
 		Return False
 	Endif

@@ -103,6 +103,8 @@ Function tryUpdateWeather(Bool bForceUpdate = False)
 	Int iChanceWeatherOverride
 	Int iDaysInYear = GV_DaysInYear.GetValue() as Int
 	Int iThisHour = GetCurrentHourOfDay() 
+	Weather wLocalWeather = Weather.FindWeather(0) 
+	Weather wCurrentWeather = Weather.GetCurrentWeather()
 
 	if (PlayerActorRef.IsInInterior())
 		debug.trace("[SIP] Player is in Interior Cell - Aborting ")
@@ -118,11 +120,13 @@ Function tryUpdateWeather(Bool bForceUpdate = False)
 	iChanceWeatherOverride = (100 - ( 2 * Math.abs(50 - iPercentSeason))) as Int
 
 	; cap the chance of weather override to prevent changing weather at every cell location change
-	iChanceWeatherOverride = ( (iChanceWeatherOverride * 60) / 100 )
-
+	; iChanceWeatherOverride = ( (iChanceWeatherOverride * 60) / 100 )
 	if (iChanceWeatherOverride<10)
 		iChanceWeatherOverride = 10
 	endif
+
+	; New system based on moon phases - fixed chance of weather override +/- 20 %
+	iChanceWeatherOverride = 60 + 20 - utility.RandomInt(0,40) 
  
 	;/ 		
 	debug.notification("[SIP] iDaysInYear: " + iDaysInYear)
@@ -147,7 +151,14 @@ Function tryUpdateWeather(Bool bForceUpdate = False)
   	if (bForceUpdate) || ((Utility.RandomInt(0,100)<iChanceWeatherOverride)  && ((iThisHour - iHourLastCheck) >=1) )
   		fctSeasons.updateWeather(iSeason, iPercentSeason, bForceUpdate)
   		iHourLastCheck = iThisHour
-  		; debug.notification("[SIP] Weather change")
+  		debug.notification("There's a shift in the air ... " + StorageUtil.GetStringValue(none, "_FT_SeasonsMoonPhase") )
+  	else
+  		if wCurrentWeather.GetClassification() == -1
+		  	Debug.Notification(">> Missing weather detected - weather classification is -1")
+  			wLocalWeather.SetActive(true)
+  		else
+  			; Debug.Notification(">> Current weather classification: " + wCurrentWeather.GetClassification())
+		endIf
   	endif
 EndFunction
 

@@ -25,6 +25,7 @@ Event OnPlayerLoadGame()
 	;      fctUtil.BeeingFemalePregnancy = Game.GetFormFromFile(0x000028A0, modName) as spell
 	;    endif
 	;  endWhile
+ 
 
 	SLH_Control.Maintenance()
 

@@ -170,6 +170,8 @@ Function Maintenance()
 	PlayerActor= Game.GetPlayer() ; PlayerAlias.GetReference()
 	PlayerREF= PlayerActor as ObjectReference
 	pActorBase = PlayerActor.GetActorBase()
+ 
+	Utility.Wait(3)
 
 
 	; Debug.Notification("SexLab Hormones: Init: " + bInit)
@@ -2495,6 +2497,10 @@ function setHormonesSexualState(Actor kActor)
 		StorageUtil.SetIntValue(kActor, "_SLH_iLactating", 1)
 	endif
 
+	if (StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneLactation") >= 50.0)
+		StorageUtil.SetIntValue(kActor, "_SLH_iLactating", 1)
+	endif
+
 	StorageUtil.SetIntValue(kActor, "_SLH_iShowStatus", GV_showStatus.GetValueInt() as Int) 
 
 endFunction
@@ -2711,7 +2717,7 @@ function showStatus()
 
 	string shapeMessageStatus = fctBodyShape.getMessageStatus(PlayerActor)
 
-	Debug.MessageBox("SexLab Hormones \n Sex acts today: " + iSexCountToday + " - Total: " + iSexCountAll + " \n v: " + iVaginalCountToday  + " a: " + iAnalCountToday  + " o: " + iOralCountToday  + " \n Orgasms today: " + iOrgasmsCountToday + " - Total: " + iOrgasmsCountAll + " \n Libido: " + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fLibido")  + " \n Daedric: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iDaedricInfluence") + " Succubus: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iSuccubus") +" \n Bimbo: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iBimbo") + " \n Sex change: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iHRT") +" TransGender: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iTG") +" \n Pregnant: " + fctUtil.isPregnantByBeeingFemale(PlayerActor) +" Chaurus: " + fctUtil.isPregnantByEstrusChaurus(PlayerActor) + " \n Lactating: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iLactating") + " Lvl: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iMilkLevel")+ " Prl: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iProlactinLevel")+ shapeMessageStatus )
+	Debug.MessageBox("SexLab Hormones \n Sex acts today: " + iSexCountToday + " - Total: " + iSexCountAll + " \n v: " + iVaginalCountToday  + " a: " + iAnalCountToday  + " o: " + iOralCountToday  + " \n Orgasms today: " + iOrgasmsCountToday + " - Total: " + iOrgasmsCountAll + " \n Libido: " + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fLibido")  + " \n Daedric: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iDaedricInfluence") + " Succubus: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iSuccubus") +" \n Bimbo: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iBimbo") + " \n Sex change: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iHRT") +" TransGender: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iTG") +" \n Pregnant: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_isPregnant") +" Chaurus: " + fctUtil.isPregnantByEstrusChaurus(PlayerActor) + " \n Lactating: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iLactating") + " Lvl: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iMilkLevel")+ " Prl: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iProlactinLevel")+ shapeMessageStatus )
 
 EndFunction
 
@@ -2732,12 +2738,14 @@ function traceStatus()
 	debugTrace("  Sex Change: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iHRT"))
 	debugTrace("  TransGender: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_iTG"))
 	; debugTrace("  HRT Phase: " + iSexStage)
-	debugTrace("  Pregnant: " + fctUtil.isPregnantByBeeingFemale(PlayerActor))
+	debugTrace("  Pregnant: " + StorageUtil.GetIntValue(PlayerActor, "_SLH_isPregnant"))
 	debugTrace("  Chaurus Breeder: " + fctUtil.isPregnantByEstrusChaurus(PlayerActor))
+	debugTrace("  External body changes detected: " + fctUtil.isExternalChangeModActive(PlayerActor))
 
 	debugTrace("  Orgasms today: " + iOrgasmsCountToday + " - Total: " + iOrgasmsCountAll)
 	debugTrace("  NiO detected: " + StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON"))
 	debugTrace("  SLIF detected: " + StorageUtil.GetIntValue(none, "_SLH_SlifON"))
+
 
 	fctBodyShape.traceShapeStatus(PlayerActor)
 
