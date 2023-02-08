@@ -64,13 +64,18 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 	Int iMoonPhase = GetCurrentMoonphase()
 
  	debug.trace("> Sky mode: " + iSkyMode)
+ 	debug.trace("> wLocalWeather: " + wLocalWeather)
 
 	; Weather currentWeather = Weather.GetCurrentWeather()
 
 
 	if (bForceUpdate)
 		; Force with local weather for region - potentially useful for Apocrypha or Soul Cairn
-		wLocalWeather.SetActive(true)
+		if (wLocalWeather != None)
+			wLocalWeather.SetActive(true)
+		else
+			SpringCloudy.SetActive(true)
+		endif
 
 	else
 
@@ -109,6 +114,7 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 					Game.SetGameSettingFloat("fMasserZOffset", 35.0) ; default 35.0
 				endif
 				Game.SetGameSettingFloat("fPrecipWindMult", 700.0) ; default 500
+ 				StorageUtil.SetStringValue(none, "_FT_SeasonsMoonPhase", "Rising moon (spring)")
 
 			elseif (iMoonPhase==7) || (iMoonPhase==0) ; (iSeason == 1)
 				; Summer  
@@ -141,6 +147,7 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 					Game.SetGameSettingFloat("fMasserZOffset", 65.0) ; default 35.0
 				endif
 				Game.SetGameSettingFloat("fPrecipWindMult", 500.0) ; default 500
+ 				StorageUtil.SetStringValue(none, "_FT_SeasonsMoonPhase", "Full moon (summer)")
 
 			elseif (iMoonPhase==1) || (iMoonPhase==2) || (iMoonPhase==3)  ; (iSeason == 2)
 				; Fall  
@@ -175,6 +182,7 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 					Game.SetGameSettingFloat("fMasserZOffset", 50.0) ; default 35.0
 				endif
 				Game.SetGameSettingFloat("fPrecipWindMult", 600.0) ; default 500
+ 				StorageUtil.SetStringValue(none, "_FT_SeasonsMoonPhase", "Waning moon (fall)")
 
 			elseif (iMoonPhase==4) ; (iSeason == 3)
 				; Winter 
@@ -200,6 +208,7 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 					; debug.notification("(Winter Cloudy)")
 					WinterCloudy.SetActive(true)
 				endif
+ 				StorageUtil.SetStringValue(none, "_FT_SeasonsMoonPhase", "New moon (winter)")
 
 			endif
 

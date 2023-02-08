@@ -449,7 +449,7 @@ Bool Function infectChaurusQueenSkin( Actor kActor  )
 		Return False
 	Endif 
 
-	If ( (fctDevious.ActorHasKeywordByString( kActor, "Harness"  )) || (fctDevious.ActorHasKeywordByString( kActor, "Bra"  )))
+	If ( (fctDevious.ActorHasKeywordByString( kActor, "Harness"  )) || (fctDevious.ActorHasKeywordByString( kActor, "Bra"  )) || (fctDevious.ActorHasKeywordByString( kActor, "Corset"  )))
 		Debug.Trace("[SLP]	Already wearing a harness - Aborting")
 		Return False
 	Endif
@@ -551,7 +551,7 @@ Bool Function infectChaurusQueenArmor( Actor kActor  )
 	Endif
  
 
-	If ( (fctDevious.ActorHasKeywordByString( kActor, "Harness"  )) || (fctDevious.ActorHasKeywordByString( kActor, "Bra"  )))
+	If ( (fctDevious.ActorHasKeywordByString( kActor, "Harness"  )) || (fctDevious.ActorHasKeywordByString( kActor, "Bra"  ))  || (fctDevious.ActorHasKeywordByString( kActor, "Corset"  )))
 		Debug.Trace("[SLP]	Already wearing a harness- Aborting")
 		Return False
 	Endif
@@ -661,7 +661,7 @@ Bool Function infectChaurusQueenBody( Actor kActor  )
 		Return False
 	Endif 
 
-	If ( (fctDevious.ActorHasKeywordByString( kActor, "Harness"  )) || (fctDevious.ActorHasKeywordByString( kActor, "Bra"  )))
+	If ( (fctDevious.ActorHasKeywordByString( kActor, "Harness"  )) || (fctDevious.ActorHasKeywordByString( kActor, "Bra"  ))  || (fctDevious.ActorHasKeywordByString( kActor, "Corset"  )))
 		Debug.Trace("[SLP]	Already wearing a harness- Aborting")
 		Return False
 	Endif

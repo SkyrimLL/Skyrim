@@ -60,6 +60,8 @@ float		_bellyMaxFaceHugger = 1.0
 bool		_toggleBarnacles = true
 float		_chanceBarnacles = -1.0 
 
+bool		_toggleEstrusParasite = true
+
 bool		_toggleSprigganRootGag = true
 float		_chanceSprigganRootGag = -1.0
 bool		_toggleSprigganRootArms = true
@@ -194,6 +196,8 @@ event OnPageReset(string a_page)
 	_toggleEstrusTentacles = StorageUtil.GetIntValue(kPlayer, "_SLP_toggleEstrusTentacles" )
 	_chanceEstrusTentacles = StorageUtil.GetFloatValue(kPlayer, "_SLP_chanceEstrusTentacles" )
 
+	_toggleEstrusParasite = StorageUtil.GetIntValue(kPlayer, "_SLP_toggleEstrusParasite" )
+
 	_toggleTentacleMonster = StorageUtil.GetIntValue(kPlayer, "_SLP_toggleTentacleMonster" )
 	_chanceTentacleMonster = StorageUtil.GetFloatValue(kPlayer, "_SLP_chanceTentacleMonster" )
 	_breastMaxTentacleMonster = StorageUtil.GetFloatValue(kPlayer, "_SLP_breastMaxTentacleMonster" )
@@ -259,6 +263,9 @@ event OnPageReset(string a_page)
 
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
+		AddHeaderOption(" Events control")
+		AddSliderOptionST("STATE_FLARE_DELAY","Flare Delay", _flareDelay ,"{1}")
+
 		AddHeaderOption(" Chance of infection")
 		AddSliderOptionST("STATE_SPIDEREGG_CHANCE","Spider Eggs (Vaginal plug)", _chanceSpiderEgg,"{0} %")
 		AddSliderOptionST("STATE_SPIDERPENIS_CHANCE","Spider Penis (Vaginal plug)", _chanceSpiderPenis,"{0} %")
@@ -270,18 +277,20 @@ event OnPageReset(string a_page)
 		AddSliderOptionST("STATE_FACEHUGGERGAG_CHANCE","Face Hugger (Gag)", _chanceFaceHuggerGag,"{0} %")
 		AddSliderOptionST("STATE_BARNACLES_CHANCE","Blackreach Spores (Harness)", _chanceBarnacles,"{0} %")
 
+		AddHeaderOption(" Estrus Chaurus compatibility")
+		AddSliderOptionST("STATE_ESTRUSTENTACLES_CHANCE","Estrus Tentacles (EC+)", _chanceEstrusTentacles,"{0} %") 
+		AddSliderOptionST("STATE_ESTRUSSLIME_CHANCE","Estrus Slime (EC+)", _chanceEstrusSlime,"{0} %")
+
 		AddHeaderOption(" Spriggan Curse")
 		AddSliderOptionST("STATE_SPRIGGANROOTARMS_CHANCE","Spriggan Hands (Cuffs)", _chanceSprigganRootArms,"{0} %")
 		; AddSliderOptionST("STATE_SPRIGGANROOTFEET_CHANCE","Spriggan Feet (Cuffs)", _chanceSprigganRootFeet,"{0} %")
 		AddSliderOptionST("STATE_SPRIGGANROOTBODY_CHANCE","Spriggan Body (Harness)", _chanceSprigganRootBody,"{0} %")
 		AddSliderOptionST("STATE_SPRIGGANROOTGAG_CHANCE","Spriggan Mask (Gag)", _chanceSprigganRootGag,"{0} %")
 
-		AddHeaderOption(" Estrus Chaurus compatibility")
-		AddSliderOptionST("STATE_ESTRUSTENTACLES_CHANCE","Estrus Tentacles (EC+)", _chanceEstrusTentacles,"{0} %") 
-		AddSliderOptionST("STATE_ESTRUSSLIME_CHANCE","Estrus Slime (EC+)", _chanceEstrusSlime,"{0} %")
-
-
 		SetCursorPosition(1)
+		AddEmptyOption()
+		AddToggleOptionST("STATE_CHAURUSQUEEN_INFECTION_TOGGLE","Sex can infect NPCs", _toggleChaurusQueenInfectNPCs as Float)
+
 		AddHeaderOption(" Infect/Cure")
 		AddToggleOptionST("STATE_SPIDEREGG_TOGGLE","Infect/Cure Spider Egg", _toggleSpiderEgg as Float)
 		AddToggleOptionST("STATE_SPIDERPENIS_TOGGLE","Infect/Cure Spider Penis", _toggleSpiderPenis as Float)
@@ -292,16 +301,17 @@ event OnPageReset(string a_page)
 		AddToggleOptionST("STATE_FACEHUGGER_TOGGLE","Infect/Cure Hip Hugger", _toggleFaceHugger as Float)
 		AddToggleOptionST("STATE_FACEHUGGERGAG_TOGGLE","Infect/Cure Face Hugger", _toggleFaceHuggerGag as Float)
 		AddToggleOptionST("STATE_BARNACLES_TOGGLE","Infect/Cure Blackreach Spores", _toggleBarnacles as Float)
+
+		AddHeaderOption(" Estrus Chaurus compatibility")
+		AddToggleOptionST("STATE_ESTRUSTENTACLES_TOGGLE","Estrus Parasite", _toggleEstrusParasite as Float) 
+		AddEmptyOption()
+
 		AddHeaderOption(" Spriggan Curse")
 		AddToggleOptionST("STATE_SPRIGGANROOTARMS_TOGGLE","Infect/Cure Spriggan Hands", _toggleSprigganRootArms as Float)
 		; AddToggleOptionST("STATE_SPRIGGANROOTFEET_TOGGLE","Infect/Cure Spriggan Feet", _toggleSprigganRootFeet as Float, OPTION_FLAG_DISABLED)
 		AddToggleOptionST("STATE_SPRIGGANROOTBODY_TOGGLE","Infect/Cure Spriggan Body", _toggleSprigganRootBody as Float)
 		AddToggleOptionST("STATE_SPRIGGANROOTGAG_TOGGLE","Infect/Cure Spriggan Mask", _toggleSprigganRootGag as Float)
 		AddToggleOptionST("STATE_SPRIGGANROOTDEBUG_TOGGLE","Toggle Spriggan Root infection", _toggleSprigganRootDebug as Float)
-
-		AddHeaderOption(" Events control")
-		AddSliderOptionST("STATE_FLARE_DELAY","Flare Delay", _flareDelay ,"{1}")
-		AddToggleOptionST("STATE_CHAURUSQUEEN_INFECTION_TOGGLE","Sex can infect NPCs", _toggleChaurusQueenInfectNPCs as Float)
 
 
 	ElseIf (a_page == "Quests")
@@ -759,8 +769,36 @@ state STATE_CHAURUSWORMVAG_BELLY ; SLIDER
 	event OnHighlightST()
 		SetInfoText("Max size of belly node (for NiOverride compatiblity)")
 	endEvent
-endState
+endState 
 
+; AddSliderOptionST("STATE_ESTRUSTENTACLES_TOGGLE","Estrus Parasite", _toggleEstrusParasite as Float)
+state STATE_ESTRUSTENTACLES_TOGGLE ; TOGGLE
+	event OnSelectST() 
+		Int toggle = Math.LogicalXor( 1,  StorageUtil.GetIntValue(kPlayer, "_SLP_toggleEstrusParasite" )  ) 
+ 
+		If (toggle ==1)
+			Debug.MessageBox("Infecting player with silent Estrus Parasite")
+			kPlayer.SendModEvent("SLPInfectEstrusChaurusEgg")
+		else
+			Debug.MessageBox("Use the Estrus Chaurus menu to cure this parasite manually.")
+			; kPlayer.SendModEvent("SLPTriggerEstrusChaurusBirth","All")
+		Endif
+
+		SetToggleOptionValueST( toggle as Bool )
+		ForcePageReset()
+	endEvent
+
+	event OnDefaultST()
+		StorageUtil.SetIntValue(kPlayer, "_SLP_toggleEstrusParasite", 1 )
+		SetToggleOptionValueST( true )
+		ForcePageReset()
+	endEvent
+
+	event OnHighlightST()
+		SetInfoText("Manually Infect/Cure Estrus parasites for roleplay or testing purposes (if Estrus Chaurus is enabled).")
+	endEvent
+
+endState
 
 ; AddSliderOptionST("STATE_ESTRUSTENTACLES_CHANCE","Chance of infection", _chanceEstrusTentacles,"{0} %")
 state STATE_ESTRUSTENTACLES_CHANCE ; SLIDER

@@ -60,6 +60,9 @@ endEvent
 
 
 function maintenance()
+
+	Utility.Wait(3)
+
 	If (FrostUtil.GetAPIVersion() > 0) && !bFrostFallInit
 		; exposurePoints.SetValue( FrostUtil.GetPlayerExposure() )
 		bFrostFallInit = true

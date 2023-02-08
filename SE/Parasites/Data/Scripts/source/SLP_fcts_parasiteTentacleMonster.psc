@@ -74,7 +74,7 @@ Bool Function infectTentacleMonster( Actor kActor  )
 		Return False
 	Endif 
 
-	If (fctDevious.ActorHasKeywordByString( kActor, "Harness"  ))
+	If (fctDevious.ActorHasKeywordByString( kActor, "Harness"  ) || (fctDevious.ActorHasKeywordByString( kActor, "Corset"  )))
 		Debug.Trace("[SLP]	Already wearing a harness- Aborting")
 		Return False
 	Endif
