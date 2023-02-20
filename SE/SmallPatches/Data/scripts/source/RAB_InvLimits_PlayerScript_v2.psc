@@ -19,6 +19,8 @@ Scriptname RAB_InvLimits_PlayerScript_v2 extends ReferenceAlias
 		Sound Property RABInv_DropSound Auto
 		GlobalVariable Property RABSoundEnabled Auto
 		GlobalVariable Property RABWarningsEnabled Auto
+ 
+		int Property RABCarry_Capacity Auto
 
 	; ========================== ITEM TYPE DEFS - WEAPONS ==========================
 
@@ -85,6 +87,10 @@ Scriptname RAB_InvLimits_PlayerScript_v2 extends ReferenceAlias
 		float[] Property RABInv_Slot_CurrentUse Auto
 		string[] Property RABInv_Slot_OverloadMessage Auto
 
+
+		bool RABInv_RecalcActive = false
+		int RABInv_RecalcFuncVersion = 0
+
 	; ================== DEBUG NOTIFICATIONS ==================
 
 		Function RABInv_ShowDebugNotification(string MessageToShow)
@@ -96,15 +102,24 @@ Scriptname RAB_InvLimits_PlayerScript_v2 extends ReferenceAlias
 	; ================== INITIAL STARTUP ==================
 
 		Event OnInit()
-			GamePlayer=Game.GetPlayer()
-			RABInv_RecalcAll()
+			_maintenance()
 		endEvent
 
 		Event OnPlayerLoadGame()
-			GamePlayer=Game.GetPlayer()
-			RABInv_RecalcAll()
+			_maintenance()
 		endEvent
 		
+		function _maintenance()
+			GamePlayer=Game.GetPlayer()
+
+			if (RABCarry_Capacity!=0)
+				Game.GetPlayer().SetActorValue("CarryWeight", RABCarry_Capacity as Float)
+			endif
+
+			if(!RABInv_RecalcActive)
+				RABInv_RecalcAll()
+			endif
+		endfunction
 		
 	; ============= GLZ: FUNCTION TO SEE IF RECALCALL() IS ACTIVE FROM ANOTHER SCRIPT ================
 	
@@ -115,6 +130,7 @@ Scriptname RAB_InvLimits_PlayerScript_v2 extends ReferenceAlias
 	; ================== FUNCTION TRIGGERED ON ITEM PICK UP ==================
 
 		Event OnItemAdded(Form ItemReference,int ItemCount,ObjectReference akItemReference,ObjectReference akSourceContainer)
+			; if full recalc is under way, queue up another to account for new items
 			if(RABInv_RecalcActive)
 				RABInv_RecalcAll()
 			else
@@ -166,6 +182,7 @@ Scriptname RAB_InvLimits_PlayerScript_v2 extends ReferenceAlias
 	; ================== FUNCTION TRIGGERED ON ITEM DROP ==================
 
 		Event OnItemRemoved(Form ItemReference,int ItemCount,ObjectReference akItemReference,ObjectReference akSourceContainer)
+			; if full recalc is under way, queue up another to account for new items
 			if(RABInv_RecalcActive)
 				RABInv_RecalcAll()
 			else
@@ -184,6 +201,7 @@ Scriptname RAB_InvLimits_PlayerScript_v2 extends ReferenceAlias
 	; ============================== EQUIPPING AN ITEM ==============================
 
 		Event OnObjectEquipped(Form ItemReference,ObjectReference akReference)
+			; if full recalc is under way, queue up another to account for new items
 			if(RABInv_RecalcActive)
 				RABInv_RecalcAll()
 			else
@@ -200,6 +218,7 @@ Scriptname RAB_InvLimits_PlayerScript_v2 extends ReferenceAlias
 	; ============================== UNEQUIPPING AN ITEM ==============================
 
 		Event OnObjectUnequipped(Form ItemReference,ObjectReference akReference)
+			; if full recalc is under way, queue up another to account for new items
 			if(RABInv_RecalcActive)
 				RABInv_RecalcAll()
 			else
@@ -265,9 +284,6 @@ Scriptname RAB_InvLimits_PlayerScript_v2 extends ReferenceAlias
 		EndFunction
 
 	; ================== START FROM SCRATCH AND RECALC ALL ==================
-
-		bool RABInv_RecalcActive = false
-		int RABInv_RecalcFuncVersion = 0
 		Function RABInv_RecalcAll()
 
 			; Get ready:
@@ -404,6 +420,7 @@ Scriptname RAB_InvLimits_PlayerScript_v2 extends ReferenceAlias
 			iCarryCapacity += RABInv_DetermineWeightedSlotCapacity(9, 1.0) ; 9: Shield
 
 			Game.GetPlayer().SetActorValue("CarryWeight", iCarryCapacity as Float)
+			RABCarry_Capacity = iCarryCapacity
 
 		EndFunction
 
