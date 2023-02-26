@@ -105,6 +105,7 @@ Function tryUpdateWeather(Bool bForceUpdate = False)
 	Int iThisHour = GetCurrentHourOfDay() 
 	Weather wLocalWeather = Weather.FindWeather(0) 
 	Weather wCurrentWeather = Weather.GetCurrentWeather()
+	Form fCurrentWeather = wCurrentWeather as Form
 
 	if (PlayerActorRef.IsInInterior())
 		debug.trace("[SIP] Player is in Interior Cell - Aborting ")
@@ -141,6 +142,10 @@ Function tryUpdateWeather(Bool bForceUpdate = False)
 	debug.trace("[SIP] iDaysInSeason: " + iDaysInSeason)
 	debug.trace("[SIP] iPercentSeason: " + iPercentSeason)
 	debug.trace("[SIP] iChanceWeatherOverride: " + iChanceWeatherOverride)
+	debug.trace("[SIP] wLocalWeather: " + wLocalWeather)
+	debug.trace("[SIP] wCurrentWeather: " + wCurrentWeather)
+	debug.trace("[SIP] wCurrentWeather ID: " + fCurrentWeather.GetFormID())
+	; debug.notification("[SIP] wCurrentWeather ID: " + fCurrentWeather.GetFormID())
 
 
 	if (iHourLastCheck==-1)
