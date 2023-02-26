@@ -164,25 +164,29 @@ State ListeningForWeatherTransition
 			Utility.Wait(3.0)
 			
 			ObjectReference akClosestMarker = Game.FindClosestReferenceOfAnyTypeInListFromRef(REF_FRL_OcclusionDetectionMarkerList, Self, fMaximumRoofDistance)
+
+			if (akClosestMarker != None)
 			
-			Float fClosestX = akClosestMarker.GetPositionX()
-			Float fClosestY = akClosestMarker.GetPositionY()
-			Float fCenterX = Self.GetPositionX()
-			Float fCenterY = Self.GetPositionY()
+				Float fClosestX = akClosestMarker.GetPositionX()
+				Float fClosestY = akClosestMarker.GetPositionY()
+				Float fCenterX = Self.GetPositionX()
+				Float fCenterY = Self.GetPositionY()
+				
+				Float fToleranceX = Math.Abs(Math.Abs(fClosestX) - Math.Abs(fCenterX))
+				Float fToleranceY = Math.Abs(Math.Abs(fClosestY) - Math.Abs(fCenterY))
+
 			
-			Float fToleranceX = Math.Abs(Math.Abs(fClosestX) - Math.Abs(fCenterX))
-			Float fToleranceY = Math.Abs(Math.Abs(fClosestY) - Math.Abs(fCenterY))
-			
-			akCasterMarker.Disable()
-			akCasterMarker.Delete()
-			akTargetMarker.Disable()
-			akTargetMarker.Delete()
-					
-			If fToleranceX < fToleranceMax && fToleranceY < fToleranceMax && akClosestMarker
-			
-				GoToState("")
-				Return
-			EndIf
+				akCasterMarker.Disable()
+				akCasterMarker.Delete()
+				akTargetMarker.Disable()
+				akTargetMarker.Delete()
+						
+				If fToleranceX < fToleranceMax && fToleranceY < fToleranceMax && akClosestMarker
+				
+					GoToState("")
+					Return
+				EndIf
+			endif
 		EndIf
 		
 		RegisterForSingleUpdate(fUpdateInterval)
