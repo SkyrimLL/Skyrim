@@ -465,7 +465,7 @@ function manageSexLabAroused(Actor kActor, int aiModRank = -1)
 	Debug.Trace("[SLH] >>> 		fLibido:" + fLibido)
 	Debug.Trace("[SLH] >>> 		SexDrive:" + StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneSexDrive" ))
 
-	slaUtil.UpdateActorExposureRate(kActor, fArousalRateMod)
+	slaUtil.SetActorExposureRate(kActor, fArousalRateMod)
 	
 	StorageUtil.SetIntValue(kActor, "_SLH_iArousal",slaUtil.GetActorExposure(kActor))
 	StorageUtil.SetFloatValue(kActor, "_SLH_fArousalRate",slaUtil.GetActorExposureRate(kActor))
@@ -1348,8 +1348,8 @@ endfunction
 ; -------
 
 Function debugTrace(string traceMsg)
-	if (StorageUtil.GetIntValue(none, "_SLH_debugTraceON")==1)
-		Debug.Trace("[SLH_fctUtil]" + traceMsg)
-	endif
+	; if (StorageUtil.GetIntValue(none, "_SLH_debugTraceON")==1)
+	;	Debug.Trace("[SLH_fctUtil]" + traceMsg)
+	; endif
 endFunction
 
