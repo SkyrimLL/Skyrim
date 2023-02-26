@@ -470,6 +470,7 @@ event OnPageReset(string a_page)
 	If (a_page == "$SLH_pHormonelevels")
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
+		AddEmptyOption()
 		AddHeaderOption("$SLH_hHormonesLevelsModifiers")
 		AddSliderOptionST("STATE_METABOLISM","$SLH_sMETABOLISM", _metabolismMod as Float,"{1}") 
 		AddSliderOptionST("STATE_FEMALE","$SLH_sFEMALE", _femaleMod as Float,"{1}") 
@@ -479,16 +480,41 @@ event OnPageReset(string a_page)
 		AddSliderOptionST("STATE_SUCCUBUS_HORMONE","$SLH_sSUCCUBUS_HORMONE", _succubusMod as Float,"{1}") 
 		AddSliderOptionST("STATE_GROWTH","$SLH_sGROWTH", _growthMod as Float,"{1}") 
 		AddSliderOptionST("STATE_PHEROMONES","$SLH_sPHEROMONES", _pheromonesMod as Float,"{1}") 
+		AddSliderOptionST("STATE_IMMUNITY","$SLH_sIMMUNITY", _immunityMod as Float,"{1}") 
 		AddSliderOptionST("STATE_LACTATION","$SLH_sLACTATION", _lactationMod as Float,"{1}") 
 		AddSliderOptionST("STATE_PIGMENTATION","$SLH_sPIGMENTATION", _pigmentationMod as Float,"{1}") 
-		AddSliderOptionST("STATE_SLEEP","$SLH_sSLEEP", _sleepMod as Float,"{1}") 
 		AddSliderOptionST("STATE_FERTILITY","$SLH_sFERTILITY", _fertilityMod as Float,"{1}") 
-		AddSliderOptionST("STATE_IMMUNITY","$SLH_sIMMUNITY", _immunityMod as Float,"{1}") 
+		AddSliderOptionST("STATE_SLEEP","$SLH_sSLEEP", _sleepMod as Float,"{1}") 
 		AddSliderOptionST("STATE_STRESS","$SLH_sSTRESS", _stressMod as Float,"{1}") 
 		AddSliderOptionST("STATE_MOOD","$SLH_sMOOD", _moodMod as Float,"{1}") 
 
+
+		AddHeaderOption("$SLH_hPlayerStatus")
+		Int iHoursSinceLastSex = GetCurrentHourOfDay() - StorageUtil.GetIntValue(PlayerActor, "_SLH_iHourOfDaySinceLastSex") 
+
+		if (PlayerActor.GetLeveledActorBase().GetSex() == 1)
+			sPlayerGender = "Female"
+		else
+			sPlayerGender = "Male"
+		endif
+
+ 		AddTextOption("$ Current gender: {" +  sPlayerGender   as String +"}", "", OPTION_FLAG_DISABLED)
 		AddEmptyOption()
+
+ 		AddTextOption("$ Arousal = {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_iArousal") as Int +"}", "", OPTION_FLAG_DISABLED)
+ 		AddTextOption("$ ArousalRate = {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fArousalRate") as Float +"}", "", OPTION_FLAG_DISABLED) 
+		AddEmptyOption()
+
+ 		AddTextOption("$ Sex count today: {" +  StorageUtil.GetIntValue(PlayerActor, "_SLH_iSexCountToday")   as Int +"}", "", OPTION_FLAG_DISABLED)
+ 		AddTextOption("$ Last sex (hour of day): {" +  StorageUtil.GetIntValue(PlayerActor, "_SLH_iHourOfDaySinceLastSex")   as Int +"}", "", OPTION_FLAG_DISABLED)
+ 		AddTextOption("$ Hours since last sex: {" +  iHoursSinceLastSex  as Int +"}", "", OPTION_FLAG_DISABLED)
+ 		AddTextOption("$ Days since last sex: {" +  StorageUtil.GetIntValue(PlayerActor, "_SLH_iDaysSinceLastSex")   as Int +"}", "", OPTION_FLAG_DISABLED)
+ 		AddTextOption("$ Libido: {" +  StorageUtil.GetFloatValue(PlayerActor, "_SLH_fLibido")   as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddEmptyOption()
+
 		SetCursorPosition(1)
+ 
+		AddTextOption("$     Weight: {" + pActorBase.GetWeight() as Int +"}", "", OPTION_FLAG_DISABLED)
 
 		AddHeaderOption("$SLH_hHormoneLevels") 
 		; AddTextOption("      (not used before v3.0)", "", OPTION_FLAG_DISABLED) 
@@ -501,14 +527,35 @@ event OnPageReset(string a_page)
 		AddTextOption("$     Succubus: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneSuccubus") as Int +"}", "", OPTION_FLAG_DISABLED)		
 		AddTextOption("$     Growth: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneGrowth") as Int +"}", "", OPTION_FLAG_DISABLED)
 		AddTextOption("$     Pheromones: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormonePheromones") as Int +"}", "", OPTION_FLAG_DISABLED)
-		AddTextOption("$     Lactation: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneLactation") as Int +"}", "", OPTION_FLAG_DISABLED)
-		AddTextOption("$     Fertility: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneFertility") as Int +"}", "", OPTION_FLAG_DISABLED)
-		AddTextOption("$     Pigmentation: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormonePigmentation") as Int +"}", "", OPTION_FLAG_DISABLED)
-		AddTextOption("$     Sleep: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneSleep") as Int +"}", "", OPTION_FLAG_DISABLED)
 		AddTextOption("$     Immunity: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneImmunity") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Lactation: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneLactation") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Pigmentation: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormonePigmentation") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Fertility: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneFertility") as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$     Sleep: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneSleep") as Int +"}", "", OPTION_FLAG_DISABLED)
 		AddTextOption("$     Stress: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneStress") as Int +"}", "", OPTION_FLAG_DISABLED)
 		AddTextOption("$     Mood: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneMood") as Int +"}", "", OPTION_FLAG_DISABLED)
+ 
+		AddEmptyOption()
+ 		AddTextOption("$ StaminaRate = {" + PlayerActor.GetActorValue("StaminaRate")  as Float +"}", "", OPTION_FLAG_DISABLED)
+ 		AddTextOption("$ HealRate = {" + PlayerActor.GetActorValue("HealRate")  as Float +"}", "", OPTION_FLAG_DISABLED)
+ 		AddTextOption("$ MagickaRate = {" + PlayerActor.GetActorValue("MagickaRate")  as Float +"}", "", OPTION_FLAG_DISABLED)
+		AddEmptyOption()
 
+		AddTextOption("$ Milk Level: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_iMilkLevel")  as Int +"}", "", OPTION_FLAG_DISABLED)		
+		AddEmptyOption()
+
+		AddTextOption("$ Daedric Influence: {" +  StorageUtil.GetIntValue(PlayerActor, "_SLH_iDaedricInfluence")   as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$ Succubus Level: {" +  StorageUtil.GetIntValue(PlayerActor, "_SLH_iSuccubusLevel")   as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddEmptyOption()
+
+ 		AddTextOption("$ Days as a Bimbo: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformGameDays")  as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$ Cycles as a Bimbo: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformCycle")  as Int +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$ Bimbo Level: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformLevel")  as Int +"}", "", OPTION_FLAG_DISABLED)		
+
+		if (StorageUtil.GetFormValue(PlayerActor, "_SLH_fOrigRace") !=  (pActorBase.GetRace() as Form)) 
+			AddEmptyOption()
+			AddTextOption("$SLH_xPlayerRaceWarning", "", OPTION_FLAG_DISABLED) 
+		endif
 
 
 	elseIf (a_page == "$SLH_pBodyChanges")
@@ -734,48 +781,6 @@ event OnPageReset(string a_page)
 		AddToggleOptionST("STATE_RESET_COLORS","$SLH_bRESET_COLORS", _resetColorsToggle as Float)
 		AddToggleOptionST("STATE_RESET","$SLH_bRESET", _resetToggle as Float)
 		AddToggleOptionST("STATE_DEBUG","$SLH_bDEBUG", _showDebug as Float)
-
-		AddHeaderOption("$SLH_hPlayerStatus")
-		Int iHoursSinceLastSex = GetCurrentHourOfDay() - StorageUtil.GetIntValue(PlayerActor, "_SLH_iHourOfDaySinceLastSex") 
-
-		if (PlayerActor.GetLeveledActorBase().GetSex() == 1)
-			sPlayerGender = "Female"
-		else
-			sPlayerGender = "Male"
-		endif
-
- 		AddTextOption("$ Current gender: {" +  sPlayerGender   as String +"}", "", OPTION_FLAG_DISABLED)
-		AddEmptyOption()
-
- 		AddTextOption("$ Sex count today: {" +  StorageUtil.GetIntValue(PlayerActor, "_SLH_iSexCountToday")   as Int +"}", "", OPTION_FLAG_DISABLED)
- 		AddTextOption("$ Last sex (hour of day): {" +  StorageUtil.GetIntValue(PlayerActor, "_SLH_iHourOfDaySinceLastSex")   as Int +"}", "", OPTION_FLAG_DISABLED)
- 		AddTextOption("$ Hours since last sex: {" +  iHoursSinceLastSex  as Int +"}", "", OPTION_FLAG_DISABLED)
- 		AddTextOption("$ Days since last sex: {" +  StorageUtil.GetIntValue(PlayerActor, "_SLH_iDaysSinceLastSex")   as Int +"}", "", OPTION_FLAG_DISABLED)
- 		AddTextOption("$ Libido: {" +  StorageUtil.GetFloatValue(PlayerActor, "_SLH_fLibido")   as Int +"}", "", OPTION_FLAG_DISABLED)
-		AddEmptyOption()
-
- 
- 		AddTextOption("$ StaminaRate = {" + PlayerActor.GetActorValue("StaminaRate")  as Float +"}", "", OPTION_FLAG_DISABLED)
- 		AddTextOption("$ HealRate = {" + PlayerActor.GetActorValue("HealRate")  as Float +"}", "", OPTION_FLAG_DISABLED)
- 		AddTextOption("$ MagickaRate = {" + PlayerActor.GetActorValue("MagickaRate")  as Float +"}", "", OPTION_FLAG_DISABLED)
-		AddEmptyOption()
-
- 		AddTextOption("$ Arousal = {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_iArousal") as Int +"}", "", OPTION_FLAG_DISABLED)
- 		AddTextOption("$ ArousalRate = {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fArousalRate") as Float +"}", "", OPTION_FLAG_DISABLED) 
-		AddEmptyOption()
-
- 		AddTextOption("$ Days as a Bimbo: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformGameDays")  as Int +"}", "", OPTION_FLAG_DISABLED)
-		AddTextOption("$ Cycles as a Bimbo: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformCycle")  as Int +"}", "", OPTION_FLAG_DISABLED)
-		AddTextOption("$ Bimbo Level: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformLevel")  as Int +"}", "", OPTION_FLAG_DISABLED)		
-		AddTextOption("$ Milk Level: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_iMilkLevel")  as Int +"}", "", OPTION_FLAG_DISABLED)		
-		AddEmptyOption()
-
-		AddTextOption("$ Daedric Influence: {" +  StorageUtil.GetIntValue(PlayerActor, "_SLH_iDaedricInfluence")   as Int +"}", "", OPTION_FLAG_DISABLED)
-		AddTextOption("$ Succubus Level: {" +  StorageUtil.GetIntValue(PlayerActor, "_SLH_iSuccubusLevel")   as Int +"}", "", OPTION_FLAG_DISABLED)
-
-		if (StorageUtil.GetFormValue(PlayerActor, "_SLH_fOrigRace") !=  (pActorBase.GetRace() as Form)) 
-			AddTextOption("$SLH_xPlayerRaceWarning", "", OPTION_FLAG_DISABLED) 
-		endif
 	endIf
 endEvent
 

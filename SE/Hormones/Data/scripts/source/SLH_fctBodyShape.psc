@@ -531,17 +531,22 @@ function alterBodyAfterRest(Actor kActor)
 	debugTrace( ">>>>> alterBodyAfterRest detected " )
 	debugTrace( "fSwellFactor: " + fSwellFactor)
 	debugTrace( "fSuccubusMod: " + fSuccubusMod)
-	debugTrace( "isSlifInstalled: " + isSlifInstalled)
-	debugTrace( "_SLH_BasicNetImmerseON: " + StorageUtil.GetIntValue(none, "_SLH_BasicNetImmerseON"))
-	debugTrace( "isNiOInstalled: " + isNiOInstalled)
-	debugTrace( "_SLH_NiNodeOverrideON: " + StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON"))
-	debugTrace( "_SLH_BodyMorphsON: " + StorageUtil.GetIntValue(none, "_SLH_BodyMorphsON"))
-	debugTrace( "GV_useWeight.GetValue(): " + GV_useWeight.GetValue())
-	debugTrace( "GV_useNodes.GetValue(): " + GV_useNodes.GetValue())
-	debugTrace( "GV_useBreastNode.GetValue(): " + GV_useBreastNode.GetValue())
-	debugTrace( "GV_useBellyNode.GetValue(): " + GV_useBellyNode.GetValue())
-	debugTrace( "GV_useButtNode.GetValue(): " + GV_useButtNode.GetValue())
-	debugTrace( "GV_useSchlongNode.GetValue(): " + GV_useSchlongNode.GetValue()) 
+	debugTrace( "fWeightSwellMod: " + fWeightSwellMod)
+	debugTrace( "fBreastSwellMod: " + fBreastSwellMod)
+	debugTrace( "fButtSwellMod: " + fButtSwellMod)
+	debugTrace( "fBellySwellMod: " + fBellySwellMod)
+	debugTrace( "fSchlongSwellMod: " + fSchlongSwellMod) 
+	; debugTrace( "isSlifInstalled: " + isSlifInstalled)
+	; debugTrace( "_SLH_BasicNetImmerseON: " + StorageUtil.GetIntValue(none, "_SLH_BasicNetImmerseON"))
+	; debugTrace( "isNiOInstalled: " + isNiOInstalled)
+	; debugTrace( "_SLH_NiNodeOverrideON: " + StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON"))
+	; debugTrace( "_SLH_BodyMorphsON: " + StorageUtil.GetIntValue(none, "_SLH_BodyMorphsON"))
+	; debugTrace( "GV_useWeight.GetValue(): " + GV_useWeight.GetValue())
+	; debugTrace( "GV_useNodes.GetValue(): " + GV_useNodes.GetValue())
+	; debugTrace( "GV_useBreastNode.GetValue(): " + GV_useBreastNode.GetValue())
+	; debugTrace( "GV_useBellyNode.GetValue(): " + GV_useBellyNode.GetValue())
+	; debugTrace( "GV_useButtNode.GetValue(): " + GV_useButtNode.GetValue())
+	; debugTrace( "GV_useSchlongNode.GetValue(): " + GV_useSchlongNode.GetValue()) 
 
 	if (GV_useWeight.GetValue() == 1)
 		debug.trace( "[SLH] alterBodyAfterRest Weight")
@@ -556,10 +561,10 @@ function alterBodyAfterRest(Actor kActor)
 
 		if (fWeightSwellMod>=0)
 			; (fWeightSwellMod>=0) means More Weight = More muscle
-			fWeightGrowth = ( (StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneGrowth") + abs(StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneFemale") - StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneMale")) ) / 20.0) * (StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneMetabolism") / 100.0)
+			fWeightGrowth = 1.0 + ( (StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneGrowth") + abs(StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneFemale") - StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneMale")) ) / 20.0) * (StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneMetabolism") / 100.0)
 		else
 			; (fWeightSwellMod<0) means More Weight = More fat
-			fWeightGrowth = ( (StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneGrowth") + abs(StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneFemale") - StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneMale")) ) / 20.0) * ((100.0 - StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneMetabolism")) / 100.0)
+			fWeightGrowth = -1.0 + ( (StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneGrowth") + abs(StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneFemale") - StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneMale")) ) / 20.0) * ((100.0 - StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneMetabolism")) / 100.0)
 
 		endif
 		fWeight = fCurrentWeight + (fWeightGrowth * ( fSwellFactor/ 100.0 ) * fWeightSwellMod)
@@ -597,7 +602,7 @@ function alterBodyAfterRest(Actor kActor)
 				Else
 					fNodeMax = fBreastMax
 					fBreastGrowth = ( (StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneGrowth") + StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneFemale") ) / 200.0) * ((100.0 - StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneMetabolism")) / 200.0) ; (fNodeMax + fBreastMin  - fCurrentBreast)  
-					fBreast = fCurrentBreast + ( fBreastGrowth * ( fSwellFactor/ 100.0 ) * fBreastSwellMod )   
+					fBreast = fCurrentBreast + 0.1 + ( fBreastGrowth * ( fSwellFactor/ 100.0 ) * fBreastSwellMod )   
 				EndIf
 
 				debugTrace("  	fCurrentBreast:  " + fCurrentBreast)
@@ -639,7 +644,7 @@ function alterBodyAfterRest(Actor kActor)
 				Else
 					fNodeMax = fBellyMax
 					fBellyGrowth = ( (StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneGrowth") + StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneMale") ) / 600.0) * ((100.0 - StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneMetabolism")) / 200.0) ; (fNodeMax + fBellyMin - fCurrentBelly)  
-					fBelly = fCurrentBelly + ( fBellyGrowth * ( fSwellFactor/ 100.0 ) * fBellySwellMod ) 
+					fBelly = fCurrentBelly + 0.1 + ( fBellyGrowth * ( fSwellFactor/ 100.0 ) * fBellySwellMod ) 
 					; debug.notification("[SLH]  		fBellyGrowth:  " + fBellyGrowth)
 					debugTrace("  		fBellyGrowth:  " + fBellyGrowth)
 				EndIf
@@ -669,7 +674,7 @@ function alterBodyAfterRest(Actor kActor)
 					fButtGrowth = ( (StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneGrowth") + StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneFemale") ) / 200.0) * ((100.0 - StorageUtil.GetFloatValue(kActor, "_SLH_fHormoneMetabolism")) / 200.0) ; (fNodeMax + fButtMin  - fCurrentButt)  
 					; debug.notification("[SLH]  		fButtGrowth:  " + fButtGrowth)
 					debugTrace("  		fButtGrowth:  " + fButtGrowth)
-					fButt = fCurrentButt + ( fButtGrowth * ( fSwellFactor/ 100.0 ) * fButtSwellMod )   
+					fButt = fCurrentButt + 0.1 + ( fButtGrowth * ( fSwellFactor/ 100.0 ) * fButtSwellMod )   
 				EndIf
 				
 				alterButtNode(kActor,  fButt )
@@ -699,7 +704,7 @@ function alterBodyAfterRest(Actor kActor)
 					fSchlongGrowth = -1.0 * fSchlongGrowth
 				endIf
 
-				fSchlong = fCurrentSchlong + ( fSchlongGrowth*  ( fSwellFactor/ 100.0 ) *  fSchlongSwellMod )
+				fSchlong = fCurrentSchlong + 0.1 + ( fSchlongGrowth*  ( fSwellFactor/ 100.0 ) *  fSchlongSwellMod )
 
 				alterSchlongNode(kActor,  fSchlong )
 			endif
@@ -822,13 +827,13 @@ function alterBodyByPercent(Actor kActor, String sBodyPart, Float modFactor)
 		If  (sBodyPart=="Breast") && (GV_useBreastNode.GetValue() == 1)
 			if ( bBreastEnabled ) 
 				Float fCurrentBreast 
-                If (StorageUtil.GetIntValue(none, "_SLH_BodyMorphsON")==1)
-                    fCurrentBreast = SLHGetNodeScale(kActor, NINODE_RIGHT_BREAST, false)
-                elseif (StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON")==0)
-                    fCurrentBreast = NetImmerse.GetNodeScale(kActor, NINODE_RIGHT_BREAST, false)
-                else
-                    fCurrentBreast = StorageUtil.GetFloatValue(kActor, "_SLH_fBreast")
-                endIf
+        If (StorageUtil.GetIntValue(none, "_SLH_BodyMorphsON")==1)
+            fCurrentBreast = SLHGetNodeScale(kActor, NINODE_RIGHT_BREAST, false)
+        elseif (StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON")==0)
+            fCurrentBreast = NetImmerse.GetNodeScale(kActor, NINODE_RIGHT_BREAST, false)
+        else
+            fCurrentBreast = StorageUtil.GetFloatValue(kActor, "_SLH_fBreast")
+        endIf
 
 
 				if (bExternalChangeModActive) && (StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON")==0)
@@ -838,6 +843,8 @@ function alterBodyByPercent(Actor kActor, String sBodyPart, Float modFactor)
 					fNodeMax = fBreastMax
 					fBreast = ( fCurrentBreast + ( modFactor * fCurrentBreast) / 100.0 )    
 				EndIf
+
+        fBreast = fctUtil.fRange(fBreast, fBreastMin, fNodeMax)
 
 				debugTrace("  	fCurrentBreast:  " + fCurrentBreast)
 				debugTrace("  		fBreastSwellMod:  " + fBreastSwellMod)
@@ -854,13 +861,13 @@ function alterBodyByPercent(Actor kActor, String sBodyPart, Float modFactor)
 		If (sBodyPart=="Belly")  && (GV_useBellyNode.GetValue() == 1)
 			if ( bBellyEnabled )  
 				Float fCurrentBelly 
-                If (StorageUtil.GetIntValue(none, "_SLH_BodyMorphsON")==1)
-                    fCurrentBelly = SLHGetNodeScale(kActor, NINODE_BELLY, false)
-                elseif (StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON")==0)
-                    fCurrentBelly = NetImmerse.GetNodeScale(kActor, NINODE_BELLY, false)
-                else
-                    fCurrentBelly = StorageUtil.GetFloatValue(kActor, "_SLH_fBelly")
-                endIf
+        If (StorageUtil.GetIntValue(none, "_SLH_BodyMorphsON")==1)
+            fCurrentBelly = SLHGetNodeScale(kActor, NINODE_BELLY, false)
+        elseif (StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON")==0)
+            fCurrentBelly = NetImmerse.GetNodeScale(kActor, NINODE_BELLY, false)
+        else
+            fCurrentBelly = StorageUtil.GetFloatValue(kActor, "_SLH_fBelly")
+        endIf
 
 				if (bExternalChangeModActive) && (StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON")==0)
 					fNodeMax = fPregBellyMax
@@ -869,6 +876,8 @@ function alterBodyByPercent(Actor kActor, String sBodyPart, Float modFactor)
 					fNodeMax = fBellyMax
 					fBelly = (fCurrentBelly + ( modFactor * fCurrentBelly) / 100.0 )
 				EndIf
+
+        fBelly = fctUtil.fRange(fBelly, fBellyMin, fNodeMax)
 				
 				alterBellyNode(kActor, fBelly )
 
@@ -879,13 +888,13 @@ function alterBodyByPercent(Actor kActor, String sBodyPart, Float modFactor)
 		If (sBodyPart=="Butt")  && (GV_useButtNode.GetValue() == 1)
 			if ( bButtEnabled )  
 				Float fCurrentButt 
-                If (StorageUtil.GetIntValue(none, "_SLH_BodyMorphsON")==1)
-                    fCurrentButt = SLHGetNodeScale(kActor, NINODE_RIGHT_BUTT, false)
-                elseif (StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON")==0)
-                    fCurrentButt = NetImmerse.GetNodeScale(kActor, NINODE_RIGHT_BUTT, false)
-                else
-                    fCurrentButt = StorageUtil.GetFloatValue(kActor, "_SLH_fButt")
-                endIf
+        If (StorageUtil.GetIntValue(none, "_SLH_BodyMorphsON")==1)
+            fCurrentButt = SLHGetNodeScale(kActor, NINODE_RIGHT_BUTT, false)
+        elseif (StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON")==0)
+            fCurrentButt = NetImmerse.GetNodeScale(kActor, NINODE_RIGHT_BUTT, false)
+        else
+            fCurrentButt = StorageUtil.GetFloatValue(kActor, "_SLH_fButt")
+        endIf
 
 				if (bExternalChangeModActive) && (StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON")==0)
 					fNodeMax = fPregButtMax
@@ -894,6 +903,8 @@ function alterBodyByPercent(Actor kActor, String sBodyPart, Float modFactor)
 					fNodeMax = fButtMax
 					fButt = ( fCurrentButt + ( modFactor * fCurrentButt) / 100.0 )  
 				EndIf
+
+        fButt = fctUtil.fRange(fButt, fButtMin, fNodeMax)
 				
 				alterButtNode(kActor,  fButt )
 			endif
@@ -916,6 +927,7 @@ function alterBodyByPercent(Actor kActor, String sBodyPart, Float modFactor)
 				; endIf
 				
 				fSchlong = ( fCurrentSchlong + ( modFactor * fCurrentSchlong) / 100.0 )  
+        fSchlong = fctUtil.fRange(fSchlong, fSchlongMin, fSchlongMax)
 
 				alterSchlongNode(kActor,  fSchlong )
 			endif

@@ -1971,6 +1971,7 @@ Function doOrgasm(String _args)
 
 		PlayerActor= Game.GetPlayer() ; PlayerAlias.GetReference()
 
+		Float fHormoneSexDrive = StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneSexDrive" )
 		Int iDaedricInfluence = StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneSuccubus" ) as Int
 		Int iSuccubus = StorageUtil.GetIntValue(PlayerActor, "_SLH_iSuccubus")
 		Int isPregnant = StorageUtil.GetIntValue(PlayerActor, "_SLH_isPregnant")
@@ -1997,7 +1998,8 @@ Function doOrgasm(String _args)
 
 		iGameDateLastSex = Game.QueryStat("Days Passed")   
 		Float AbsLibido = (Math.abs(StorageUtil.GetFloatValue(PlayerActor, "_SLH_fLibido")) as Float)
-		fctUtil.updateSexLabArousedExposure(PlayerActor, (fctHormones.getHormoneLevelsRacialAdjusted(PlayerActor, "SexDrive") as Int))
+		; fctUtil.updateSexLabArousedExposure(PlayerActor, (fctHormones.getHormoneLevelsRacialAdjusted(PlayerActor, "SexDrive") as Int))
+
 
  		StorageUtil.SetIntValue(PlayerActor, "_SLH_iGameDateLastSex", iGameDateLastSex) 
 		StorageUtil.SetIntValue(PlayerActor, "_SLH_iDaysSinceLastSex", iDaysSinceLastSex) 
@@ -2012,12 +2014,12 @@ Function doOrgasm(String _args)
 
 		If (fctUtil.IsMale(PlayerActor))
 			; Male - larger drop of sex drive after orgasm, small chance of multiple orgasms
-			If (Utility.RandomInt(0,100) < (StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneSexDrive") as Int))
+			If (Utility.RandomInt(0,100) < (fHormoneSexDrive as Int))
 				fctHormones.modHormoneLevel(PlayerActor, "SexDrive", -30.0 - 10.0 * (Utility.RandomInt(0,3)))
 			Endif
 		Else
 			; Female - chance of increased sex drive after orgasm, possibility of multiple orgasms
-			If (Utility.RandomInt(0,100) < ((StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneSexDrive") as Int) / 2))
+			If (Utility.RandomInt(0,100) < ((fHormoneSexDrive as Int) / 4))
 				fctHormones.modHormoneLevel(PlayerActor, "SexDrive", -20.0 * (Utility.RandomInt(0,2)))
 			else
 				fctHormones.modHormoneLevel(PlayerActor, "SexDrive", 10.0 * (Utility.RandomInt(0,2)))
@@ -2035,6 +2037,9 @@ Function doOrgasm(String _args)
 		If (isBimbo)
 			fctHormones.modHormoneLevel(PlayerActor, "Bimbo", 0.5)
 		endIf
+
+		; Update arousal rate and exposure
+		fctUtil.manageSexLabAroused(PlayerActor)
 
 		; Succubus effect ==================================================
 		If ((iSuccubus == 1)  && (_SLH_QST_Succubus.GetStage()>=30)) && !fctUtil.isMale(PlayerActor)
