@@ -744,34 +744,15 @@ Function SDSurrender(Actor kActor, String SurrenderMode)
 		funct.SanguineRape( kNewMaster, kPlayer)
 	Else
 		Debug.Trace("[_sdras_player] Attempted enslavement to empty master " )
+		_enslaveRadius(200, None)
 	EndIf
 EndFunction
 
 Event OnSDEnslaveRadius(String _eventName, String _args = "200.0", Float _argc = 1.0, Form _sender)
 	float fRadius = _args as Float
-	Actor kPotentialMaster
 	Actor kIgnoreActor = _sender as Actor
-	Int iAttempts = 0
-	Bool bMasterFound = false
 
-	While ((iAttempts<5) || (!bMasterFound))
-		fRadius = fRadius + (iAttempts * 50.0)
-		kPotentialMaster = SexLab.FindAvailableActor(kPlayer, fRadius)  
-		if ( ( ((kIgnoreActor!=None) && (kPotentialMaster!=kIgnoreActor)) || (kIgnoreActor==None)) && (kPotentialMaster!=None))
-			bMasterFound = True
-		Else
-			Debug.Trace("[_sdras_player] No potential master found around player - Radius:" + fRadius)
-		Endif
-
-		iAttempts = iAttempts + 1
-	Endwhile
-
-	if (bMasterFound)
-		SDSurrender(kPotentialMaster, _args )
-	else
-		Debug.Trace("[_sdras_player] No potential master found around player" )
-		SDFree()
-	endif
+	_enslaveRadius(fRadius, kIgnoreActor)
 EndEvent
 
 Event OnSDEnslave(String _eventName, String _args, Float _argc = 1.0, Form _sender)
@@ -857,8 +838,9 @@ Event OnSDDreamworldStart(String _eventName, String _args, Float _argc = 0.0, Fo
 
 EndEvent
 
-Event OnSDDreamworldPull(String _eventName, String _args, Float _argc = 15.0, Form _sender)
+Event OnSDDreamworldPull(String _eventName, String _args, Float _argc = -1.0, Form _sender)
 	int stageID = _args as Int
+	int scenarioID = _argc as Int
 	; Dreamworld has to be visited at least once for this event to work
 	Debug.Trace("[_sdras_player] Receiving dreamworld pull story event [" + _args  + "] [" + _argc as Int + "]")
 	Debug.Trace("[_sdras_player] StageID: " + stageID)
@@ -868,15 +850,90 @@ Event OnSDDreamworldPull(String _eventName, String _args, Float _argc = 15.0, Fo
 		Debug.Trace("[_sdras_player] StageID is 0, using this stage instead: " + stageID)
 	endif
 
-	If (_SD_dreamQuest.GetStageDone(10))
-		If (_SDGVP_sanguine_blessing.GetValue() > 0) 
-			_SD_dreamQuest.SetStage(stageID)
-		EndIf
-	Else
-		_SD_dreamerScript.startDreamworld()
+	If (scenarioID == 1) ; force send player to Dreamworld
+		Debug.Trace("[_sdras_player] scenarioID is 1, routing player to Dreamworld")
+		_routePlayer(1, stageID, _sender)
+	Else ; Broker behavior, route player to other scenarions. Useful if Death Alternative - YMOYL is not installed or replaced by other Death Alternative mods
+		Debug.Trace("[_sdras_player] scenarioID is 1, routing player to multiple scenarios")
+		_routePlayer(scenarioID, stageID, _sender)
 	Endif
 
 EndEvent
+
+Function _routePlayer(Int iScenarioID, Int iStageId, Form _sender)
+	Int iRandumNum = Utility.RandomInt(0,100)
+
+	; TO DO - Hardcoded thresholds for now, replace with sliders in MCM later
+	; Secnario 0 : Random choice
+	; Secnario 1 : Dreamworld
+	; Scenario 2 : Enslavement to sender or radius if sender is not defined
+	; Scenario 3 : Send player to random location (left for dead?)
+	; Scenario 4 : Send player to safe location (brought back to Haelga)
+	; Scenario 5 : Send player to a slavery hub (Mistwatch for now)
+
+	Int iDreamworldThreshold = 60
+	Int iEnslavementThreshold = 40
+
+	; Random selection
+	If (iScenarioID == 0)
+		Debug.Trace("[_sdras_player][_routePlayer] scenarioID is 0, routing player to multiple scenarios")
+
+		If (iRandumNum >= iEnslavementThreshold)
+			iScenarioID = 2
+		Else
+			iScenarioID = 1
+		Endif
+	Endif
+
+	Debug.Trace("[_sdras_player][_routePlayer] routing player to scenario " + iScenarioID )
+
+	If (iScenarioID == 2)
+		If (_sender != None)
+			Debug.Trace("[_sdras_player][_routePlayer] routing player to Enslavement "  )
+			SDSurrender(_sender as Actor, "" )
+		Else
+			Debug.Trace("[_sdras_player][_routePlayer] routing player to Enslavement with radius"  )
+			_enslaveRadius(200, None)
+		Endif
+
+	Else
+		Debug.Trace("[_sdras_player][_routePlayer] routing player to Dreamworld"  )
+		If (_SD_dreamQuest.GetStageDone(10))
+			If (_SDGVP_sanguine_blessing.GetValue() > 0) 
+				_SD_dreamQuest.SetStage(iStageId)
+			EndIf
+		Else
+			_SD_dreamerScript.startDreamworld()
+		Endif
+	Endif
+
+EndFunction
+
+Function _enslaveRadius(Float fRadius, Form kIgnoreActor)
+	Actor kPotentialMaster
+	Int iAttempts = 0
+	Bool bMasterFound = false
+
+	While ((iAttempts<5) || (!bMasterFound))
+		fRadius = fRadius + (iAttempts * 50.0)
+		kPotentialMaster = SexLab.FindAvailableActor(kPlayer, fRadius)  
+		if ( ( ((kIgnoreActor!=None) && (kPotentialMaster!=kIgnoreActor)) || (kIgnoreActor==None)) && (kPotentialMaster!=None))
+			bMasterFound = True
+		Else
+			Debug.Trace("[_sdras_player] No potential master found around player - Radius:" + fRadius)
+		Endif
+
+		iAttempts = iAttempts + 1
+	Endwhile
+
+	if (bMasterFound)
+		SDSurrender(kPotentialMaster, "" )
+	else
+		Debug.Trace("[_sdras_player] No potential master found around player" )
+		SDFree()
+	endif
+Endfunction
+
 
 
 Event OnSDDreamworldSuspend(String _eventName, String _args, Float _argc = 15.0, Form _sender)
