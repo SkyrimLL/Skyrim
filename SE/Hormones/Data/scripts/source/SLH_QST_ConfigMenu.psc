@@ -535,6 +535,11 @@ event OnPageReset(string a_page)
 		AddTextOption("$     Stress: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneStress") as Int +"}", "", OPTION_FLAG_DISABLED)
 		AddTextOption("$     Mood: {" + StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneMood") as Int +"}", "", OPTION_FLAG_DISABLED)
  
+
+		AddEmptyOption()
+		AddTextOption("$ SwellFactor = {" +  StorageUtil.GetFloatValue(PlayerActor, "_SLH_fSwellFactor")   as Float +"}", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$ BodyType = {" +  StorageUtil.GetIntValue(PlayerActor, "_SLH_iBodyType")   as Int +"}", "", OPTION_FLAG_DISABLED)
+
 		AddEmptyOption()
  		AddTextOption("$ StaminaRate = {" + PlayerActor.GetActorValue("StaminaRate")  as Float +"}", "", OPTION_FLAG_DISABLED)
  		AddTextOption("$ HealRate = {" + PlayerActor.GetActorValue("HealRate")  as Float +"}", "", OPTION_FLAG_DISABLED)
@@ -607,8 +612,10 @@ event OnPageReset(string a_page)
 		AddSliderOptionST("STATE_SHRINK_FACTOR","$SLH_sSHRINK_FACTOR", _baseShrinkFactor as Float,"{0} %")
 
 		AddHeaderOption("$SLH_hClothCompression")
-		AddSliderOptionST("STATE_ARMOR_MOD","$SLH_sARMOR_MOD", _armorMod as Float,"{1}")
-		AddSliderOptionST("STATE_CLOTH_MOD","$SLH_sCLOTH_MOD", _clothMod as Float,"{1}")
+		AddSliderOptionST("STATE_ARMOR_MOD","$SLH_sARMOR_MOD", _armorMod as Float,"{1}", OPTION_FLAG_DISABLED)
+		AddSliderOptionST("STATE_CLOTH_MOD","$SLH_sCLOTH_MOD", _clothMod as Float,"{1}", OPTION_FLAG_DISABLED)
+		AddTextOption("[This option is causing issues and ", "", OPTION_FLAG_DISABLED)
+		AddTextOption(" is disabled until a solution is found.]", "", OPTION_FLAG_DISABLED)
 
 		AddHeaderOption("$SLH_hBRreast")
 		If (bBreastEnabled)
@@ -1562,7 +1569,7 @@ state STATE_BREAST_MAX ; SLIDER
 	event OnSliderOpenST()
 		SetSliderDialogStartValue( GV_breastMax.GetValue() )
 		SetSliderDialogDefaultValue( 2.0 )
-		SetSliderDialogRange( GV_breastMin.GetValue(), 4.0 )
+		SetSliderDialogRange( GV_breastMin.GetValue(), 6.0 )
 		SetSliderDialogInterval( 0.2 )
 	endEvent
 

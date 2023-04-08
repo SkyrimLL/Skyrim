@@ -1,0 +1,30 @@
+{
+	"float" : 
+	{
+		"breasts" : 0.4, 
+		"breastgravity" : 0.03,
+		"breastcleavage" : 0.15,
+		"breaststogether" : 0.04, 
+		"breastsfantasy" : 0.2,
+
+		"nippleperkiness" : 0.04,
+		"nipplelength" : 0.2,
+		"nipplesize" : 0.25,
+
+		"belly" : 0.03,
+		"bigbelly" : 0.03,
+		"pregnancybelly": 0.25,
+		"bellyfrontdownfat_v2" : 0.0,
+		"bellyunder_v2" : 0.0,
+		"hips" : -0.04,
+		"hipsupperwidth" : -0.15,
+		"widewaistline" : -0.04,
+
+		"butt" : 0.03,
+		"applecheeks" : 0.05,
+		"chubbybutt" : 0.0,
+		"musclebutt" : 0.0,
+
+		"thighs" : 0.04
+	}
+}

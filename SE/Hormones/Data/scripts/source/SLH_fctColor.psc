@@ -95,7 +95,7 @@ function alterColorFromHormone(Actor kActor)
 	Int iDaysSinceLastSex = (Game.QueryStat("Days Passed") - iGameDateLastSex ) as Int
 	StorageUtil.SetIntValue(kActor, "_SLH_iDaysSinceLastSex", iDaysSinceLastSex)
 
-	Float fSwellFactor =  StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneSexDrive") 
+	Float fSwellFactor =  StorageUtil.GetFloatValue(PlayerActor, "_SLH_fSwellFactor") 
 	Float fPigmentationFactor = (StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormonePigmentation") / 100.0 ) 
 	Int iPigmentationLevel = (StorageUtil.GetFloatValue(PlayerActor, "_SLH_fHormoneSexDrive" ) * 255.0 / 200.0) as Int
 
