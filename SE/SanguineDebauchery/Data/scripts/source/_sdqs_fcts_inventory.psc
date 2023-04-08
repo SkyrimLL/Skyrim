@@ -60,7 +60,7 @@ Function transferInventory(Actor kMaster, Actor kSlave, Bool bLimitedRemoval = F
 		filteredRemoveAllItems(kSlave,  None, "Weapon", True )	; send Weapons to default storage (player chest in Dreamworld)
 		filteredRemoveAllItems(kSlave,  None, "Ammo", False )	
 
-		if (kMaster != None)
+		if (kMaster != None) && (StorageUtil.GetIntValue(kMaster, "_SD_iMasterIsCreature") == 0)
 			filteredRemoveAllItems(kSlave,  kMaster, "Gold", False )  ; send Gold to Master
 		endif
 		
