@@ -4,6 +4,7 @@ Import Utility
 Import SKSE
 zadLibs Property libs Auto
 SexLabFrameWork Property SexLab Auto
+slaUtilScr Property slaUtil  Auto  
 
 Faction Property _SLP_ChaurusFriendlyFaction  Auto
 Faction Property _SLP_SpiderFriendlyFaction  Auto
@@ -425,6 +426,22 @@ Function FalmerBlue(Actor kActor, Actor kTarget)
 		endif
 	Endif	
 EndFunction
+
+;------------------------------------------------------------------------------
+int Function GetCurrentHourOfDay() 
+ 
+	Float fCurrentHourOfDay = Utility.GetCurrentGameTime()
+	fCurrentHourOfDay -= Math.Floor(fCurrentHourOfDay) ; Remove "previous in-game days passed" bit
+	fCurrentHourOfDay *= 24 ; Convert from fraction of a day to number of hours
+	Return fCurrentHourOfDay as Int
+ 
+EndFunction
+
+;------------------------------------------------------------------------------
+; Wrapper functions for Arousal
+Float Function GetActorArousal(Actor kActor)
+	return slaUtil.GetActorArousal(kActor)
+endFunction
 ;------------------------------------------------------------------------------
 
 bool Function CheckXPMSERequirements(Actor akActor, bool isFemale)

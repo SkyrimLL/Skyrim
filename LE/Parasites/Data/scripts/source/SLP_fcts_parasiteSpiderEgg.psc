@@ -172,6 +172,12 @@ Function cureSpiderEgg( Actor kActor, Bool bHarvestParasite = False   )
   		; The spider penis is blocking the eggs
   		return
   	endif
+
+  	
+	If (fctDevious.ActorHasKeywordByString( kActor, "Belt"  ))
+		Debug.Trace("[SLP]	Already wearing a belt - Aborting")
+		Return 
+	Endif
  
 	If (isInfectedByString( kActor,  "SpiderEgg" ))
 		iNumSpiderEggsRemoved = Utility.RandomInt(2,8)
@@ -196,7 +202,7 @@ Function cureSpiderEgg( Actor kActor, Bool bHarvestParasite = False   )
 			Endif
 
 		else
-			debug.notification("Some eggs detached from the cluster... more remain inside you.")
+			debug.messagebox("Some eggs detached from the cluster... more remain inside you.")
 			PlayerActor.AddItem(SmallSpiderEgg,iNumSpiderEggsRemoved)
 		Endif
 
@@ -223,7 +229,12 @@ Function cureSpiderEggAll( Actor kActor, Bool bHarvestParasite = False   )
   		; The spider penis is blocking the eggs
   		return
   	endif
- 
+  	
+	If (fctDevious.ActorHasKeywordByString( kActor, "Belt"  ))
+		Debug.Trace("[SLP]	Already wearing a belt - Aborting")
+		Return 
+	Endif
+
 	If (isInfectedByString( kActor,  "SpiderEgg" ))
 		iNumSpiderEggsRemoved = StorageUtil.GetIntValue(kActor, "_SLP_iSpiderEggCount")
 		; iNumSpiderEggs = StorageUtil.GetIntValue(kActor, "_SLP_iSpiderEggCount") - iNumSpiderEggsRemoved
@@ -347,6 +358,12 @@ Function cureSpiderPenis( Actor kActor, Bool bHarvestParasite = False   )
   	if (kActor == None)
   		kActor = PlayerActor
   	endIf
+
+  	
+	If (fctDevious.ActorHasKeywordByString( kActor, "Belt"  ))
+		Debug.Trace("[SLP]	Already wearing a belt - Aborting")
+		Return  
+	Endif
  
 	If (isInfectedByString( kActor,  "SpiderPenis" ))
 		StorageUtil.SetIntValue(kActor, "_SLP_toggleSpiderPenis", 0 )
@@ -422,3 +439,183 @@ EndFunction
 Bool Function ActorHasKeywordByString(actor akActor, String deviousKeyword = "")
 	return libs.ActorHasKeyword(akActor, getDeviousKeywordByString( deviousKeyword ))
 EndFunction
+
+
+; ------- Parasite thoughts
+
+
+
+function parasiteRandomThoughts(actor kParasiteHost, Int iSexLabValidateActor = 1)
+	Int rollMessage 
+	Int rollFirstPerson 
+	String ParasiteMessage = ""
+	Float fHormoneParasite = StorageUtil.GetFloatValue(kParasiteHost, "_SLH_fHormonePheromones" ) 	 
+
+	rollMessage = Utility.RandomInt(0,140)
+	rollFirstPerson = Utility.RandomInt(0,100)
+
+	;wait a little to show the messages, because on ragdoll the hud is hidden
+	; Utility.Wait(2.0)
+
+	If (StorageUtil.GetFloatValue(kParasiteHost, "_SLP_thoughtsDelay")==0)
+		Return
+	Endif
+
+	; Under 50.0, only play a sound
+	; if (fHormoneParasite<50.0)
+	; 	Return
+	; Endif
+
+	; Debug.Notification("[SLH] Parasite First Person Roll: " + rollFirstPerson)
+	; Debug.Notification("[SLH] Parasite First Person: " + (StorageUtil.GetFloatValue(kParasiteHost, "_SLH_fHormonePheromones") as Int))
+
+	If (rollFirstPerson <= (fHormoneParasite as Int))
+		; First person thought
+		if kParasiteHost.IsOnMount() 
+			if (rollMessage >= 120)
+				ParasiteMessage = "I hope the eggs won't get crushed from riding!"
+			elseif (rollMessage >= 110)
+				ParasiteMessage = "Riding is making the eggs bounce inside me!" 
+			elseif (rollMessage >= 90)
+				ParasiteMessage = "I can feel the eggs so deep from riding..."
+			elseif (rollMessage >= 80)
+				ParasiteMessage = "Riding with a belly full of eggs is going to make me come!"
+			elseif (rollMessage >= 60)
+				ParasiteMessage = "I bet riding would feel even better with more spider eggs inside me."
+			elseif (rollMessage >= 50)
+				ParasiteMessage = "The eggs are making me tingle!"
+			elseif (rollMessage >= 40) 
+				ParasiteMessage = "I need to find another spider and get bred more."
+			elseif (rollMessage >= 20)
+				ParasiteMessage = "The eggs keep rolling so deep inside me!" 
+			else 
+				ParasiteMessage = "Those eggs feel so good! *Giggle*"
+			endIf
+
+		elseif (iSexLabValidateActor <= 0)
+			if (rollMessage >= 120)
+				ParasiteMessage = "The eggs are filling me up so good!"
+			elseif (rollMessage >= 115)
+				ParasiteMessage = "I can feel the eggs rub me fron the inside!"
+			elseif (rollMessage >= 110)
+				ParasiteMessage = "My vagina is so full right now!"
+			elseif (rollMessage >= 109)
+				ParasiteMessage = "Being fucked with these eggs inside is making me so horny."
+			elseif (rollMessage >= 107)
+				ParasiteMessage = "The eggs are making me so wet!"
+			elseif (rollMessage >= 105)
+				ParasiteMessage = "Always wet, always horny, always full of eggs."
+			elseif (rollMessage >= 100)
+				ParasiteMessage = "I need get fucked by spiders more."
+			elseif (rollMessage >= 90)  
+				ParasiteMessage = "I could fuck full of eggs all day long!" 
+			else 
+				ParasiteMessage = "I need to keep these eggs in or find more!"
+			endIf
+
+
+		elseif	kParasiteHost.IsRunning() || kParasiteHost.IsSprinting() 
+			if (rollMessage >= 90)
+				ParasiteMessage = "The eggs keep rolling inside me."
+			elseif (rollMessage >= 50)
+				ParasiteMessage = "I swear one egg is about to push out when I run."
+			else 
+				ParasiteMessage = "Gosh, these eggs rubbing inside me make me so horny..."
+			endIf
+
+		elseif	kParasiteHost.IsInCombat() 
+			if (rollMessage >= 90)
+				ParasiteMessage = "I can swear the eggs just pulled deeper inside me."
+			elseif (rollMessage >= 70)
+				ParasiteMessage = "The eggs are making me so slimy between my legs."
+			else 
+				ParasiteMessage = "Those eggs are driving me crazy!." 
+			endIf
+			
+		else
+			if (rollmessage >= 118)
+				ParasiteMessage = "These eggs are making me feel so full!"		
+            elseif (rollMessage >= 6)
+                ParasiteMessage = "What if an egg breaks and a spider comes out!?"
+			else
+				ParasiteMessage = "Ohhh one egg almost pushed out!"
+			endIf
+		endif
+
+	else
+		; Third person thought
+		if kParasiteHost.IsOnMount() 
+			if (rollMessage >= 120)
+				ParasiteMessage = "The eggs keep your pussy lips spread from riding!"
+			elseif (rollMessage >= 110)
+				ParasiteMessage = "Riding is making the eggs bounce inside you!" 
+			elseif (rollMessage >= 90)
+				ParasiteMessage = "The eggs burrow deeper from riding..."
+			elseif (rollMessage >= 80)
+				ParasiteMessage = "Riding with a belly full of eggs feels so good!"
+			elseif (rollMessage >= 60)
+				ParasiteMessage = "Riding would feel even better with more spider eggs inside you."
+			elseif (rollMessage >= 50)
+				ParasiteMessage = "The eggs are driving you mad!"
+			elseif (rollMessage >= 40) 
+				ParasiteMessage = "You need to find another spider to breed you."
+			elseif (rollMessage >= 20)
+				ParasiteMessage = "The eggs keep rolling so deep inside you!" 
+			else 
+				ParasiteMessage = "Those eggs feel so good inside!"
+			endIf
+
+		elseif (iSexLabValidateActor <= 0)
+			if (rollMessage >= 120)
+				ParasiteMessage = "The eggs are filling you up so good!"
+			elseif (rollMessage >= 115)
+				ParasiteMessage = "You can feel the eggs rub and stretch you."
+			elseif (rollMessage >= 110)
+				ParasiteMessage = "Your vagina is so full right now!"
+			elseif (rollMessage >= 109)
+				ParasiteMessage = "Being fucked with these eggs inside is making you so horny."
+			elseif (rollMessage >= 107)
+				ParasiteMessage = "The eggs are making you so wet!"
+			elseif (rollMessage >= 105)
+				ParasiteMessage = "Always wet, always horny, always full of eggs."
+			elseif (rollMessage >= 100)
+				ParasiteMessage = "You need to find more spiders to fuck."
+			elseif (rollMessage >= 90)  
+				ParasiteMessage = "You could fuck full of eggs all day long!" 
+			else 
+				ParasiteMessage = "You need to keep these eggs in or find more!"
+			endIf
+
+
+		elseif	kParasiteHost.IsRunning() || kParasiteHost.IsSprinting() 
+			if (rollMessage >= 90)
+				ParasiteMessage = "The eggs keep rolling inside you."
+			elseif (rollMessage >= 50)
+				ParasiteMessage = "One egg is about to burst out as you run."
+			else 
+				ParasiteMessage = "These eggs rubbing inside you and keep you horny."
+			endIf
+
+		elseif	kParasiteHost.IsInCombat() 
+			if (rollMessage >= 90)
+				ParasiteMessage = "The eggs pull deeper inside you."
+			elseif (rollMessage >= 70)
+				ParasiteMessage = "The eggs are making you so slimy between your legs."
+			else 
+				ParasiteMessage = "Those eggs are so distracting!." 
+			endIf
+			
+		else
+			if (rollmessage >= 118)
+				ParasiteMessage = "These eggs are making you feel so full!"		
+            elseif (rollMessage >= 6)
+                ParasiteMessage = "What if an egg breaks and a spider comes out!?"
+			else
+				ParasiteMessage = "One egg almost pushed out!"
+			endIf
+		endif
+	endIf
+
+	Debug.Notification(ParasiteMessage) ;temp messages
+endfunction
+

@@ -6,7 +6,7 @@ Scriptname SLP_TIF_CureBlackreachSpores Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-KynesBlessingQuest.SetObjectiveDisplayed(39)
+KynesBlessingQuest.SetObjectiveDisplayed(89)
 ;END CODE
 EndFunction
 ;END FRAGMENT

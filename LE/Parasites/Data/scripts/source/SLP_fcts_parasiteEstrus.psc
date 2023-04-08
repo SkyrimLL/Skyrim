@@ -337,6 +337,15 @@ Function triggerEstrusChaurusBirth( Actor kActor, String  sParasite, Int iBirthI
 	;	Return
 	; Endif 
 
+	If (fctDevious.ActorHasKeywordByString( kActor, "Belt"  ))
+		Debug.MessageBox("The cramps are in vain as your body tries to expel the parasites in spite of the material covering your holes.")
+		Debug.Trace("[SLP]	Already wearing a belt - Aborting")
+        Debug.SendAnimationEvent(PlayerRef, "bleedOutStart")
+        utility.wait(4)
+        Debug.SendAnimationEvent(PlayerRef, "IdleForceDefaultState")
+		Return 
+	Endif
+
 	If (sParasite == "SpiderEgg")
 		fBirthItem = SmallSpiderEgg as Form
 

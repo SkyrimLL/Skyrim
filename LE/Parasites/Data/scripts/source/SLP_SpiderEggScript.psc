@@ -71,7 +71,11 @@ EndFunction
 
 
 int Function OnUnequippedFilter(actor akActor)
+
 	if akActor.WornHasKeyword(zad_DeviousBelt)
+		string msg = ""
+		msg = "The spider eggs are wedged in too deep under the material covering your vagina. Removing them is futile until your vagina is exposed."
+		libs.NotifyPlayer(msg, true)
 		return 1
 	EndIf
 	return 0
