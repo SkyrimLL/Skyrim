@@ -94,6 +94,7 @@ float		_maxBroodSpawns = -1.0
 bool		_autoRemoveDragonWings = false
 
 float		_flareDelay = -1.0
+float		_thoughtsDelay = -1.0
 
 bool		_toggleRefreshAll = false
 bool		_toggleClearAll = false
@@ -254,6 +255,7 @@ event OnPageReset(string a_page)
 	_maxBroodSpawns = StorageUtil.GetIntValue(kPlayer, "_SLP_maxBroodSpawns" ) as Float
 
 	_flareDelay = StorageUtil.GetFloatValue(kPlayer, "_SLP_flareDelay" ) as Float
+	_thoughtsDelay = StorageUtil.GetFloatValue(kPlayer, "_SLP_thoughtsDelay" ) as Float
 
 	_togglePriestOutfits = StorageUtil.GetIntValue(none, "_SLP_togglePriestOutfits" )
 
@@ -264,7 +266,8 @@ event OnPageReset(string a_page)
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
 		AddHeaderOption("$ Events control")
-		AddSliderOptionST("STATE_FLARE_DELAY","$Flare Delay", _flareDelay ,"{1}")
+		AddSliderOptionST("STATE_FLARE_DELAY","$Flare Frequency", _flareDelay ,"{1}")
+		AddSliderOptionST("STATE_THOUGHTS_DELAY","$Thoughts Frequency", _thoughtsDelay ,"{1}")
 
 		AddHeaderOption("$ Chance of infection")
 		AddSliderOptionST("STATE_SPIDEREGG_CHANCE","$Spider Eggs (Vaginal plug)", _chanceSpiderEgg,"{0} %")
@@ -290,6 +293,7 @@ event OnPageReset(string a_page)
 		SetCursorPosition(1)
 		AddEmptyOption()
 		AddToggleOptionST("STATE_CHAURUSQUEEN_INFECTION_TOGGLE","$Sex can infect NPCs", _toggleChaurusQueenInfectNPCs as Float)
+		AddEmptyOption()
 
 		AddHeaderOption("$ Infect/Cure")
 		AddToggleOptionST("STATE_SPIDEREGG_TOGGLE","$Infect/Cure Spider Egg", _toggleSpiderEgg as Float)
@@ -1728,7 +1732,7 @@ state STATE_FLARE_DELAY ; SLIDER
 	event OnSliderOpenST()
 		SetSliderDialogStartValue( StorageUtil.GetFloatValue(kPlayer, "_SLP_flareDelay" ) as Float)
 		SetSliderDialogDefaultValue( 100.0 )
-		SetSliderDialogRange( 0.0, 300.0 )
+		SetSliderDialogRange( 0.0, 100.0 )
 		SetSliderDialogInterval( 0.5 )
 	endEvent
 
@@ -1744,7 +1748,32 @@ state STATE_FLARE_DELAY ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("$Delays checks for 'flare' events from certain parasites (roughly in real time minutes). Use values between 0 and 1 to accelerate flares. Use 0 to turn flares off.")
+		SetInfoText("$Frequency of 'flare' events. High values means more frequent. Use 0 to turn flares off.")
+	endEvent
+endState
+
+; AddSliderOptionST("STATE_THOUGHTS_DELAY","Thoughts Frequency", _thoughtsDelay ,"{1}")
+state STATE_THOUGHTS_DELAY ; SLIDER
+	event OnSliderOpenST()
+		SetSliderDialogStartValue( StorageUtil.GetFloatValue(kPlayer, "_SLP_thoughtsDelay" ) as Float)
+		SetSliderDialogDefaultValue( 100.0 )
+		SetSliderDialogRange( 0.0, 100.0 )
+		SetSliderDialogInterval( 0.5 )
+	endEvent
+
+	event OnSliderAcceptST(float value)
+		float thisValue = value 
+		StorageUtil.SetFloatValue(kPlayer, "_SLP_thoughtsDelay", thisValue as Float )
+		SetSliderOptionValueST( thisValue,"{1}" ) 
+	endEvent
+
+	event OnDefaultST()
+		StorageUtil.SetFloatValue(kPlayer, "_SLP_thoughtsDelay", 5 )
+		SetSliderOptionValueST( 5.0,"{1}" )
+	endEvent
+
+	event OnHighlightST()
+		SetInfoText("$Controls frequency of 'thoughts' or comments about Parasites effects. This comes on top of messages from parasites devices. High values means more frequent. Use 0 to turn off.")
 	endEvent
 endState
 

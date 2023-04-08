@@ -72,6 +72,9 @@ EndFunction
 
 int Function OnUnequippedFilter(actor akActor)
 	if akActor.WornHasKeyword(zad_DeviousBelt)
+		string msg = ""
+		msg = "The crawls deep under the material covering your ass. Removing it is futile until your anus is exposed."
+		libs.NotifyPlayer(msg, true)
 		return 1
 	EndIf
 	return 0
