@@ -341,11 +341,13 @@ Function EnslavePlayer(Actor akMaster, Actor akSlave, Bool bLimitedRemoval = Fal
 		kMaster.SetRelationshipRank(kSlave, 0 )
 	EndIf
 
-	If ( kCrimeFaction && !kMaster.IsInFaction( _SDFP_bountyhunter ) )
-		iGold = kCrimeFaction.GetCrimeGold()
-		iDemerits += Math.Ceiling( Math.abs(iGold) / 100 )
-		kCrimeFaction.PlayerPayCrimeGold( True, False )
-	EndIf
+	If (StorageUtil.GetIntValue(kMaster, "_SD_iMasterIsCreature") == 0)
+		If ( kCrimeFaction && !kMaster.IsInFaction( _SDFP_bountyhunter ) )
+			iGold = kCrimeFaction.GetCrimeGold()
+			iDemerits += Math.Ceiling( Math.abs(iGold) / 100 )
+			kCrimeFaction.PlayerPayCrimeGold( True, False )
+		EndIf
+	Endif
 
 	; Test slaver tattoo
 	debugTrace(" You are marked as your owner's property.")
