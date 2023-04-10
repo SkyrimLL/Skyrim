@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<SliderPresets>
+    <Preset name="Hormones Starving to Slim" set="CBBE Body BBP">
+        <Group name="Pregnancy Scaling Body"/>
+        <SetSlider name="Arms" size="big" value="10"/>
+        <SetSlider name="Belly" size="small" value="33"/>
+        <SetSlider name="BigBelly" size="big" value="50"/>
+        <SetSlider name="BreastCleavage" size="big" value="30"/>
+        <SetSlider name="BreastGravity" size="big" value="20"/>
+        <SetSlider name="BreastGravity" size="small" value="100"/>
+        <SetSlider name="BreastHeight" size="big" value="70"/>
+        <SetSlider name="BreastPerkiness" size="big" value="100"/>
+        <SetSlider name="BreastPerkiness" size="small" value="100"/>
+        <SetSlider name="BreastWidth" size="big" value="40"/>
+        <SetSlider name="BreastWidth" size="small" value="31"/>
+        <SetSlider name="Breasts" size="big" value="0"/>
+        <SetSlider name="Breasts" size="small" value="0"/>
+        <SetSlider name="BreastsSmall" size="big" value="50"/>
+        <SetSlider name="BreastsSmall" size="small" value="47"/>
+        <SetSlider name="Butt" size="big" value="20"/>
+        <SetSlider name="ButtSmall" size="big" value="80"/>
+        <SetSlider name="ButtSmall" size="small" value="0"/>
+        <SetSlider name="CalfSize" size="big" value="50"/>
+        <SetSlider name="CalfSmooth" size="big" value="50"/>
+        <SetSlider name="CalfSmooth" size="small" value="100"/>
+        <SetSlider name="ChubbyButt" size="big" value="40"/>
+        <SetSlider name="ChubbyLegs" size="big" value="20"/>
+        <SetSlider name="ChubbyWaist" size="big" value="20"/>
+        <SetSlider name="DoubleMelon" size="big" value="10"/>
+        <SetSlider name="Groin" size="big" value="100"/>
+        <SetSlider name="Hipbone" size="big" value="-30"/>
+        <SetSlider name="Hipbone" size="small" value="40"/>
+        <SetSlider name="Hips" size="big" value="20"/>
+        <SetSlider name="Hips" size="small" value="23"/>
+        <SetSlider name="NippleDistance" size="big" value="60"/>
+        <SetSlider name="NippleDistance" size="small" value="57"/>
+        <SetSlider name="NippleLength" size="big" value="10"/>
+        <SetSlider name="NipplePerkiness" size="big" value="22"/>
+        <SetSlider name="NipplePerkiness" size="small" value="22"/>
+        <SetSlider name="NippleSize" size="big" value="200"/>
+        <SetSlider name="NippleSize" size="small" value="50"/>
+        <SetSlider name="PushUp" size="big" value="50"/>
+        <SetSlider name="ShoulderSmooth" size="big" value="70"/>
+        <SetSlider name="ShoulderSmooth" size="small" value="50"/>
+        <SetSlider name="ShoulderWidth" size="big" value="-40"/>
+        <SetSlider name="ShoulderWidth" size="small" value="-40"/>
+        <SetSlider name="SlimThighs" size="big" value="70"/>
+        <SetSlider name="SlimThighs" size="small" value="100"/>
+        <SetSlider name="Thighs" size="big" value="30"/>
+        <SetSlider name="TummyTuck" size="big" value="80"/>
+        <SetSlider name="TummyTuck" size="small" value="100"/>
+        <SetSlider name="Waist" size="big" value="0"/>
+    </Preset>
+</SliderPresets>

@@ -74,6 +74,7 @@ function initHormonesLevels(Actor kActor)
 
 endFunction
 
+
 function setHormonesLevels(Actor kActor)
 	; Use only for first time initialization
 	Int isPregnant = StorageUtil.GetIntValue(kActor, "_SLH_isPregnant")
@@ -365,22 +366,24 @@ Float function updateActorSwellFactor(Actor kActor)
 		Debug.Notification("You feel more focused")
 
 		fSwellFactor = -1.0 * baseShrinkFactor
+		Debug.Trace("  Focused: fSwellFactor: " + fSwellFactor )
 
 	ElseIf ( iSexCountToday >1) && ( (iSexCountToday >= sexActivityThreshold) || (iDaysSinceLastSex <= sexActivityBuffer ) ) 
 	; Increase if more than 1 sex act today AND ( number of sex acts is larger than value set in the menu or the last sex act happened under the limit of days set in the menu)
-		Debug.Notification("You feel more voluptuous") 
+		; Debug.Notification("You feel more voluptuous") 
  
 		fSwellFactor    = baseSwellFactor
+		Debug.Trace("  Voluptuous: fSwellFactor: " + fSwellFactor )
 
 	Else   
 	; Stable - no particular sex activity. Weight should continue to grow at a slower rate to simulate inertia - body keeps growing even when doing nothing
 		Debug.Notification("You feel more balanced")
 		; No change
 		fSwellFactor    = baseSwellFactor / 10.0 
+		Debug.Trace("  Balanced: fSwellFactor: " + fSwellFactor )
  
 	EndIf	
 		
-	Debug.Trace("  fSwellFactor: " + fSwellFactor )
 	
 	; fSwellFactor = fctUtil.fRange( fSwellFactor , -100.0, 100.0)
 
@@ -587,6 +590,6 @@ EndFunction
 
 Function debugTrace(string traceMsg)
 	if (StorageUtil.GetIntValue(none, "_SLH_debugTraceON")==1)
-		Debug.Trace("[SLH_fctHormonesLevels]" + traceMsg)
+	;	Debug.Trace("[SLH_fctHormonesLevels]" + traceMsg)
 	endif
 endFunction

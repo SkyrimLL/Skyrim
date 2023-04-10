@@ -10,7 +10,7 @@ Event OnEffectStart(Actor Target, Actor Caster)
  	StorageUtil.SetIntValue(kPlayer, "_SLP_iChaurusPheromoneON", 1)
  	StorageUtil.SetIntValue(kPlayer, "_SLP_iChaurusCharmON", 0)
  	; kPlayer.AddToFaction(ChaurusFaction)
-
+ 	
 EndEvent
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)        

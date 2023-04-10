@@ -70,7 +70,7 @@ Bool Function infectBarnacles( Actor kActor  )
 		Return False
 	Endif
 
-	If ((fctDevious.ActorHasKeywordByString( kActor, "Harness"  )) || (fctDevious.ActorHasKeywordByString( kActor, "Corset"  )) )
+	If ((fctDevious.ActorHasKeywordByString( kActor, "Harness"  )) || (fctDevious.ActorHasKeywordByString( kActor, "Corset"  )) || (fctDevious.ActorHasKeywordByString( kActor, "Belt"  )) )
 		Debug.Trace("[SLP]	Already wearing a corset - Aborting")
 		Return False
 	Endif
@@ -126,7 +126,7 @@ Function cureBarnacles( Actor kActor, Bool bHarvestParasite = False   )
   	if (kActor == None)
   		kActor = PlayerActor
   	endIf
-  	
+
 
 	If (isInfectedByString( kActor,  "Barnacles" ))
 		StorageUtil.SetIntValue(kActor, "_SLP_toggleBarnacles", 0 )
@@ -203,3 +203,133 @@ EndFunction
 Bool Function ActorHasKeywordByString(actor akActor, String deviousKeyword = "")
 	return libs.ActorHasKeyword(akActor, getDeviousKeywordByString( deviousKeyword ))
 EndFunction
+
+; ------- Parasite thoughts
+
+
+
+function parasiteRandomThoughts(actor kParasiteHost, Int iSexLabValidateActor = 1)
+	Int rollMessage 
+	Int rollFirstPerson 
+	String ParasiteMessage = ""
+	Float fHormoneParasite = StorageUtil.GetFloatValue(kParasiteHost, "_SLH_fHormonePheromones" ) 	 
+
+	rollMessage = Utility.RandomInt(0,140)
+	rollFirstPerson = Utility.RandomInt(0,100)
+
+	;wait a little to show the messages, because on ragdoll the hud is hidden
+	; Utility.Wait(2.0)
+
+	If (StorageUtil.GetFloatValue(kParasiteHost, "_SLP_thoughtsDelay")==0)
+		Return
+	Endif
+
+	; Under 50.0, only play a sound
+	; if (fHormoneParasite<50.0)
+	; 	Return
+	; Endif
+
+	; Debug.Notification("[SLH] Parasite First Person Roll: " + rollFirstPerson)
+	; Debug.Notification("[SLH] Parasite First Person: " + (StorageUtil.GetFloatValue(kParasiteHost, "_SLH_fHormonePheromones") as Int))
+
+	If (rollFirstPerson <= (fHormoneParasite as Int))
+		; First person thought
+		if kParasiteHost.IsOnMount() 
+			if (rollMessage >= 120)
+				ParasiteMessage = "The husks on my thighs keep pinching me!"
+			elseif (rollMessage >= 20)
+				ParasiteMessage = "One of the husks keep pushing against my ass!" 
+			else 
+				ParasiteMessage = "The husks on my breasts keep bouncing and stretching them!"
+			endIf
+
+		elseif (iSexLabValidateActor <= 0)
+			if (rollMessage >= 120)
+				ParasiteMessage = "The husks between my legs are making me so tight!"
+			elseif (rollMessage >= 90)  
+				ParasiteMessage = "My skin is so sensitive and hot!" 
+			else 
+				ParasiteMessage = "I swear I can feel their pleasure too!"
+			endIf
+
+
+		elseif	kParasiteHost.IsRunning() || kParasiteHost.IsSprinting() 
+			if (rollMessage >= 90)
+				ParasiteMessage = "The husks keep sucking on my tits."
+			elseif (rollMessage >= 50)
+				ParasiteMessage = "Running is turning the husks into a constant tingle"
+			else 
+				ParasiteMessage = "The thingling from the husks is breathtaking..."
+			endIf
+
+		elseif	kParasiteHost.IsInCombat() 
+			if (rollMessage >= 90)
+				ParasiteMessage = "The husks protect me with cloud of spores."
+			elseif (rollMessage >= 70)
+				ParasiteMessage = "The lights from the orbs is so comforting."
+			else 
+				ParasiteMessage = "Those orbs amplify sensations on my skin!." 
+			endIf
+			
+		else
+			if (rollmessage >= 118)
+				ParasiteMessage = "These orbs keep releasing slime on my skin!"		
+            elseif (rollMessage >= 6)
+                ParasiteMessage = "If only the husks could spread and cover me completely!"
+			else
+				ParasiteMessage = "The husks are almost completely over my pussy!"
+			endIf
+		endif
+
+	else
+		; Third person thought
+		if kParasiteHost.IsOnMount() 
+			if (rollMessage >= 120)
+				ParasiteMessage = "The husks keep pinching your thighs."
+			elseif (rollMessage >= 20)
+				ParasiteMessage = "One of the husks keep pushing against your ass!" 
+			else 
+				ParasiteMessage = "The husks on your breasts keep bouncing and stretching them!"
+			endIf
+
+		elseif (iSexLabValidateActor <= 0)
+			if (rollMessage >= 120)
+				ParasiteMessage = "The husks between your legs are making you so much tighter!"
+			elseif (rollMessage >= 90)  
+				ParasiteMessage = "Your skin is so sensitive and itchy!" 
+			else 
+				ParasiteMessage = "The husks become warmer from sex!"
+			endIf
+
+
+		elseif	kParasiteHost.IsRunning() || kParasiteHost.IsSprinting() 
+			if (rollMessage >= 90)
+				ParasiteMessage = "The husks keep sucking on your tits painfully."
+			elseif (rollMessage >= 50)
+				ParasiteMessage = "Running is turning the husks into a hard shell."
+			else 
+				ParasiteMessage = "The thingling from the husks is driving you mad..."
+			endIf
+
+		elseif	kParasiteHost.IsInCombat() 
+			if (rollMessage >= 90)
+				ParasiteMessage = "The husks ooze a thin cloud of spores."
+			elseif (rollMessage >= 70)
+				ParasiteMessage = "The lights from the orbs is getting more menacing."
+			else 
+				ParasiteMessage = "Those orbs feel almost electric on your skin!." 
+			endIf
+			
+		else
+			if (rollmessage >= 118)
+				ParasiteMessage = "These orbs keep your skin well lubricated!"		
+            elseif (rollMessage >= 6)
+                ParasiteMessage = "What if the husks spread and cover you completely!"
+			else
+				ParasiteMessage = "The husks are almost covering your pussy!"
+			endIf
+		endif
+	endIf
+
+	Debug.Notification(ParasiteMessage) ;temp messages
+endfunction

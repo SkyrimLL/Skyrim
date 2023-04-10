@@ -2045,6 +2045,7 @@ State monitor
 				; If (fctSlavery.CheckSlavePrivilege( kPlayer , "_SD_iEnableKneel") && (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 1) ) || (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 0)
 					StorageUtil.SetStringValue(kPlayer, "_SD_sDefaultStance", "Kneeling")
 					kPlayer.SendModEvent("SLDRefreshGlobals")
+					kPlayer.SendModEvent("SDKneeling")
 					Debug.Notification("$Kneeling...")
 				; Else
 				; 	Debug.Notification("You are not allowed to kneel")
@@ -2054,6 +2055,7 @@ State monitor
 				; If (fctSlavery.CheckSlavePrivilege( kPlayer , "_SD_iEnableStand") && (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 1) ) || (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 0)
 					StorageUtil.SetStringValue(kPlayer, "_SD_sDefaultStance", "Standing")
 					kPlayer.SendModEvent("SLDRefreshGlobals")
+					kPlayer.SendModEvent("SDStanding")
 					Debug.Notification("$Standing...")
 				; Else
 				; 	Debug.Notification("You are not allowed to stand")
@@ -2061,6 +2063,7 @@ State monitor
 
 			elseIf (StorageUtil.GetStringValue(kPlayer, "_SD_sDefaultStance") == "Standing")  
 				kPlayer.SendModEvent("SLDRefreshGlobals")
+				kPlayer.SendModEvent("SDStanding")
 				Debug.Notification("$Already standing...")
 			Else
 			 	debugTrace(" Problem with position: " + StorageUtil.GetStringValue(kPlayer, "_SD_sDefaultStance"))
@@ -2075,12 +2078,14 @@ State monitor
 		If ( aiKeyCode == keys[3] )
  			If (StorageUtil.GetStringValue(kPlayer, "_SD_sDefaultStance") == "Crawling")  
  				kPlayer.SendModEvent("SLDRefreshGlobals")
+				kPlayer.SendModEvent("SDCrawling")
 				Debug.Notification("$Already crawling...")
 
 			elseIf (StorageUtil.GetStringValue(kPlayer, "_SD_sDefaultStance") == "Kneeling")  && (!bIsWristRestraintEquipped) ; && (StorageUtil.GetIntValue(kPlayer, "_SD_iEnableCrawl") == 1 )
 				; If (fctSlavery.CheckSlavePrivilege( kPlayer , "_SD_iEnableCrawl") && (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 1) ) || (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 0)
 					StorageUtil.SetStringValue(kPlayer, "_SD_sDefaultStance", "Crawling")
 					kPlayer.SendModEvent("SLDRefreshGlobals")
+					kPlayer.SendModEvent("SDCrawling")
 					Debug.Notification("$Crawling...")
 				; Else
 				; 	Debug.Notification("You are not allowed to crawl")
@@ -2090,6 +2095,7 @@ State monitor
 				; If (fctSlavery.CheckSlavePrivilege( kPlayer , "_SD_iEnableKneel") && (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 1) ) || (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 0)
 					StorageUtil.SetStringValue(kPlayer, "_SD_sDefaultStance", "Kneeling")
 					kPlayer.SendModEvent("SLDRefreshGlobals")
+					kPlayer.SendModEvent("SDKneeling")
 					Debug.Notification("$Kneeling...")
 				; Else
 				; 	Debug.Notification("You are not allowed to kneel")

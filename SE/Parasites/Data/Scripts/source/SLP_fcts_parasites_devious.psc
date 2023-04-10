@@ -266,7 +266,7 @@ Bool Function clearParasiteDD ( Actor akActor, Armor ddArmorInventory, Armor ddA
 	endIf
 
 	; RemoveDevice(actor akActor, armor deviceInventory, armor deviceRendered, keyword zad_DeviousDevice, bool destroyDevice=false, bool skipEvents=false, bool skipMutex=false)
-	libs.UnlockDevice(akActor, ddArmorInventory , ddArmorRendered , ddArmorKeyword, bDestroy )
+	libs.UnlockDevice(akActor, ddArmorInventory , ddArmorRendered , ddArmorKeyword, bDestroy, False )
  
 	bDeviceRemoveSuccess = True
  

@@ -146,7 +146,13 @@ Function cureChaurusWorm( Actor kActor, Bool bHarvestParasite = False   )
   	if (kActor == None)
   		kActor = PlayerActor
   	endIf
- 
+
+  	
+	If (fctDevious.ActorHasKeywordByString( kActor, "Belt"  ))
+		Debug.Trace("[SLP]	Already wearing a belt - Aborting")
+		Return 
+	Endif
+
 	If (isInfectedByString( kActor,  "ChaurusWorm" ))
 		StorageUtil.SetIntValue(kActor, "_SLP_toggleChaurusWorm", 0)
 		clearParasiteNPCByString (kActor, "ChaurusWorm")
@@ -246,7 +252,14 @@ Function cureChaurusWormVag( Actor kActor, Bool bHarvestParasite = False   )
   	if (kActor == None)
   		kActor = PlayerActor
   	endIf
- 
+
+  	
+	If (fctDevious.ActorHasKeywordByString( kActor, "Belt"  ))
+		Debug.Trace("[SLP]	Already wearing a belt - Aborting")
+		Return 
+	Endif
+
+	
 	If (isInfectedByString( kActor,  "ChaurusWormVag" ))
 		StorageUtil.SetIntValue(kActor, "_SLP_toggleChaurusWormVag", 0)
 		clearParasiteNPCByString (kActor, "ChaurusWormVag")

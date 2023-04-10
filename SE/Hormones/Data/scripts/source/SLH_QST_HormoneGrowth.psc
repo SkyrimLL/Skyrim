@@ -240,13 +240,17 @@ Function Maintenance()
 	; StorageUtil.SetIntValue(PlayerActor, "_SLH_iDaysSinceLastSex", iDaysSinceLastSex)
 	StorageUtil.SetIntValue(PlayerActor, "_SLH_iDaysSinceLastCheck", iDaysSinceLastCheck)
 
+	if ( StorageUtil.GetIntValue(PlayerActor, "_SLH_iBodyType") == 0)
+		StorageUtil.SetIntValue(PlayerActor, "_SLH_iBodyType", 1) ; slim to fat
+	endif
+
 	StorageUtil.SetIntValue(none, "_SLP_isAnimatedDragonWings",  0) 
 	StorageUtil.SetIntValue(none, "_SLP_isRealFlying",  0) 
 	StorageUtil.SetIntValue(none, "_SLS_isCagedFollowerON",  0) 
 	StorageUtil.SetIntValue(none, "_SLS_isEstrusChaurusON",  0) 
 	StorageUtil.SetIntValue(none, "_SLS_isBeeingFemaleON",  0)
 	StorageUtil.SetIntValue(none, "_SLS_isSoulgemOvenON",  0)
-	StorageUtil.SetIntValue(none, "_SLS_isFertitiltyModeON",  0) 
+	StorageUtil.SetIntValue(none, "_SLS_isFertilityModeON",  0) 
 	StorageUtil.SetIntValue(none, "_SLP_isAnimatedWingsUltimate", 0) 
 
 	int idx = Game.GetModCount()
@@ -254,33 +258,49 @@ Function Maintenance()
 	while idx > 0
 		idx -= 1
 		modName = Game.GetModName(idx)
+		
+		; debug.trace("[SLH] Checking mod: " + modName)
+
 		if modName == "EstrusChaurus.esp"
+			debug.trace("[SLH] 'EstrusChaurus.esp' detected")
 			StorageUtil.SetIntValue(none, "_SLS_isEstrusChaurusON",  1) 
 			StorageUtil.SetFormValue(none, "_SLS_getEstrusChaurusBreederSpell",  Game.GetFormFromFile(0x00019121, modName)) ; as Spell
 
 		elseif modName == "BeeingFemale.esm"
+			debug.trace("[SLH] 'BeeingFemale.esm' detected")
 			StorageUtil.SetIntValue(none, "_SLS_isBeeingFemaleON",  1) 
 			StorageUtil.SetFormValue(none, "_SLS_getBeeingFemalePregnancySpell",  Game.GetFormFromFile(0x000028A0, modName)) ; as Spell
 
-		elseif modName == "Fertility Mode.esm"
-			StorageUtil.SetIntValue(none, "_SLS_isFertitiltyModeON",  1) 
-			StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell1",  Game.GetFormFromFile(0x0001B816, modName)) ; as Spell
-			StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell2",  Game.GetFormFromFile(0x0001B818, modName)) ; as Spell
-			StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell3",  Game.GetFormFromFile(0x0001B81A, modName)) ; as Spell
-
 		elseif modName == "Fertility Mode 3 Fixes and Updates.esp"
-			StorageUtil.SetIntValue(none, "_SLS_isFertitiltyModeON",  1) 
-			StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell1",  Game.GetFormFromFile(0x0000081D, modName)) ; as Spell
-			StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell2",  Game.GetFormFromFile(0x0000081E, modName)) ; as Spell
-			StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell3",  Game.GetFormFromFile(0x0000081F, modName)) ; as Spell
-			
+
+		elseif modName == "Fertility Mode.esm"
+			debug.trace("[SLH] 'Fertility Mode.esm' detected")
+			StorageUtil.SetIntValue(none, "_SLS_isFertilityModeON",  1) 
+
+			; First check if updated version is available
+			modName = "Fertility Mode 3 Fixes and Updates.esp"
+			if (Game.GetFormFromFile(0x0000081D, modName) != None)
+				debug.trace("[SLH] 'Fertility Mode 3 Fixes and Updates.esp' detected")
+				StorageUtil.SetIntValue(none, "_SLS_isFertilityModeON",  1) 
+				StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell1",  Game.GetFormFromFile(0x0000081D, modName)) ; as Spell
+				StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell2",  Game.GetFormFromFile(0x0000081E, modName)) ; as Spell
+				StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell3",  Game.GetFormFromFile(0x0000081F, modName)) ; as Spell
+
+			else
+				modName = "Fertility Mode.esm"
+				StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell1",  Game.GetFormFromFile(0x0001B816, modName)) ; as Spell
+				StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell2",  Game.GetFormFromFile(0x0001B818, modName)) ; as Spell
+				StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell3",  Game.GetFormFromFile(0x0001B81A, modName)) ; as Spell
+			endif
 		elseif modName == "dcc-soulgem-oven-000.esm"
+			debug.trace("[SLH] 'dcc-soulgem-oven-000.esm' detected")
 			StorageUtil.SetIntValue(none, "_SLS_isSoulgemOvenON",  1) 
 			StorageUtil.SetFormValue(none, "_SLS_dcc_sgo_SpellBellyEncumber",  Game.GetFormFromFile(0x00004E4E, modName)) ; as Spell 
 			StorageUtil.SetFormValue(none, "_SLS_dcc_sgo_SpellBellyBonus",  Game.GetFormFromFile(0x0000AF61, modName)) ;
 			StorageUtil.SetFormValue(none, "_SLS_dcc_sgo_SpellBreastInfluence",  Game.GetFormFromFile(0x00004E4B, modName)) ;
 			
 		elseif modName == "CagedFollowers.esp"
+			debug.trace("[SLH] 'CagedFollowers.esp' detected")
 			StorageUtil.SetIntValue(none, "_SLS_isCagedFollowerON",  1) 
 			StorageUtil.SetFormValue(none, "_SLS_getCagedFollowerQuestKeyword",  Game.GetFormFromFile(0x0000184d, modName)) ; as Keyword
 
@@ -1407,6 +1427,7 @@ Event OnRefreshShapeEvent(String _eventName, String _args, Float _argc = 1.0, Fo
 	debugTrace(" Receiving 'refresh shape' event. Actor: " + kActor )
 
 	refreshShape(kActor)
+	refreshColor(kActor)
 	
 EndEvent
 
@@ -1843,9 +1864,9 @@ Event OnSexLabEnd(String _eventName, String _args, Float _argc, Form _sender)
 			; _showStatus()
 		EndIf
 
-		setHormonesSexualState( PlayerActor)
+		setHormonesState(PlayerActor)
 
-		If (bOral || bVaginal || bAnal)
+		; If (bOral || bVaginal || bAnal)
 			; Refreshing values in case of any external change from other mods
 			; fctBodyShape.getShapeState(PlayerActor) 
 
@@ -1865,9 +1886,7 @@ Event OnSexLabEnd(String _eventName, String _args, Float _argc, Form _sender)
 				fctBodyShape.getShapeState(PlayerActor) 
 				; fctBodyShape.applyBodyShapeChanges(PlayerActor)
 			EndIf
-		Else
-			setHormonesState(PlayerActor)	
-		EndIf
+		; EndIf
 
 
 		if animation.HasTag("Masturbation") || animation.HasTag("Solo") 

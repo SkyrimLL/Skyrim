@@ -239,6 +239,7 @@ State SleepingSideway
 		Utility.Wait(0.5)			
 		BlackScreen.PopTo(FadeIn)
 		BedRef.Delete()		
+		Debug.SendAnimationEvent(Target, "IdleForceDefaultState")	
 	endEvent
 endState
 
@@ -255,6 +256,8 @@ State ExitSleepingSideway
 
 	Event OnEndState()
 		Debug.SendAnimationEvent(Target, "idleBedExitStart")	
+		Utility.Wait(0.5)	
+		Debug.SendAnimationEvent(Target, "IdleForceDefaultState")	
 	endEvent
 endState
 
@@ -281,6 +284,8 @@ State Sitting
 	Event OnEndState()
 		Game.GetPlayer().SendModEvent("SLDMeditate")		
 		Debug.SendAnimationEvent(Target, "idleChairExitStart")
+		Utility.Wait(0.5)	
+		Debug.SendAnimationEvent(Target, "IdleForceDefaultState")	
 	endEvent
 endState	
 
@@ -306,5 +311,8 @@ State Kneeling
 	Event OnEndState()
 		Game.GetPlayer().SendModEvent("SLDMeditate")		
 		Debug.SendAnimationEvent(Target, "idleChairExitStart")
+		Utility.Wait(0.5)	
+		Debug.SendAnimationEvent(Target, "IdleForceDefaultState")	
+
 	endEvent
 endState

@@ -31,6 +31,8 @@ ReferenceAlias Property ChaurusFollowerAlias  Auto
 ObjectReference Property LastelleRef  Auto  
 ObjectReference Property LastelleCampOutside  Auto  
 
+Int   Property MAX_TICKER_COMMENTS      = 500 AutoReadOnly
+
 Sound Property SummonSoundFX  Auto
 Sound Property VoicesFX  Auto
 Sound Property CritterFX  Auto
@@ -68,7 +70,7 @@ Potion Property SLP_CritterSemen Auto
 Keyword Property ArmorCuirass  Auto  
 Keyword Property ClothingBody  Auto  
 
-
+Int _iCommentTicker = 0
 
 Package Property _SLP_PKG_ZapFuroTub  Auto  
 
@@ -752,10 +754,7 @@ Bool Function tryParasiteNextStage(Actor kActor, String sParasite)
  	Int iChaurusEggsCount = PlayerActor.GetItemCount(ChaurusEgg)
 
  	If (kActor == PlayerActor)
- 		if (StorageUtil.GetFloatValue(PlayerActor, "_SLP_flareDelay" )==0.0)
- 			debug.notification("[SLP] tryParasiteNextStage Flares disabled - ")
- 			Return bSuccess; Flares disabled - ignore
- 		endif
+
 
  		If (PlayerActor.IsBleedingOut() || PlayerActor.IsDead() || PlayerActor.IsOnMount() || PlayerActor.IsFlying() || PlayerActor.IsUnconscious() || !Game.IsActivateControlsEnabled() || SexLab.IsActorActive(PlayerActor) )
  			; debug.notification("[SLP] tryParasiteNextStage failed - " + sParasite)
@@ -773,6 +772,27 @@ Bool Function tryParasiteNextStage(Actor kActor, String sParasite)
  		Endif
 
  		debug.trace("[SLP] tryParasiteNextStage - " + sParasite)
+
+ 		; ----------------------------------
+ 		; Single stage parasites 
+
+ 		If (sParasite == "Barnacles")  
+			Debug.Messagebox("The spores evaporated on their own.")
+			fctParasiteBarnacles.cureBarnacles( PlayerActor, False  )
+			bSuccess = True
+			; PlayerActor.SendModEvent("SLPTriggerEstrusChaurusBirth", "Barnacles", Utility.RandomInt(1, 5))
+			Return bSuccess
+		Endif
+		
+
+ 		; ----------------------------------
+		; Multi-stage parasites
+
+		; Disable if flareDelay is 0 - events are on pause
+ 		if (StorageUtil.GetFloatValue(PlayerActor, "_SLP_flareDelay" )==0.0)
+ 			debug.notification("[SLP] tryParasiteNextStage Flares disabled - ")
+ 			Return bSuccess; Flares disabled - ignore
+ 		endif
 
 		If (sParasite == "SprigganRoot") && (iChaurusQueenStage<1)
 			; Spriggan growth is stopped by Seed Stone
@@ -1127,12 +1147,6 @@ Bool Function tryParasiteNextStage(Actor kActor, String sParasite)
 
 			bSuccess = True
 		
-		ElseIf (sParasite == "Barnacles")  
-			Debug.Messagebox("The spores evaporated on their own.")
-			fctParasiteBarnacles.cureBarnacles( PlayerActor, False  )
-			bSuccess = True
-			; PlayerActor.SendModEvent("SLPTriggerEstrusChaurusBirth", "Barnacles", Utility.RandomInt(1, 5))
-		
 		endif
 	endif
 
@@ -1154,10 +1168,12 @@ Function tryCharmSpider(Actor Target)
 
 		; Add code using Hormones pheromone levels
 		iCharmThreshold = iCharmThreshold + ((StorageUtil.GetFloatValue(kPlayer, "_SLH_fHormonePheromones") as Int) / 2)
+		Debug.Trace("[SLP] Charm Spider - iCharmThreshold: " + iCharmThreshold)
+		; Debug.Notification("[SLP] Charm Spider - iCharmThreshold: " + iCharmThreshold)
 
 		If (Utility.RandomInt(0,100)<=iCharmThreshold)  
-			; Debug.Notification("[SLP] Charm Spider" )
-		    ;   Debug.Messagebox(" Spider Pheromone charm spell started") 
+			Debug.Notification("[SLP] Charm Spider" )
+		    Debug.Messagebox(" The spider is under your spell.") 
 		 	kPlayer.AddToFaction(SpiderFaction)
 		    Target.StopCombat()   
 		    ; Target.SetPlayerTeammate(true )
@@ -1234,8 +1250,8 @@ Function tryCharmChaurus(Actor Target)
 
 		; Add code using Hormones pheromone levels
 		iCharmThreshold = iCharmThreshold + ((StorageUtil.GetFloatValue(kPlayer, "_SLH_fHormonePheromones") as Int) / 2)
-		Debug.Trace("[SLP] Charm Chaurus - Pheromone: " + iCharmThreshold)
-		Debug.Notification("[SLP] Charm Chaurus - Pheromone: " + iCharmThreshold)
+		Debug.Trace("[SLP] Charm Chaurus - iCharmThreshold: " + iCharmThreshold)
+		; Debug.Notification("[SLP] Charm Chaurus - iCharmThreshold: " + iCharmThreshold)
 
 		If (Utility.RandomInt(0,100)<=iCharmThreshold)   
 			Debug.Notification("[SLP] Charm Chaurus - success" )
@@ -1271,7 +1287,7 @@ Function tryCharmChaurus(Actor Target)
 		endif
 
 	else
-		Debug.Notification("[SLP] Charm Chaurus - Failed" )
+		; Debug.Notification("[SLP] Charm Chaurus - Failed" )
 		debugTrace("[SLP] Charm Chaurus - Failed" )
 
 	endif
@@ -1522,17 +1538,171 @@ EndFunction
 Function retractChaurusWeapon(Actor kActor, String sBladeType)
 	fctParasiteChaurusQueen.retractChaurusWeapon( kActor,  sBladeType)
 EndFunction
+
+
+
+;===========================================================================
+;parasites sounds
+;===========================================================================
+
+
+function playRandomSound(actor akActor)
+	Int rollMessage = Utility.RandomInt(0,100)
+
+	if (rollMessage > 80) ;if dropped anything, play a moan sound
+		playMoanSound(akActor)
+	elseif (rollMessage > 20) 
+		playCritterSound(akActor)
+	else
+		playWetSound(akActor)
+	endif
+endfunction
+
+function playMoanSound(actor akActor)
+	sslBaseVoice voice = SexLab.GetVoice(akActor)
+	voice.Moan(akActor, 10 + (Utility.RandomInt(0,8) * 10 ), false)
+	Utility.Wait(1.0)
+endFunction
+
+function playCritterSound(actor akActor)
+	Sound.SetInstanceVolume(CritterFX.Play(akActor as ObjectReference), 1.0)
+ 	Utility.Wait(1.0)
+endFunction
+
+function playWetSound(actor akActor)
+	Sound.SetInstanceVolume(WetFX.Play(akActor as ObjectReference), 1.0)
+ 	Utility.Wait(1.0)
+endFunction
+
+
+; -------------------------------------------------------
+
+function tryRandomParasiteThoughts(String sTag)
+ 	Actor PlayerActor = Game.GetPlayer() 
+	float ParasiteArousal = fctUtils.GetActorArousal(PlayerActor) as float 
+	float fParasiteThreshold
+ 
+	Float fThrottle = (_iCommentTicker as Float) / 10.0
+	Float thoughtsDelay = (100.0 - StorageUtil.GetFloatValue(PlayerActor, "_SLP_thoughtsDelay" )) as Float
+	
+	Int iHoursSinceLastSex
+
+ 
+	if (thoughtsDelay > 0)
+
+		iHoursSinceLastSex = fctUtils.GetCurrentHourOfDay() - StorageUtil.GetIntValue(PlayerActor, "_SLP_iHourOfDaySinceLastSex") 
+		fParasiteThreshold = (0.1 + 2000 * (((_iCommentTicker as Float) / MAX_TICKER_COMMENTS) * ( (ParasiteArousal / 10.0)) ) /  thoughtsDelay)
+		debug.trace("[SLP]     tryRandomParasiteThoughts threshold: " + fParasiteThreshold)
+		Debug.Trace("[SLP]     tryRandomParasiteThoughts _iCommentTicker:" + _iCommentTicker)
+
+		if (fParasiteThreshold<0.0)
+			fParasiteThreshold = 0.0
+		endif
+
+		if (fParasiteThreshold>100.0)
+			fParasiteThreshold = 100.0
+		endif
+		
+		if (Utility.RandomInt(0,100) <= fParasiteThreshold )  || (sTag == "now")
+			parasiteRandomThoughts(PlayerActor)
+			_iCommentTicker = _iCommentTicker / 2
+		endif
+
+		if ( ((fThrottle as Int) * 10) == _iCommentTicker)
+			debug.notification("[SLP] Chance of parasite comment: " + fParasiteThreshold)
+			
+			Debug.Trace("[SLP] >>> iHoursSinceLastSex:" + iHoursSinceLastSex)
+			Debug.Trace("[SLP] >>> chance of Parasite thoughts:" + fParasiteThreshold) 
+			Debug.Trace("[SLP] _iCommentTicker:" + _iCommentTicker)
+
+		endif		
+	endif
+
+    ; debug.notification("Parasite arousal:" + ParasiteArousal)
+    ; debug.notification(".")
+	_iCommentTicker = _iCommentTicker + 1
+
+	if (_iCommentTicker > MAX_TICKER_COMMENTS)
+		_iCommentTicker = 0
+	endif
+
+endfunction
+
+
+function parasiteForcedThoughts(actor kParasiteHost, String sFirstPersonMessage, String sThirdPersonMessage)
+	Int rollMessage 
+	Int rollFirstPerson 
+	String ParasiteMessage = ""
+	Float fHormoneParasite = StorageUtil.GetFloatValue(kParasiteHost, "_SLH_fHormonePheromones" ) 	
+	Float fHormoneMetabolism = StorageUtil.GetFloatValue(kParasiteHost, "_SLH_fHormoneMetabolism" ) 
+
+	rollMessage = Utility.RandomInt(0,140)
+	rollFirstPerson = Utility.RandomInt(0,100)
+
+	;wait a little to show the messages, because on ragdoll the hud is hidden
+	; Utility.Wait(2.0)
+
+	If (StorageUtil.GetIntValue(kParasiteHost, "_SLH_iShowStatus")==0)
+		Return
+	Endif
+
+	; Under 50.0, no effect
+	if (fHormoneParasite<50.0)
+		Return
+	Endif
+
+	playRandomSound(kParasiteHost)
+
+	; Under 80.0, only play parasiteHost giggle
+	if (fHormoneParasite<80.0)
+		Return
+	Endif
+
+	; Debug.Notification("[SLH] parasiteHost First Person Roll: " + rollFirstPerson)
+	; Debug.Notification("[SLH] parasiteHost First Person: " + (StorageUtil.GetFloatValue(kParasiteHost, "_SLH_fHormonePheromones") as Int))
+
+	If (rollFirstPerson <= (StorageUtil.GetFloatValue(kParasiteHost, "_SLH_fHormonePheromones") as Int))
+		ParasiteMessage = sFirstPersonMessage
+	else
+		ParasiteMessage = sThirdPersonMessage
+	endIf
+
+	Debug.Notification(ParasiteMessage) ;temp messages
+
+endfunction
+
+
+function parasiteRandomThoughts(actor kParasiteHost)
+	If (isInfectedByString( kParasiteHost,  "SpiderEgg" )) || (isInfectedByString( kParasiteHost,  "SpiderPenis" ))
+		playWetSound(kParasiteHost)
+		fctParasiteSpiderEgg.parasiteRandomThoughts(kParasiteHost, SexLab.ValidateActor( kParasiteHost))
+	Endif
+
+	if (isInfectedByString( kParasiteHost,  "ChaurusWorm" )) || (isInfectedByString( kParasiteHost,  "ChaurusWormVag" ))
+		playWetSound(kParasiteHost)
+		; fctParasiteChaurusWorm.parasiteRandomThoughts(kParasiteHost, SexLab.ValidateActor( kParasiteHost))
+	Endif
+
+	if (isInfectedByString( kParasiteHost,  "Barnacles" ))
+		playRandomSound(kParasiteHost)
+		fctParasiteBarnacles.parasiteRandomThoughts(kParasiteHost, SexLab.ValidateActor( kParasiteHost))
+
+	Endif
+endfunction
+
 ; -------------------------------------------------------
 Function maintenance()
  	Actor PlayerActor= Game.GetPlayer() as Actor
  	ActorBase pActorBase = PlayerActor.GetActorBase()
 
+ 	; NiNodes detection
 	Bool isNiOInstalled =  fctUtils.CheckXPMSERequirements(PlayerActor, fctUtils.isFemale(PlayerActor))
 	debugTrace("  NiOverride detection: " + isNiOInstalled)
 	if (StorageUtil.GetIntValue(none, "_SLH_BodyMorphsON") == 0)
 		StorageUtil.SetIntValue(none, "_SLH_NiNodeOverrideON", isNiOInstalled as Int)
 	endif
 
+	; SLIF detection
 	Bool isSlifInstalled = Game.GetModbyName("SexLab Inflation Framework.esp") != 255
 	debugTrace("  SLIF detection: " + isSlifInstalled)
 	StorageUtil.SetIntValue(none, "_SLH_SlifON", isSlifInstalled as Int)
@@ -1541,6 +1711,15 @@ Function maintenance()
 		StorageUtil.SetIntValue(none, "_SLP_iSexLabParasites", 1)
 		fctUtils._resetParasiteSettings()
 	EndIf
+
+	; Hormones detection
+	; If Hormones is not installed, _SLH_fHormonePheromones is aligned with _SLP_thoughtsDelay
+	If (!(StorageUtil.GetIntValue(none, "_SLH_iHormones") == 1))
+		StorageUtil.SetFloatValue(none, "_SLH_fHormonePheromones", StorageUtil.GetFloatValue(PlayerActor, "_SLP_thoughtsDelay" ) )
+	EndIf
+
+
+
 EndFunction
 
 

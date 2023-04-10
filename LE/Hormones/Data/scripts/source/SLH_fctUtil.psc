@@ -339,13 +339,12 @@ endFunction
 bool function isPregnantByFertilityMode(actor kActor)
 	bIsPregnant = False
 	if kActor && kActor != none
-		if (StorageUtil.GetIntValue(none, "_SLS_isFertitiltyModeON") ==  1) 
+		if (StorageUtil.GetIntValue(none, "_SLS_isFertilityModeON") ==  1) 
 			spell FertilityModePregnancySpell1 = StorageUtil.GetFormValue(none, "_SLS_getFertilityModePregnancySpell1") as Spell
 			spell FertilityModePregnancySpell2 = StorageUtil.GetFormValue(none, "_SLS_getFertilityModePregnancySpell2") as Spell
 			spell FertilityModePregnancySpell3 = StorageUtil.GetFormValue(none, "_SLS_getFertilityModePregnancySpell3") as Spell
-			if (FertilityModePregnancySpell1 != none)
-				bIsPregnant = kActor.HasSpell(FertilityModePregnancySpell1) || kActor.HasSpell(FertilityModePregnancySpell2) || kActor.HasSpell(FertilityModePregnancySpell3)
-			endif
+			bIsPregnant = kActor.HasSpell(FertilityModePregnancySpell1) || kActor.HasSpell(FertilityModePregnancySpell2) || kActor.HasSpell(FertilityModePregnancySpell3)
+
 		endIf
 	endIf
 	debugTrace(" Check Pregnant by Fertility Mode: " + bIsPregnant)
@@ -1348,8 +1347,8 @@ endfunction
 ; -------
 
 Function debugTrace(string traceMsg)
-	; if (StorageUtil.GetIntValue(none, "_SLH_debugTraceON")==1)
-	;	Debug.Trace("[SLH_fctUtil]" + traceMsg)
-	; endif
+	if (StorageUtil.GetIntValue(none, "_SLH_debugTraceON")==1)
+		Debug.Trace("[SLH_fctUtil]" + traceMsg)
+	endif
 endFunction
 
