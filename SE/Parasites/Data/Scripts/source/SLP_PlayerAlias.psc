@@ -319,7 +319,7 @@ Int Function _getParasiteTickerThreshold(Actor kActor, Int _iNextStageTicker, In
 		if ( ((fThrottle as Int) * 10) == _iNextStageTicker)
 			; debug.notification(".")
 			; debug.notification("[SLP] Check parasite event: " + sParasite )
-			debug.notification("[SLP] Chance of parasite event: " + fThreshold )
+			; debug.notification("[SLP] Chance of parasite event: " + fThreshold )
 			debug.trace("[SLP] Check parasite event: " + sParasite + " - Chance of trigger: " + (fThreshold) as Int)
 			debug.trace("[SLP]     _iNextStageTicker: " + _iNextStageTicker)
 			debug.trace("[SLP]     _iParasiteDuration: " + _iParasiteDuration)
@@ -2362,7 +2362,10 @@ Event OnSleepStart(float afSleepStartTime, float afDesiredSleepEndTime)
 		debug.trace("[SLP] OnSleep - chance of removal: " + (iParasiteDuration * 10))
 		If  (Utility.RandomInt(0,100) < (iParasiteDuration * 10) ) && (!kLocation.IsSameLocation(SLP_BlackreachLocation)) && (!kLocation.HasKeyword(SLP_FalmerHiveLocType)) && (!kLocation.HasKeyword(SLP_CaveLocType)) && (!kLocation.HasKeyword(SLP_DwarvenRuinLocType))
 
+			debug.trace("[SLP] OnSleep - Location is good - attempting removal of barnacle spores")
   			fctParasites.tryParasiteNextStage(PlayerActor, "Barnacles")
+  			; Debug.Messagebox("The spores evaporated on their own.")
+			; fctParasites.cureParasiteByString( PlayerActor, "Barnacles", False  )
 		endIf
 	endif
 
