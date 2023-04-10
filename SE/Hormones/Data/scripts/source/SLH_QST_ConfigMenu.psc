@@ -614,8 +614,8 @@ event OnPageReset(string a_page)
 		AddHeaderOption("$SLH_hClothCompression")
 		AddSliderOptionST("STATE_ARMOR_MOD","$SLH_sARMOR_MOD", _armorMod as Float,"{1}", OPTION_FLAG_DISABLED)
 		AddSliderOptionST("STATE_CLOTH_MOD","$SLH_sCLOTH_MOD", _clothMod as Float,"{1}", OPTION_FLAG_DISABLED)
-		AddTextOption("[This option is causing issues and ", "", OPTION_FLAG_DISABLED)
-		AddTextOption(" is disabled until a solution is found.]", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$SLH_SCloth_L1", "", OPTION_FLAG_DISABLED)
+		AddTextOption("$SLH_SCloth_L2", "", OPTION_FLAG_DISABLED)
 
 		AddHeaderOption("$SLH_hBRreast")
 		If (bBreastEnabled)
@@ -718,7 +718,7 @@ event OnPageReset(string a_page)
 		endif
 
 		if (StorageUtil.GetIntValue(none, "_SLP_isAnimatedWingsUltimate") ==  1) 
-			AddTextOption("     Animated Wings Ultimate detected", "", OPTION_FLAG_DISABLED)
+			AddTextOption("$SLH_ANIMATEDWINGSULTIMATE_DETECTED", "", OPTION_FLAG_DISABLED)
 		endif
 
 		AddHeaderOption("$SLH_hSexChangeCurse")
@@ -2947,7 +2947,7 @@ state STATE_AUTO_REMOVE_WINGS ; TOGGLE
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Automatically remove equipped wings when removing the Queen Body if a compatible mod is detected (unchecked means the wings will remain equipped after the Queen Body is removed).")
+		SetInfoText("$SLH_AUTO_REMOVE_WINGS_DESC")
 	endEvent
 endState
 
