@@ -309,3 +309,5 @@ EndFunction
 Bool Function ActorHasKeywordByString(actor akActor, String deviousKeyword = "")
 	return libs.ActorHasKeyword(akActor, getDeviousKeywordByString( deviousKeyword ))
 EndFunction
+
+
