@@ -755,6 +755,160 @@ Bool Function tryParasiteNextStage(Actor kActor, String sParasite)
 
  	If (kActor == PlayerActor)
 
+ 		debug.trace("[SLP] tryParasiteNextStage - " + sParasite)
+
+
+ 		; ----------------------------------
+ 		; Single stage parasites 
+
+ 		If (sParasite == "Barnacles")  
+			Debug.Messagebox("The spores evaporated on their own.")
+			fctParasiteBarnacles.cureBarnacles( PlayerActor, False  )
+			bSuccess = True
+			; PlayerActor.SendModEvent("SLPTriggerEstrusChaurusBirth", "Barnacles", Utility.RandomInt(1, 5))
+			Return bSuccess
+
+
+		ElseIf (sParasite == "SpiderPenis")  
+			Debug.MessageBox("The remains of the spider penis finally slide out of you.")
+			; PlayerActor.SendModEvent("SLPCureSpiderPenis")
+			fctParasiteSpiderEgg.cureSpiderPenis( PlayerActor   )
+			bSuccess = True
+				
+		ElseIf (sParasite == "FaceHugger")  
+			Int iEvent = Utility.RandomInt(1, 20)
+ 			sslBaseVoice voice = SexLab.GetVoice(PlayerActor)
+
+ 			Sound.SetInstanceVolume(WetFX.Play(PlayerRef), 1.0)
+ 			Utility.Wait(1.0)
+ 			Sound.SetInstanceVolume(CritterFX.Play(PlayerRef), 1.0)
+ 			Utility.Wait(1.0)
+
+			if (iEvent <= 10)
+				Debug.Messagebox("The creature cripples you with rapid thrusts of its tail deep inside you.")
+	 			voice.Moan(PlayerActor, 10 + (Utility.RandomInt(0,8) * 10 ), false)
+           	 	Debug.SendAnimationEvent(PlayerRef, "bleedOutStart")
+            	utility.wait(4)
+           		Debug.SendAnimationEvent(PlayerRef, "IdleForceDefaultState")
+           	else
+				Debug.Messagebox("The creature pumps your womb full of a thick milky liquid.")
+           	endif
+
+ 			voice.Moan(PlayerActor, 10 + (Utility.RandomInt(0,8) * 10 ), false)
+ 			Sound.SetInstanceVolume(WetFX.Play(PlayerRef), 1.0)
+ 			Utility.Wait(1.0)
+ 			Sound.SetInstanceVolume(CritterFX.Play(PlayerRef), 1.0)
+ 			Utility.Wait(1.0)
+ 			           
+            SexLab.AddCum(PlayerActor,  Vaginal = true,  Oral = false,  Anal = true)
+			bSuccess = True
+		
+		ElseIf (sParasite == "FaceHuggerGag")  
+			Int iEvent = Utility.RandomInt(1, 20)
+
+ 			Sound.SetInstanceVolume(WetFX.Play(PlayerRef), 1.0)
+ 			Utility.Wait(1.0)
+ 			Sound.SetInstanceVolume(CritterFX.Play(PlayerRef), 1.0)
+ 			Utility.Wait(1.0)
+
+			if (iEvent <= 10)
+				Debug.Messagebox("The creature grabs your face tight as its tail coils around your neck, leaving you light headed and breathless.")
+	 			voice.Moan(PlayerActor, 10 + (Utility.RandomInt(0,8) * 10 ), false)
+           	 	Debug.SendAnimationEvent(PlayerRef, "bleedOutStart")
+            	utility.wait(4)
+           		Debug.SendAnimationEvent(PlayerRef, "IdleForceDefaultState")
+           	else
+				Debug.Notification("The creature pumps your throat full of a sweet and milky liquid.")
+				PlayerActor.AddItem(SLP_CritterSemen, 1, abSilent = true)
+				PlayerActor.EquipItem(SLP_CritterSemen,abPreventRemoval = false, abSilent = true)
+           	endif
+
+ 			sslBaseVoice voice = SexLab.GetVoice(PlayerActor)
+ 			voice.Moan(PlayerActor, 10 + (Utility.RandomInt(0,8) * 10 ), false)
+ 			Sound.SetInstanceVolume(WetFX.Play(PlayerRef), 1.0)
+ 			Utility.Wait(1.0)
+ 			Sound.SetInstanceVolume(CritterFX.Play(PlayerRef), 1.0)
+ 			Utility.Wait(1.0)
+ 			           
+            SexLab.AddCum(PlayerActor,  Vaginal = false,  Oral = true,  Anal = false)
+			bSuccess = True
+
+		
+		ElseIf (sParasite == "TentacleMonster")  
+
+			Int iEvent = Utility.RandomInt(1, 20)
+
+ 			Sound.SetInstanceVolume(VoicesFX.Play(PlayerRef), 1.0)
+ 			Utility.Wait(1.0)
+ 			Sound.SetInstanceVolume(WetFX.Play(PlayerRef), 1.0)
+ 			Utility.Wait(1.0) 
+
+			sslBaseVoice voice = SexLab.GetVoice(PlayerActor)
+ 			voice.Moan(PlayerActor, 10 + (Utility.RandomInt(0,8) * 10 ), false)
+
+ 			Sound.SetInstanceVolume(VoicesFX.Play(PlayerRef), 1.0)
+ 			Utility.Wait(1.0)
+
+			if (iEvent <= 2)
+				Debug.notification("FIND A COCK AND FUCK IT. OBEY")
+				SendModEvent("SLHModHormone", "SexDrive", 2.0)
+			elseif (iEvent == 3)
+				Debug.notification("FIND A COCK AND SUCK IT. OBEY")
+				SendModEvent("SLHModHormone", "SexDrive", 2.0)
+			elseif (iEvent == 4)
+				Debug.notification("LISTEN TO OUR VOICES AND OBEY")
+				SendModEvent("SLHModHormone", "Bimbo", 2.0)
+			elseif (iEvent == 5)
+				Debug.notification("SURRENDER TO THE BLISS AND PLEASURE")
+				SendModEvent("SLHModHormone", "Bimbo", 2.0)
+			elseif (iEvent == 6)
+				Debug.notification("LET US GUIDE YOU")
+				SendModEvent("SLHModHormone", "Bimbo", 2.0)
+			elseif (iEvent == 7)
+				Debug.notification("WE CHOSE YOU. SUBMIT AND OBEY")
+				SendModEvent("SLHModHormone", "Bimbo", 2.0)
+			elseif (iEvent == 8)
+				Debug.notification("OBEDIENCE IS PLEASURE. OBEY")
+				SendModEvent("SLHModHormone", "Bimbo", 2.0)
+			elseif (iEvent == 9)
+				Debug.notification("LET GO OF YOUR THOUGHTS. OBEY")
+				SendModEvent("SLHModHormone", "Bimbo", 2.0)
+			elseif (iEvent == 10)
+				Debug.Messagebox("The creature blurs your mind through constant stimulation of your nipples and your clit.")
+				SendModEvent("SLHModHormone", "SexDrive", 5.0)
+
+			elseif (iEvent >= 11)
+				Debug.Notification("Needle-like tentacles fill your ears and burrow into your brain.")
+				; Testing stop and restart of quest for random location aliases
+				if (!(TentacleMonsterQuest.IsRunning()))
+					TentacleMonsterQuest.Start()
+				else
+					; TentacleMonsterQuest.Stop()
+					; Utility.Wait(1.0)
+					; TentacleMonsterQuest.Start()
+					TentacleMonsterQuest.SetStage(Utility.RandomInt(1, 4)*10)
+				Endif
+				; Utility.Wait(1.0)
+				; TentacleMonsterQuest.Start()
+
+				SendModEvent("SLHModHormone", "Bimbo", 5.0)
+			endif
+
+ 			Sound.SetInstanceVolume(VoicesFX.Play(PlayerRef), 1.0)
+ 			Utility.Wait(1.0)
+
+			bSuccess = True
+
+		Endif
+
+		; Disable if flareDelay is 0 - events are on pause
+ 		if (StorageUtil.GetFloatValue(PlayerActor, "_SLP_flareDelay" )==0.0)
+ 			debug.notification("[SLP] tryParasiteNextStage Flares disabled - ")
+ 			Return bSuccess; Flares disabled - ignore
+ 		endif
+
+ 		; ----------------------------------
+ 		; Block stages that are unsafe while player is busy
 
  		If (PlayerActor.IsBleedingOut() || PlayerActor.IsDead() || PlayerActor.IsOnMount() || PlayerActor.IsFlying() || PlayerActor.IsUnconscious() || !Game.IsActivateControlsEnabled() || SexLab.IsActorActive(PlayerActor) )
  			; debug.notification("[SLP] tryParasiteNextStage failed - " + sParasite)
@@ -771,28 +925,9 @@ Bool Function tryParasiteNextStage(Actor kActor, String sParasite)
 			Return bSuccess; Player is busy - try again later
  		Endif
 
- 		debug.trace("[SLP] tryParasiteNextStage - " + sParasite)
-
- 		; ----------------------------------
- 		; Single stage parasites 
-
- 		If (sParasite == "Barnacles")  
-			Debug.Messagebox("The spores evaporated on their own.")
-			fctParasiteBarnacles.cureBarnacles( PlayerActor, False  )
-			bSuccess = True
-			; PlayerActor.SendModEvent("SLPTriggerEstrusChaurusBirth", "Barnacles", Utility.RandomInt(1, 5))
-			Return bSuccess
-		Endif
-		
 
  		; ----------------------------------
 		; Multi-stage parasites
-
-		; Disable if flareDelay is 0 - events are on pause
- 		if (StorageUtil.GetFloatValue(PlayerActor, "_SLP_flareDelay" )==0.0)
- 			debug.notification("[SLP] tryParasiteNextStage Flares disabled - ")
- 			Return bSuccess; Flares disabled - ignore
- 		endif
 
 		If (sParasite == "SprigganRoot") && (iChaurusQueenStage<1)
 			; Spriggan growth is stopped by Seed Stone
@@ -994,12 +1129,7 @@ Bool Function tryParasiteNextStage(Actor kActor, String sParasite)
 			; HEAT
 			StorageUtil.SetIntValue(kActor, "_SLP_triggerNextStageChaurusQueen", 20 + (iChaurusQueenStage * 10) )
 
-		ElseIf (sParasite == "SpiderPenis")  
-			Debug.MessageBox("The remains of the spider penis finally slide out of you.")
-			; PlayerActor.SendModEvent("SLPCureSpiderPenis")
-			fctParasiteSpiderEgg.cureSpiderPenis( PlayerActor   )
-			bSuccess = True
-		
+
 		ElseIf (sParasite == "SpiderEgg")  
 			Debug.Messagebox("Your whole body is convulsing as violent cramps force the eggs out of you.")
 			fctParasiteSpiderEgg.cureSpiderEgg( PlayerActor, false ) 
@@ -1018,64 +1148,6 @@ Bool Function tryParasiteNextStage(Actor kActor, String sParasite)
 			fctParasiteEstrus.triggerEstrusChaurusBirth( PlayerActor, "ChaurusWormVag", 1)
 			bSuccess = True
 		
-		ElseIf (sParasite == "FaceHugger")  
-			Int iEvent = Utility.RandomInt(1, 20)
- 			sslBaseVoice voice = SexLab.GetVoice(PlayerActor)
-
- 			Sound.SetInstanceVolume(WetFX.Play(PlayerRef), 1.0)
- 			Utility.Wait(1.0)
- 			Sound.SetInstanceVolume(CritterFX.Play(PlayerRef), 1.0)
- 			Utility.Wait(1.0)
-
-			if (iEvent <= 10)
-				Debug.Messagebox("The creature cripples you with rapid thrusts of its tail deep inside you.")
-	 			voice.Moan(PlayerActor, 10 + (Utility.RandomInt(0,8) * 10 ), false)
-           	 	Debug.SendAnimationEvent(PlayerRef, "bleedOutStart")
-            	utility.wait(4)
-           		Debug.SendAnimationEvent(PlayerRef, "IdleForceDefaultState")
-           	else
-				Debug.Messagebox("The creature pumps your womb full of a thick milky liquid.")
-           	endif
-
- 			voice.Moan(PlayerActor, 10 + (Utility.RandomInt(0,8) * 10 ), false)
- 			Sound.SetInstanceVolume(WetFX.Play(PlayerRef), 1.0)
- 			Utility.Wait(1.0)
- 			Sound.SetInstanceVolume(CritterFX.Play(PlayerRef), 1.0)
- 			Utility.Wait(1.0)
- 			           
-            SexLab.AddCum(PlayerActor,  Vaginal = true,  Oral = false,  Anal = true)
-			bSuccess = True
-		
-		ElseIf (sParasite == "FaceHuggerGag")  
-			Int iEvent = Utility.RandomInt(1, 20)
-
- 			Sound.SetInstanceVolume(WetFX.Play(PlayerRef), 1.0)
- 			Utility.Wait(1.0)
- 			Sound.SetInstanceVolume(CritterFX.Play(PlayerRef), 1.0)
- 			Utility.Wait(1.0)
-
-			if (iEvent <= 10)
-				Debug.Messagebox("The creature grabs your face tight as its tail coils around your neck, leaving you light headed and breathless.")
-	 			voice.Moan(PlayerActor, 10 + (Utility.RandomInt(0,8) * 10 ), false)
-           	 	Debug.SendAnimationEvent(PlayerRef, "bleedOutStart")
-            	utility.wait(4)
-           		Debug.SendAnimationEvent(PlayerRef, "IdleForceDefaultState")
-           	else
-				Debug.Notification("The creature pumps your throat full of a sweet and milky liquid.")
-				PlayerActor.AddItem(SLP_CritterSemen, 1, abSilent = true)
-				PlayerActor.EquipItem(SLP_CritterSemen,abPreventRemoval = false, abSilent = true)
-           	endif
-
- 			sslBaseVoice voice = SexLab.GetVoice(PlayerActor)
- 			voice.Moan(PlayerActor, 10 + (Utility.RandomInt(0,8) * 10 ), false)
- 			Sound.SetInstanceVolume(WetFX.Play(PlayerRef), 1.0)
- 			Utility.Wait(1.0)
- 			Sound.SetInstanceVolume(CritterFX.Play(PlayerRef), 1.0)
- 			Utility.Wait(1.0)
- 			           
-            SexLab.AddCum(PlayerActor,  Vaginal = false,  Oral = true,  Anal = false)
-			bSuccess = True
-		
 		ElseIf (sParasite == "TentacleMonster")  
 
 			Int iEvent = Utility.RandomInt(1, 20)
@@ -1091,55 +1163,11 @@ Bool Function tryParasiteNextStage(Actor kActor, String sParasite)
  			Sound.SetInstanceVolume(VoicesFX.Play(PlayerRef), 1.0)
  			Utility.Wait(1.0)
 
-			if (iEvent == 1)
+			if (iEvent <= 5)
 				Debug.Messagebox("The ground suddenly shakes around you.")
 				SendModEvent("SLHModHormone", "Lactation", 5.0)
 				SendModEvent("SLHModHormone", "Metabolism", 5.0 * Utility.RandomInt(1,10))
 				fctParasiteEstrus.infectEstrusTentacles( PlayerActor )
-
-			elseif (iEvent == 2)
-				Debug.notification("FIND A COCK AND FUCK IT. OBEY")
-				SendModEvent("SLHModHormone", "SexDrive", 2.0)
-			elseif (iEvent == 3)
-				Debug.notification("FIND A COCK AND SUCK IT. OBEY")
-				SendModEvent("SLHModHormone", "SexDrive", 2.0)
-			elseif (iEvent == 4)
-				Debug.notification("LISTEN TO OUR VOICES AND OBEY")
-				SendModEvent("SLHModHormone", "Bimbo", 2.0)
-			elseif (iEvent == 5)
-				Debug.notification("SURRENDER TO THE BLISS AND PLEASURE")
-				SendModEvent("SLHModHormone", "Bimbo", 2.0)
-			elseif (iEvent == 6)
-				Debug.notification("LET US GUIDE YOU")
-				SendModEvent("SLHModHormone", "Bimbo", 2.0)
-			elseif (iEvent == 7)
-				Debug.notification("WE CHOSE YOU. SUBMIT AND OBEY")
-				SendModEvent("SLHModHormone", "Bimbo", 2.0)
-			elseif (iEvent == 8)
-				Debug.notification("OBEDIENCE IS PLEASURE. OBEY")
-				SendModEvent("SLHModHormone", "Bimbo", 2.0)
-			elseif (iEvent == 9)
-				Debug.notification("LET GO OF YOUR THOUGHTS. OBEY")
-				SendModEvent("SLHModHormone", "Bimbo", 2.0)
-			elseif (iEvent == 10)
-				Debug.Messagebox("The creature blurs your mind through constant stimulation of your nipples and your clit.")
-				SendModEvent("SLHModHormone", "SexDrive", 5.0)
-
-			elseif (iEvent >= 11)
-				Debug.Notification("Needle-like tentacles fill your ears and burrow into your brain.")
-				; Testing stop and restart of quest for random location aliases
-				if (!(TentacleMonsterQuest.IsRunning()))
-					TentacleMonsterQuest.Start()
-				else
-					; TentacleMonsterQuest.Stop()
-					; Utility.Wait(1.0)
-					; TentacleMonsterQuest.Start()
-					TentacleMonsterQuest.SetStage(Utility.RandomInt(1, 4)*10)
-				Endif
-				; Utility.Wait(1.0)
-				; TentacleMonsterQuest.Start()
-
-				SendModEvent("SLHModHormone", "Bimbo", 5.0)
 			endif
 
  			Sound.SetInstanceVolume(VoicesFX.Play(PlayerRef), 1.0)
@@ -1609,7 +1637,7 @@ function tryRandomParasiteThoughts(String sTag)
 		endif
 
 		if ( ((fThrottle as Int) * 10) == _iCommentTicker)
-			debug.notification("[SLP] Chance of parasite comment: " + fParasiteThreshold)
+			; debug.notification("[SLP] Chance of parasite comment: " + fParasiteThreshold)
 			
 			Debug.Trace("[SLP] >>> iHoursSinceLastSex:" + iHoursSinceLastSex)
 			Debug.Trace("[SLP] >>> chance of Parasite thoughts:" + fParasiteThreshold) 
