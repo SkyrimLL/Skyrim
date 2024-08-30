@@ -247,11 +247,13 @@ Function _updateMagicka(Int iBonus = 1)
 	iAVMin = ((fJobMageMastery as Int) / 10) - 150
 
 	If (JobMageQuest.IsStageDone(415))
+		; Mage standing stone
 		; Debug.Trace("[SLD] 	Glowing SkyShard")
 		iAVMin = iAVMin / 2
 	endif
 
 	If (JobMageQuest.IsStageDone(425))
+		; Atronach standing stone
 		; Debug.Trace("[SLD] 	Shimering SkyShard")
 		iAVMin = ((fJobMageMastery as Int) / 20) 
 	endif

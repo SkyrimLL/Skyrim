@@ -318,5 +318,14 @@
         <Member name="Realistic Armors 3BA Hide Cuirass 2 (Physics)"/>
         <Member name="Realistic Armors 3BA Hide Gauntlets"/>
         <Member name="Realistic Armors 3BA Padded Armor (Physics)"/>
+        <Member name="@QwibTravelerArmor"/>
+        <Member name="@QwibTravelerBoots"/>
+        <Member name="@QwibTravelerGloves"/>
+        <Member name="@QwibTravelerGlovesBeast"/>
+        <Member name="@QwibTravelerHood"/>
+        <Member name="@QwibTravelerHoodArg"/>
+        <Member name="@QwibTravelerHoodDown"/>
+        <Member name="@QwibTravelerHoodKhajiit"/>
+        <Member name="@QwibTravelerShirt"/>
     </Group>
 </SliderGroups>

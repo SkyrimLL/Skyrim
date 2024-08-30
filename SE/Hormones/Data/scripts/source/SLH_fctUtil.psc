@@ -340,18 +340,44 @@ bool function isPregnantByFertilityMode(actor kActor)
 	bIsPregnant = False
 	if kActor && kActor != none
 		if (StorageUtil.GetIntValue(none, "_SLS_isFertilityModeON") ==  1) 
-			spell FertilityModePregnancySpell1 = StorageUtil.GetFormValue(none, "_SLS_getFertilityModePregnancySpell1") as Spell
-			spell FertilityModePregnancySpell2 = StorageUtil.GetFormValue(none, "_SLS_getFertilityModePregnancySpell2") as Spell
-			spell FertilityModePregnancySpell3 = StorageUtil.GetFormValue(none, "_SLS_getFertilityModePregnancySpell3") as Spell
-			bIsPregnant = kActor.HasSpell(FertilityModePregnancySpell1) || kActor.HasSpell(FertilityModePregnancySpell2) || kActor.HasSpell(FertilityModePregnancySpell3)
+			if (StorageUtil.GetIntValue(none, "_SLS_isFertilityModePlusON") ==  1) 
+				Faction FertilityModePregnancyFaction = StorageUtil.GetFormValue(none, "_SLS_getFertilityModePregnancyFaction") as Faction
+				bIsPregnant = False
+
+				if (FertilityModePregnancyFaction != None)
+					if (kActor.IsInFaction(FertilityModePregnancyFaction))
+						bIsPregnant = True
+					endif
+				else
+					debugTrace("[SLH] Compatibility issue. Fertility Mode+ is detected but pergnancy faction is None.")
+				endif
+
+				debugTrace(" Check Pregnant by Fertility Mode Plus: " + bIsPregnant)
+
+			else
+				spell FertilityModePregnancySpell1 = StorageUtil.GetFormValue(none, "_SLS_getFertilityModePregnancySpell1") as Spell
+				spell FertilityModePregnancySpell2 = StorageUtil.GetFormValue(none, "_SLS_getFertilityModePregnancySpell2") as Spell
+				spell FertilityModePregnancySpell3 = StorageUtil.GetFormValue(none, "_SLS_getFertilityModePregnancySpell3") as Spell
+				debugTrace(" Check FertilityModePregnancySpell1: " + kActor.HasSpell(FertilityModePregnancySpell1))
+				debugTrace(" Check FertilityModePregnancySpell2: " + kActor.HasSpell(FertilityModePregnancySpell2))
+				debugTrace(" Check FertilityModePregnancySpell3: " + kActor.HasSpell(FertilityModePregnancySpell3)) 
+				if (FertilityModePregnancySpell1 != none)
+					bIsPregnant = kActor.HasSpell(FertilityModePregnancySpell1)
+				endif
+				if (FertilityModePregnancySpell2 != none) && (!bIsPregnant)
+					bIsPregnant = kActor.HasSpell(FertilityModePregnancySpell2)
+				endif
+				if (FertilityModePregnancySpell3 != none) && (!bIsPregnant)
+					bIsPregnant = kActor.HasSpell(FertilityModePregnancySpell3)
+				endif
+				debugTrace(" Check Pregnant by Fertility Mode: " + bIsPregnant)
+			endif
 
 		endIf
 	endIf
-	debugTrace(" Check Pregnant by Fertility Mode: " + bIsPregnant)
 	return bIsPregnant
 endFunction
-
-
+ 
 
 bool function isPregnantByEstrusChaurus(actor kActor)
 	bIsPregnant = False

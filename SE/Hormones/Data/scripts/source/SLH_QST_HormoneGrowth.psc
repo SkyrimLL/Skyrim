@@ -252,6 +252,8 @@ Function Maintenance()
 	StorageUtil.SetIntValue(none, "_SLS_isSoulgemOvenON",  0)
 	StorageUtil.SetIntValue(none, "_SLS_isFertilityModeON",  0) 
 	StorageUtil.SetIntValue(none, "_SLP_isAnimatedWingsUltimate", 0) 
+	StorageUtil.SetIntValue(none, "_SLS_isFertilityModeON",  0) 
+	StorageUtil.SetIntValue(none, "_SLS_isFertilityModePlusON",  0) 
 
 	int idx = Game.GetModCount()
 	string modName = ""
@@ -274,19 +276,22 @@ Function Maintenance()
 		elseif modName == "Fertility Mode 3 Fixes and Updates.esp"
 
 		elseif modName == "Fertility Mode.esm"
-			debug.trace("[SLH] 'Fertility Mode.esm' detected")
 			StorageUtil.SetIntValue(none, "_SLS_isFertilityModeON",  1) 
 
 			; First check if updated version is available
 			modName = "Fertility Mode 3 Fixes and Updates.esp"
-			if (Game.GetFormFromFile(0x0000081D, modName) != None)
-				debug.trace("[SLH] 'Fertility Mode 3 Fixes and Updates.esp' detected")
-				StorageUtil.SetIntValue(none, "_SLS_isFertilityModeON",  1) 
-				StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell1",  Game.GetFormFromFile(0x0000081D, modName)) ; as Spell
-				StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell2",  Game.GetFormFromFile(0x0000081E, modName)) ; as Spell
-				StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell3",  Game.GetFormFromFile(0x0000081F, modName)) ; as Spell
+			if (modName == "Fertility Mode 3 Fixes and Updates.esp")
+				if (Game.GetFormFromFile(0x0000081D, modName) != None)
+					debug.trace("[SLH] 'Fertility Mode 3 Fixes and Updates.esp' detected")  
+					StorageUtil.SetIntValue(none, "_SLS_isFertilityModePlusON",  1) 
+					StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancyFaction",  Game.GetFormFromFile(0x00000862, modName)) ; as Spell
+					StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell1",  Game.GetFormFromFile(0x0000081D, modName)) ; as Spell
+					StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell2",  Game.GetFormFromFile(0x0000081E, modName)) ; as Spell
+					StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell3",  Game.GetFormFromFile(0x0000081F, modName)) ; as Spell
+				endif
 
 			else
+				debug.trace("[SLH] 'Fertility Mode.esm' detected")
 				modName = "Fertility Mode.esm"
 				StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell1",  Game.GetFormFromFile(0x0001B816, modName)) ; as Spell
 				StorageUtil.SetFormValue(none, "_SLS_getFertilityModePregnancySpell2",  Game.GetFormFromFile(0x0001B818, modName)) ; as Spell
@@ -2347,15 +2352,19 @@ EndFunction
 
 Function refreshColor(Actor kActor)
 
+	if (NextAllowed == -1)
+		return
+	endif
+
 	debugTrace(" Updating colors only" )
 	debugTrace("     bExternalChangeModActive:" + bExternalChangeModActive)
 	debugTrace("     NextAllowed: " + NextAllowed)
   
 	; fctBodyShape.refreshBodyShape(kActor) 
 	fctColor.applyColorChanges(kActor)
-	If !( bExternalChangeModActive ) && (NextAllowed!= -1)
-		fctBodyShape.applyBodyShapeChanges(kActor)
-	EndIf
+	; If !( bExternalChangeModActive ) && (NextAllowed!= -1)
+	fctBodyShape.applyBodyShapeChanges(kActor)
+	; EndIf
 	
 EndFunction
 

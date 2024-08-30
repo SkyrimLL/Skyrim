@@ -179,5 +179,9 @@
         <Member name="Realistic Armors 3BA Scale Armor (Physics)"/>
         <Member name="Realistic Armors 3BA Scale Boots"/>
         <Member name="Realistic Armors 3BA Scale Gauntlets"/>
+        <Member name="@QwibTravelerShirtFP"/>
+        <Member name="@QwibTravelerUpgrade"/>
+        <Member name="@QwibTravelerUpgradeFP"/>
+        <Member name="@QwibTravelerVest"/>
     </Group>
 </SliderGroups>

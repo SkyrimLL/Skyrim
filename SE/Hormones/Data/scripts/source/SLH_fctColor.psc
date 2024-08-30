@@ -308,11 +308,11 @@ function applyColorChanges(Actor kActor)
 
 		setTintMaskTarget(colorBase =  iSkinColor, maskType = 6, maskIndex = 0, colorTarget = iSkinColor, alphaLevel = 255)
 
-	 	If (SKSE.GetPluginVersion("NiOverride") >= 1) && (StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON")==1)
+	 	; If (SKSE.GetPluginVersion("NiOverride") >= 1) && (StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON")==1)
 	 		debugTrace("  Applying NiOverride")
 		 	NiOverride.ApplyOverrides(kActor)
 	 		NiOverride.ApplyNodeOverrides(kActor)
-	 	Endif
+	 	; Endif
 
 	endIf
 
