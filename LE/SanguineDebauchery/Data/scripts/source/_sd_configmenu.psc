@@ -155,6 +155,11 @@ Float _SDOID_config_S11_min = 1.0
 Float _SDOID_config_S11_max = 20.0
 Float _SDOID_config_S11_default = 5.0
 Float _SDOID_config_S11_inc = 1.0
+Int _SDOID_config_S12
+Float _SDOID_config_S12_min = 0.0
+Float _SDOID_config_S12_max = 100.0
+Float _SDOID_config_S12_default = 0.0
+Float _SDOID_config_S12_inc = 5.0
 
 Int _SDOID_config_M1 ;unused
 
@@ -198,6 +203,8 @@ Bool bRunning
 Quest fDawnGuardPatchQuest
 
 _SD_ConfigQuests kQuests
+
+Actor kPlayer
 
 ; PRIVATE FUNCTIONS -------------------------------------------------------------------------------
 string Function decimalDaysToString( Float afDays )
@@ -438,13 +445,13 @@ EndFunction
 
 ; @implements SKI_ConfigBase
 event OnConfigInit()
-	{Called when this config menu is initialized}
+	; {Called when this config menu is initialized}
 	initMod()
 endEvent
 
 ; @implements SKI_QuestBase
 event OnVersionUpdate(int a_version)
-	{Called when a version update of this script has been detected}
+	; {Called when a version update of this script has been detected}
 	If ( a_version != _SD_mcm_ver || CurrentVersion != _SD_mcm_ver )
 		; Debug.Notification("[SD] Updating script to version " + _SD_mcm_ver)
 		Debug.Trace("[SD] Updating script to version " + _SD_mcm_ver)
@@ -456,7 +463,9 @@ endEvent
 
 ; @implements SKI_ConfigBase
 event OnPageReset(string a_page)
-	{Called when a new page is selected, including the initial empty page}
+	kPlayer = Game.GetPlayer()
+
+	; {Called when a new page is selected, including the initial empty page}
 	; Load custom .swf for animated logo that's displayed when no page is selected yet.
 	if (a_page == "" || !Self.IsRunning() )
 		;SetTitleText( "$SD_CONCAT{" + CurrentVersion as String + "}VERSION" )
@@ -479,6 +488,7 @@ event OnPageReset(string a_page)
 		; _SDOID_config_S2 = AddSliderOption("$SD_OPTION_P0_WEAKENED_AT", _SDGVP_config_healthThreshold.GetValue() as Float, "$SD_PERCENT_HEALTH") ;4 - 3
 		_SDOID_config_S2 = AddSliderOption("$Chance of enslavement", _SDGVP_config_healthThreshold.GetValue() as Float, "{1} %")  
 		_SDOID_config_S1 = AddSliderOption("$Chance of spriggan infection", _SDGVP_config_healthMult.GetValue() as Float, "{1} %")  
+		_SDOID_config_S12 = AddSliderOption("$Percent health to submit", StorageUtil.GetIntValue(kPlayer, "_SD_iPercentHealthSubmit" ) as Float, "{1} %")  
 
 		; _SDOID_config_B1 = AddToggleOption("$SD_OPTION_P0_ESSENTIAL_WHILE_WEAKENED", _SDGVP_config_essential.GetValue() as Bool, OPTION_FLAG_DISABLED) ;6 - 4
 		AddHeaderOption("$SD_HEADER_P0_ITEMS") ;8 - 5
@@ -572,8 +582,7 @@ event OnPageReset(string a_page)
 			; EndIf
 
 			; ------ List slavery factions
-			; // iterate list from first added to last added
-			Actor kPlayer = Game.GetPlayer()
+			; // iterate list from first added to last added 
 			Debug.Trace("[SD] Expire Slave Factions")
 
 			int currentDaysPassed = Game.QueryStat("Days Passed")
@@ -765,6 +774,8 @@ event OnOptionHighlight(int a_option)
 		SetInfoText("$_SDOID_config_S10_desc")
 	ElseIf ( a_option == _SDOID_config_S11 )
 		SetInfoText("$_SDOID_config_S11_desc")
+	ElseIf ( a_option == _SDOID_config_S12 )
+		SetInfoText("$_SDOID_config_S12_desc")
 	;#################################################################################################			
 	ElseIf ( a_option == _SDOID_config_S1 )
 		; SetInfoText("$_SDOID_config_S1")
@@ -903,7 +914,8 @@ endEvent
 
 ; @implements SKI_ConfigBase
 event OnOptionDefault(int a_option)
-	{Called when resetting an option to its default value}
+	kPlayer = Game.GetPlayer()
+	; {Called when resetting an option to its default value}
 	If ( a_option == _SDOID_config_B1 )
 		_SDGVP_config_essential.SetValue( 1 )
 		SetToggleOptionValue(a_option, _SDGVP_config_essential.GetValue() as Bool )
@@ -919,12 +931,12 @@ event OnOptionDefault(int a_option)
 	ElseIf ( a_option == _SDOID_config_S1 )
 		; _SDGVP_config_healthMult.SetValue( _SDOID_config_S1_default )
 		_SDGVP_config_healthMult.SetValue( 80 )
-		StorageUtil.SetIntValue(Game.getPlayer(), "_SD_iChanceSprigganInfection",_SDGVP_config_healthMult.GetValue() as Int )
+		StorageUtil.SetIntValue(kPlayer, "_SD_iChanceSprigganInfection",_SDGVP_config_healthMult.GetValue() as Int )
 		SetSliderDialogStartValue( _SDGVP_config_healthMult.GetValue() as Float )
 	ElseIf ( a_option == _SDOID_config_S2 )
 		; _SDGVP_config_healthThreshold.SetValue( _SDOID_config_S2_default )
 		_SDGVP_config_healthThreshold.SetValue( 70.0 )
-		StorageUtil.SetIntValue(Game.getPlayer(), "_SD_iChanceEnslavement",_SDGVP_config_healthThreshold.GetValue() as Int )
+		StorageUtil.SetIntValue(kPlayer, "_SD_iChanceEnslavement",_SDGVP_config_healthThreshold.GetValue() as Int )
 		SetSliderDialogStartValue( _SDGVP_config_healthThreshold.GetValue() as Float )
 	ElseIf ( a_option == _SDOID_config_S3 )
 		_SDGVP_config_buyout.SetValue( _SDOID_config_S3_default )
@@ -938,20 +950,24 @@ event OnOptionDefault(int a_option)
 	ElseIf ( a_option == _SDOID_config_S6 )
 		_SDGVP_config_join_days.SetValue( _SDOID_config_S6_default )
 		SetSliderDialogStartValue( _SDGVP_config_join_days.GetValue() as Float )
+	ElseIf ( a_option == _SDOID_config_S12 )  
+		StorageUtil.SetIntValue(kPlayer, "_SD_iPercentHealthSubmit", 0 )
+		SetSliderDialogStartValue( StorageUtil.GetIntValue(kPlayer, "_SD_iPercentHealthSubmit" ) as Float )
 	ElseIf ( a_option == _SDOID_config_T2 )
 		_SDGVP_config_genderRestrictions.SetValue( 0 )
 		SetTextOptionValue(a_option, _SDSP_config_genderRestrictions[ _SDGVP_config_genderRestrictions.GetValueInt() ] as String )
-		StorageUtil.SetIntValue( Game.GetPlayer()  , "_SD_iGenderRestrictions",  0 )
+		StorageUtil.SetIntValue( kPlayer  , "_SD_iGenderRestrictions",  0 )
 	ElseIf ( a_option == _SDOID_config_T3 )
 		_SDGVP_config_genderSanguine.SetValue( 2 )
 		SetTextOptionValue(a_option, _SDSP_config_genderSanguine[ _SDGVP_config_genderSanguine.GetValueInt() ] as String )
-		StorageUtil.SetIntValue( Game.GetPlayer()  , "_SD_iGenderSanguine",  2 )
+		StorageUtil.SetIntValue( kPlayer  , "_SD_iGenderSanguine",  2 )
 	EndIf
 endEvent
 
 ; @implements SKI_ConfigBase
 event OnOptionSliderOpen(int a_option)
-	{Called when a slider option has been selected}
+	kPlayer = Game.GetPlayer()
+	; {Called when a slider option has been selected}
 	If ( a_option == _SDOID_config_S1 )
 ;		SetSliderDialogStartValue( _SDGVP_config_healthMult.GetValue() as Float )
 ;		SetSliderDialogDefaultValue( _SDOID_config_S1_default )
@@ -992,7 +1008,7 @@ event OnOptionSliderOpen(int a_option)
 		SetSliderDialogInterval( 1.0 ) ; _SDOID_config_S6_inc )
 	ElseIf ( a_option == _SDOID_config_S7 )
 		SetSliderDialogStartValue( _SDGVP_config_blindnessLevel.GetValue() as Float )
-		StorageUtil.SetIntValue(Game.getPlayer(), "_SD_iChanceDreamworldOnSleep",_SDGVP_config_blindnessLevel.GetValue() as Int )
+		StorageUtil.SetIntValue(kPlayer, "_SD_iChanceDreamworldOnSleep",_SDGVP_config_blindnessLevel.GetValue() as Int )
 		SetSliderDialogDefaultValue( _SDOID_config_S7_default )
 		SetSliderDialogRange( 0.0, 100.0 ) ; _SDOID_config_S7_min, _SDOID_config_S7_max )
 		SetSliderDialogInterval( _SDOID_config_S7_inc )
@@ -1016,20 +1032,26 @@ event OnOptionSliderOpen(int a_option)
 		SetSliderDialogDefaultValue( _SDOID_config_S11_default )
 		SetSliderDialogRange( _SDOID_config_S11_min, _SDOID_config_S11_max )
 		SetSliderDialogInterval( _SDOID_config_S11_inc )
+	ElseIf ( a_option == _SDOID_config_S12 )
+		SetSliderDialogStartValue( StorageUtil.GetIntValue(kPlayer, "_SD_iPercentHealthSubmit" ) as Float )
+		SetSliderDialogDefaultValue( _SDOID_config_S12_default )
+		SetSliderDialogRange( _SDOID_config_S11_min, _SDOID_config_S12_max )
+		SetSliderDialogInterval( _SDOID_config_S12_inc )
 	EndIf
 endEvent
 
 ; @implements SKI_ConfigBase
 event OnOptionSliderAccept(int a_option, float a_value)
-	{Called when a new slider value has been accepted}
+	kPlayer = Game.GetPlayer()
+	; {Called when a new slider value has been accepted}
 	If ( a_option == _SDOID_config_S1 )
 		_SDGVP_config_healthMult.SetValue( a_value )
-		StorageUtil.SetIntValue(Game.GetPlayer(), "_SD_iChanceSprigganInfection",_SDGVP_config_healthMult.GetValue() as Int )		
+		StorageUtil.SetIntValue(kPlayer, "_SD_iChanceSprigganInfection",_SDGVP_config_healthMult.GetValue() as Int )		
 		; SetSliderOptionValue(_SDOID_config_S1, a_value, "$SD_HEALTH")
 		SetSliderOptionValue(_SDOID_config_S1, a_value, "{1} %")
 	ElseIf ( a_option == _SDOID_config_S2 )
 		_SDGVP_config_healthThreshold.SetValue( a_value )
-		StorageUtil.SetIntValue(Game.GetPlayer(), "_SD_iChanceEnslavement",_SDGVP_config_healthThreshold.GetValue() as Int )
+		StorageUtil.SetIntValue(kPlayer, "_SD_iChanceEnslavement",_SDGVP_config_healthThreshold.GetValue() as Int )
 		; SetSliderOptionValue(_SDOID_config_S2, a_value, "$SD_PERCENT_HEALTH")
 		SetSliderOptionValue(_SDOID_config_S2, a_value, "{1} %")
 	ElseIf ( a_option == _SDOID_config_S3 )
@@ -1046,7 +1068,7 @@ event OnOptionSliderAccept(int a_option, float a_value)
 		SetSliderOptionValue(_SDOID_config_S6, a_value, "$SD_DAYS")
 	ElseIf ( a_option == _SDOID_config_S7 )
 		_SDGVP_config_blindnessLevel.SetValue( a_value )
-		StorageUtil.SetIntValue(Game.getPlayer(), "_SD_iChanceDreamworldOnSleep",_SDGVP_config_blindnessLevel.GetValue() as Int )
+		StorageUtil.SetIntValue(kPlayer, "_SD_iChanceDreamworldOnSleep",_SDGVP_config_blindnessLevel.GetValue() as Int )
 		SetSliderOptionValue(_SDOID_config_S7, a_value, "{1} %")
 	ElseIf ( a_option == _SDOID_config_S8 )
 		if ( a_value > (_SDGVP_config_max_slavery_level.GetValue( ) as Float) )
@@ -1066,6 +1088,9 @@ event OnOptionSliderAccept(int a_option, float a_value)
 	ElseIf ( a_option == _SDOID_config_S11 )
 		_SDGVP_config_disposition_threshold.SetValue( a_value )
 		SetSliderOptionValue(_SDOID_config_S11, a_value,"{1}")
+	ElseIf ( a_option == _SDOID_config_S12 )
+		StorageUtil.SetIntValue(kPlayer, "_SD_iPercentHealthSubmit", a_value as Int)
+		SetSliderOptionValue(_SDOID_config_S12, a_value,"{1}")
 	EndIf
 endEvent
 

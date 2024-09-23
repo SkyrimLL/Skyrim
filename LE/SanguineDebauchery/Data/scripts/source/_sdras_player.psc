@@ -227,6 +227,7 @@ Function _Maintenance()
 	RegisterForModEvent("SDRewardSlave",   "OnSDRewardSlave")
 	RegisterForModEvent("SDHandsFreeSlave",   "OnSDHandsFreeSlave")
 	RegisterForModEvent("SDHandsBoundSlave",   "OnSDHandsBoundSlave")
+	RegisterForModEvent("SDGetDevice",   "OnSDGetDevice")
 	RegisterForModEvent("SDEquipDevice",   "OnSDEquipDevice")
 	RegisterForModEvent("SDClearDevice",   "OnSDClearDevice")
 	RegisterForModEvent("SDClearSanguineDevices",   "OnSDClearSanguineDevices")
@@ -691,6 +692,7 @@ Function SDSurrender(Actor kActor, String SurrenderMode)
 		StorageUtil.SetFormValue(kPlayer, "_SD_TempAggressor", None)
 
 		_SDKP_spriggan.SendStoryEvent(akRef1 = kNewMaster as ObjectReference, akRef2 = kPlayer, aiValue1 = 0, aiValue2 = 0)
+
  
 
 	ElseIf (kNewMaster != None) && (StorageUtil.GetIntValue(kPlayer, "_SD_iChanceEnslavement")>0) &&  (fctFactions.checkIfSlaver (  kNewMaster ) || fctFactions.checkIfSlaverCreature (  kNewMaster ) )
@@ -747,6 +749,97 @@ Function SDSurrender(Actor kActor, String SurrenderMode)
 		_enslaveRadius(200, None)
 	EndIf
 EndFunction
+
+
+Function SDSurrenderOrRape(Actor kActor, String SurrenderMode)
+ 	; Actor kActor = _sender as Actor
+	Actor kNewMaster = StorageUtil.GetFormValue( kPlayer , "_SD_TempAggressor") as Actor
+	Actor kCurrentMaster
+
+	if (kActor != None)
+		; StorageUtil _SD_TempAggressor is deprecated
+		; Use _sender through kActor.SendModEvent("") in priority instead 
+		kNewMaster = kActor
+	EndIf
+		
+	Debug.Trace("[_sdras_player] Receiving 'surrender' event - New master: " + kNewMaster)
+
+	; If (kNewMaster)
+		; Debug.Trace("[_sdras_player] Faction check: " + fctFactions.checkIfSlaver (  kNewMaster ) )
+	; EndIf
+
+	If (kNewMaster != None)  && (StorageUtil.GetIntValue(kPlayer, "_SD_iChanceSprigganInfection")>0) &&  (fctFactions.checkIfSpriggan (  kNewMaster ) )
+		; if already enslaved, transfer of ownership
+		SendModEvent("da_PacifyNearbyEnemies")
+		StorageUtil.SetFormValue(kPlayer, "_SD_TempAggressor", None)
+
+		If (Utility.RandomInt(0,100) <= StorageUtil.GetIntValue(kPlayer, "_SD_iChanceSprigganInfection"))
+			_SDKP_spriggan.SendStoryEvent(akRef1 = kNewMaster as ObjectReference, akRef2 = kPlayer, aiValue1 = 0, aiValue2 = 0)
+		else
+			funct.SanguineRape( kNewMaster, kPlayer)
+		endif
+ 
+
+	ElseIf (kNewMaster != None) && (StorageUtil.GetIntValue(kPlayer, "_SD_iChanceEnslavement")>0) &&  (fctFactions.checkIfSlaver (  kNewMaster ) || fctFactions.checkIfSlaverCreature (  kNewMaster ) )
+		; if already enslaved, transfer of ownership
+		SendModEvent("da_PacifyNearbyEnemies")
+
+		If (Utility.RandomInt(0,100) <= StorageUtil.GetIntValue(kPlayer, "_SD_iChanceEnslavement"))
+
+			If (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 1)
+				kCurrentMaster = StorageUtil.GetFormValue(kPlayer, "_SD_CurrentOwner") as Actor
+
+				If (!kCurrentMaster.IsDead()) && (kPlayer.GetDistance( kCurrentMaster ) <= ( StorageUtil.GetIntValue(kPlayer, "_SD_iLeashLength") * 2) ) && ( StorageUtil.GetIntValue(kPlayer, "_SD_iSold") != 1 )
+					kCurrentMaster.SetRelationshipRank( kPlayer, StorageUtil.GetIntValue(kCurrentMaster, "_SD_iOriginalRelationshipRank") )
+					If (Utility.RandomInt(0,100) >= 0) || ( StorageUtil.GetIntValue(kCurrentMaster, "_SD_iDisposition") > 0)
+						Debug.Notification("$Your previous owner fights back.")
+						kCurrentMaster.StartCombat(kNewMaster)
+					Else
+						Debug.Notification("$Your former owner leaves, disgusted.")
+					EndIf
+				EndIf
+
+				StorageUtil.SetIntValue(kPlayer, "_SD_iSlaveTransfer",1)
+				; _SDQP_enslavement.Stop()
+
+				; While ( _SDQP_enslavement.IsStopping() )
+				; EndWhile
+
+				; Utility.wait(1.0)
+
+			EndIf
+
+			; new master
+
+			StorageUtil.SetFormValue(kPlayer, "_SD_TempAggressor", None)
+
+			If (SurrenderMode == "Consensual")
+				StorageUtil.SetIntValue(kNewMaster, "_SD_iForcedSlavery", 0) 
+				kNewMaster.SendModEvent("PCSubSubmit")
+				Debug.MessageBox(" You submit to a new owner.\n [Give the game a few seconds to start the enslavement sequence. If it takes too long, open the console and wait for the sequence to start.]")
+			else
+				Debug.MessageBox(" You have been defeated and taken as a slave.\n [Give the game a few seconds to start the enslavement sequence. If it takes too long, open the console and wait for the sequence to start.]")
+			EndIf
+
+			; New enslavement - changing ownership
+			If (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 1)
+				_SD_Enslaved.TransferSlave(kCurrentMaster, kNewMaster, kPlayer)
+			else
+				_SDKP_enslave.SendStoryEvent(akRef1 = kNewMaster, akRef2 = kPlayer, aiValue1 = 0, aiValue2 = 1)
+	 		endif
+		else
+			funct.SanguineRape( kNewMaster, kPlayer)
+		endif
+		
+	ElseIf (kNewMaster != None)
+		; kNewMaster.SendModEvent("PCSubSex")
+		funct.SanguineRape( kNewMaster, kPlayer)
+	Else
+		Debug.Trace("[_sdras_player] Attempted enslavement to empty master " )
+		_enslaveRadius(200, None)
+	EndIf
+EndFunction
+
 
 Event OnSDEnslaveRadius(String _eventName, String _args = "200.0", Float _argc = 1.0, Form _sender)
 	float fRadius = _args as Float
@@ -1328,6 +1421,48 @@ Event OnSDRewardSlave(String _eventName, String _args, Float _argc = 1.0, Form _
 	Elseif (kActor != none)
 		fctOutfit.ClearDeviceNPCByString(kActor, sDeviceString = sDevice, sOutfitString= "" )
 	EndIf
+EndEvent
+
+Event OnSDGetDevice(String _eventName, String _args, Float _argc = -1.0, Form _sender)
+ 	Actor kActor = _sender as Actor
+	Int iOutfitID = _argc as Int
+	String sDevice = _args
+	String sTags = ""
+	Int iTagsIndex 
+
+	; Example:  forcing a gag on akSpeaker using additional tags for a race override
+	; akSpeaker.SendModEvent("SDEquipDevice", "Gag|Breton") 
+
+	Debug.Trace("[_sdras_player] Receiving device equip story event [" + _args  + "] [" + _argc as Int + "] [" + _argc + "] for actor ["+kActor+"]")
+
+	; Split _args between Device and Tags (separated by '|')
+	iTagsIndex = StringUtil.Find(_args, "|")
+	if (iTagsIndex==-1)
+	 	sDevice = _args
+		sTags = ""
+	else
+		sDevice = StringUtil.Substring(_args, 0, iTagsIndex )
+		sTags = StringUtil.Substring(_args, iTagsIndex +1 )
+	endIf
+
+
+	If (kActor == kPlayer)
+		Debug.Trace("[_sdras_player] 	sDevice = "+ sDevice +" - sTags = " + sTags )
+
+		if (iOutfitID == 1) ; Sanguine outfit - ignore tags
+			fctOutfit.equipNonGenericDeviceByString ( sDeviceString = sDevice, sOutfitString = "Sanguine"  )
+		else
+			fctOutfit.setMasterGearByRace ( kActor, kPlayer  )
+			fctOutfit.getDeviceByString ( sDeviceString = sDevice, sOutfitString= "", sDeviceTags = sTags )
+		endif
+	else
+		if (iOutfitID == 1) ; Sanguine outfit - ignore tags
+			fctOutfit.equipNonGenericDeviceNPCByString ( kActor, sDeviceString = sDevice, sOutfitString = "Sanguine"  )
+		else
+			fctOutfit.getDeviceNPCByString (kActor, sDeviceString = sDevice, sOutfitString = "", sDeviceTags = sTags )
+		endif
+	endIf
+
 EndEvent
 
 Event OnSDEquipDevice(String _eventName, String _args, Float _argc = -1.0, Form _sender)
@@ -2152,6 +2287,20 @@ State monitor
 
 				if (StorageUtil.GetIntValue( akActor, "_SD_iDateBeastSlaverChecked")==0)
 					fctFactions.checkIfSlaverCreature ( akActor )
+				Endif
+			Endif
+
+			; Basic trigger for enslavement - slider should be by percent health eventually. Right now, simply actual value for tests.
+			; This is provided in case no other mod handles enslavement situaltions, like Death Laternative - Your Money or your life. (DAYMOL)
+			If ((PlayerRef.GetActorValue("Health") <= StorageUtil.GetIntValue(PlayerRef, "_SD_iPercentHealthSubmit") ) && (StorageUtil.GetIntValue(PlayerRef, "_SD_iPercentHealthSubmit")>0))
+				If (!akActor.IsDead())
+					Debug.Notification("$[SD] Surrender to aggressor")
+					StorageUtil.SetIntValue(kPlayer, "_SD_iSurrenderOn", 0)
+					; akActor.SendModEvent("PCSubSurrender")
+					fctOutfit.initSlaveryGearByActor ( akActor )
+					SDSurrenderOrRape(akActor, "" )
+					GoToState("monitor")
+
 				Endif
 			Endif
 

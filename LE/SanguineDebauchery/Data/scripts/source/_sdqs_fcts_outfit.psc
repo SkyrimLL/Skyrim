@@ -481,7 +481,7 @@ Function initSlaveryGearForThisRace ( Form thisRace )
 
 			; Redguard
 			ElseIf (StringUtil.Find(sRaceName, "Redguard")!= -1)
-				registerSlaveryOptions( fRace=thisRace, allowCollar=1, allowArmbinders=1, allowPunishmentDevice=1, allowPunishmentScene=1, allowWhippingScene=1, defaultStance="Kneeling", raceSlaveTat="Redguard Scrawl (belly)" )
+				registerSlaveryOptions( fRace=thisRace, allowCollar=1, allowArmbinders=1, allowPunishmentDevice=1, allowPunishmentScene=1, allowWhippingScene=1, defaultStance="Kneeling", raceSlaveTat="Redguard Scrawl (belly)" ) 
 
 			; Orc
 			ElseIf (StringUtil.Find(sRaceName, "Orc")!= -1)
@@ -631,6 +631,213 @@ EndFunction
 
 ;---------------------------------------------------
 
+Function getDeviceByString ( String sDeviceString = "", String sOutfitString = "", String sDeviceTags = "")
+	Actor PlayerActor = Game.GetPlayer() 
+
+	getDeviceNPCByString ( PlayerActor, sDeviceString, sOutfitString, sDeviceTags )
+
+EndFunction
+
+
+Function getDeviceNPCByString ( Actor akActor, String sDeviceString = "", String sOutfitString = "",  String sDeviceTags = "") 
+	Keyword kwDeviceKeyword = none
+	Armor aWornDevice = none
+	Armor aRenderedDevice = none
+	String sGenericDeviceTags = ""
+	String sDeviceTagsOverride = ""
+	Form kForm	
+	Race thisRace
+	Form fRaceOverride 
+	Form fActorOverride  
+	Bool bDeviceOverride = False
+	Bool bDeviceEquipSuccess = False
+
+ 	if (akActor == none)
+ 		Return
+ 	endif
+ 	
+	setMasterGearByRace (akActor, akActor )
+	fRaceOverride = StorageUtil.GetFormValue(akActor, "_SD_fSlaveryGearRace")
+	fActorOverride = StorageUtil.GetFormValue(akActor, "_SD_fSlaveryGearActor")
+
+	if (sDeviceTags != "")
+		kForm = getSlaveryGearRaceByString ( sDeviceTags ) 
+
+		if (kForm!= none)
+			fRaceOverride = kForm as Race
+		endif
+	endif
+
+	sDeviceString = sanitizeStringCode(sDeviceString)
+	debugTrace(" getDeviceNPCByString : " + sDeviceString)  
+
+	; Actor override - this actor is getting gear preferences from another actor
+	If ( fActorOverride!= none) 
+		if (StorageUtil.GetFormValue(fActorOverride, "_SD_" + sDeviceString + "_keyword")!=none)
+			debugTrace(" 	- Actor override detected for " + sDeviceString)  
+			sGenericDeviceTags = StorageUtil.GetStringValue(fActorOverride, "_SD_" + sDeviceString + "_tags" )
+			if (sGenericDeviceTags == "override")
+				bDeviceOverride = True
+				kwDeviceKeyword = 	StorageUtil.GetFormValue(fActorOverride, "_SD_" + sDeviceString + "_keyword") as Keyword
+				aWornDevice = StorageUtil.GetFormValue(fActorOverride, "_SD_" + sDeviceString + "_inventory" ) as Armor
+				aRenderedDevice = StorageUtil.GetFormValue(fActorOverride, "_SD_" + sDeviceString + "_rendered" ) as Armor
+			endif
+		else
+			debugTrace(" 	- Actor override not found for " + sDeviceString)  
+		endIf
+	EndIf
+	
+	; Race override - this actor is getting gear preferences from another race
+	If ( fRaceOverride!= none) && (!bDeviceOverride) 
+		if (StorageUtil.GetFormValue(fRaceOverride, "_SD_" + sDeviceString + "_keyword")!=none)
+			debugTrace(" 	- Racial override detected for " + sDeviceString)  
+			sGenericDeviceTags = StorageUtil.GetStringValue(fRaceOverride, "_SD_" + sDeviceString + "_tags" )
+			if (sGenericDeviceTags == "override")
+				bDeviceOverride = True
+				kwDeviceKeyword = 	StorageUtil.GetFormValue(fRaceOverride, "_SD_" + sDeviceString + "_keyword") as Keyword
+				aWornDevice = StorageUtil.GetFormValue(fRaceOverride, "_SD_" + sDeviceString + "_inventory" ) as Armor
+				aRenderedDevice = StorageUtil.GetFormValue(fRaceOverride, "_SD_" + sDeviceString + "_rendered" ) as Armor
+			endif
+		else
+			debugTrace(" 	- Racial override not found for " + sDeviceString)  
+		endIf
+	EndIf
+
+	; Player/NPC override - this actor is getting gear preferences from SD Addon
+	String sMaterial = StorageUtil.GetFormValue(akActor, "_SD_" + sDeviceString + "_material")
+
+	if (sMaterial!="")
+		debugTrace(" 	- Actor override detected for " + sDeviceString + " - Material: " + sMaterial)  
+		sGenericDeviceTags = StorageUtil.GetStringValue(akActor, "_SD_" + sDeviceString + "_tags" )
+		; if (sGenericDeviceTags == "override")
+		; 	bDeviceOverride = True
+			bDeviceOverride = False
+		;	getNonGenericDeviceNPCByString (akActor,  sDeviceString,  sMaterial)
+
+		;	kwDeviceKeyword = 	None ; Disable next equip device since we equipped it here
+		; endif
+	else
+		debugTrace(" 	- Actor override not found for " + sDeviceString)  
+	endIf
+
+	; No override found
+	If (!bDeviceOverride) ; generic item
+ 		debug.notification("[SD]   no override found - basic device fallback" )  
+ 		debugTrace("   no override found - basic device fallback" )  
+		
+		kwDeviceKeyword = getDeviousKeywordByString(sDeviceString)
+
+		If ( sDeviceString == "Collar" ) || ( sDeviceString == "collar" ) 
+			aWornDevice = xlibs.zadx_HR_IronCollarChain01Inventory 
+			aRenderedDevice = xlibs.zadx_HR_IronCollarChain01Rendered
+
+		ElseIf ( sDeviceString == "WristRestraints" ) || ( sDeviceString == "WristRestraint" )  || ( sDeviceString == "Armbinders" )
+			aWornDevice = xlibs.zadx_HR_IronCuffsFrontInventory 
+			aRenderedDevice = xlibs.zadx_HR_IronCuffsFrontRendered
+		
+		ElseIf ( sDeviceString == "LegCuffs" )
+			aWornDevice = xlibs.zadx_HR_ChainHarnessBootsInventory 
+			aRenderedDevice = xlibs.zadx_HR_ChainHarnessBootsRendered
+		
+		ElseIf ( sDeviceString == "Gag" )
+			aWornDevice = xlibs.zadx_HR_PearGagInventory
+			aRenderedDevice = xlibs.zadx_HR_PearGagRendered
+		
+		ElseIf ( sDeviceString == "Blindfold" )
+			aWornDevice = xlibs.blindfoldBlocking
+			aRenderedDevice = xlibs.blindfoldBlockingRendered
+
+		ElseIf ( sDeviceString == "Belt" ) || ( sDeviceString == "belt" )
+			aWornDevice = libs.beltIron
+			aRenderedDevice = libs.beltIronRendered
+		
+		ElseIf ( sDeviceString == "PlugAnal" )
+			aWornDevice = xlibs.zadx_HR_IronPearAnalBlackInventory
+			aRenderedDevice = xlibs.zadx_HR_IronPearAnalBlackRendered
+		
+		ElseIf ( sDeviceString == "PlugVaginal" )
+			aWornDevice = xlibs.zadx_HR_IronPearVaginalBlackInventory
+			aRenderedDevice = xlibs.zadx_HR_IronPearVaginalBlackRendered
+		
+		ElseIf ( sDeviceString == "Gloves" ) || ( sDeviceString == "gloves" )
+			aWornDevice = xlibs.RDLrestrictiveGloves
+			aRenderedDevice = xlibs.RDLrestrictiveGlovesRendered
+		
+		ElseIf ( sDeviceString == "Boots" ) || ( sDeviceString == "boots" )
+			aWornDevice = xlibs.zadx_HR_IronBalletBootsHeelInventory
+			aRenderedDevice = xlibs.zadx_HR_IronBalletBootsHeelRendered
+		
+		ElseIf ( sDeviceString == "Corset" ) || ( sDeviceString == "corset" )
+			aWornDevice = xlibs.RDLrestrictiveCorset
+			aRenderedDevice = xlibs.RDLrestrictiveCorsetRendered
+		EndIf 
+
+	endIf
+
+	If (StorageUtil.GetIntValue(akActor, "_SD_iEnslaved")==1) 
+		; Any tweaks during slavery goes here - color in tags based on master personality maybe?
+	Endif
+ 
+ 	; If override forms are set, use them first
+ 	; ElseIf generic device tag is set, use it
+ 	; Else force random generic item
+
+	If (kwDeviceKeyword != None)
+
+			if (sOutfitString!="")
+				Debug.Messagebox("[SD] getDeviceByString called with message: " + sOutfitString)  
+			Endif
+
+			debugTrace(" getDeviceByString: " + sDeviceString)  
+			debugTrace(" 		keyword: " + kwDeviceKeyword)  
+
+			if (aWornDevice!=none) 
+				; preferred device
+
+				debugTrace(" 		getDeviceByString - preferred: " + aRenderedDevice + " - Device inventory: "  + aWornDevice  )
+
+				bDeviceEquipSuccess = getDeviceNPC(akActor,aWornDevice)
+			endif
+
+			If (!bDeviceEquipSuccess)
+				debugTrace(" 		getDeviceByString - device equip FAILED for " + sDeviceString)
+				Debug.Notification("[SD] getDeviceByString FAILED: " + sDeviceString)
+			endIf
+
+	else
+		debugTrace(" unknown device to equip " +  sDeviceString)  
+
+	endif
+
+	
+EndFunction
+
+
+Bool Function getDevice(Armor ddArmorInventory)
+	Actor PlayerActor = Game.GetPlayer() as Actor
+	Bool bDeviceEquipSuccess
+
+	bDeviceEquipSuccess = getDeviceNPC(PlayerActor, ddArmorInventory)
+
+	return bDeviceEquipSuccess
+EndFunction
+
+Bool Function getDeviceNPC(Actor akActor, Armor ddArmorInventory)
+	Keyword kwWornKeyword
+	Bool bDeviceEquipSuccess = True
+	ObjectReference ActorRef = akActor as ObjectReference
+
+	libs.Log("[SD] getDeviceNPC for " +  akActor)
+
+	; TO DO - figure out why AddItem is not working - using lock device instead for now.
+	; bDeviceEquipSuccess = libs.LockDevice(akActor, ddArmorInventory )
+	akActor.AddItem(ddArmorInventory, 1, false)
+
+	return bDeviceEquipSuccess
+EndFunction
+
+;---------------------------------------------------
+
 Function equipDeviceByString ( String sDeviceString = "", String sOutfitString = "", String sDeviceTags = "")
 	Actor PlayerActor = Game.GetPlayer() 
 
@@ -719,11 +926,58 @@ Function equipDeviceNPCByString ( Actor akActor, String sDeviceString = "", Stri
 		debugTrace(" 	- Actor override not found for " + sDeviceString)  
 	endIf
 
-	; If player override is set, intercept selection with player override instead
+	; No override found
 	If (!bDeviceOverride) ; generic item
- 		debug.notification("[SD]   no override found - aborting device" )  
- 		debugTrace("   no override found - aborting device" )  
-		return
+ 		debug.notification("[SD]   no override found - basic device fallback" )  
+ 		debugTrace("   no override found - basic device fallback" )  
+		
+		kwDeviceKeyword = getDeviousKeywordByString(sDeviceString)
+
+		If ( sDeviceString == "Collar" ) || ( sDeviceString == "collar" ) 
+			aWornDevice = xlibs.zadx_HR_IronCollarChain01Inventory 
+			aRenderedDevice = xlibs.zadx_HR_IronCollarChain01Rendered
+
+		ElseIf ( sDeviceString == "WristRestraints" ) || ( sDeviceString == "WristRestraint" )  || ( sDeviceString == "Armbinders" )
+			aWornDevice = xlibs.zadx_HR_IronCuffsFrontInventory 
+			aRenderedDevice = xlibs.zadx_HR_IronCuffsFrontRendered
+		
+		ElseIf ( sDeviceString == "LegCuffs" )
+			aWornDevice = xlibs.zadx_HR_ChainHarnessBootsInventory 
+			aRenderedDevice = xlibs.zadx_HR_ChainHarnessBootsRendered
+		
+		ElseIf ( sDeviceString == "Gag" )
+			aWornDevice = xlibs.zadx_HR_PearGagInventory
+			aRenderedDevice = xlibs.zadx_HR_PearGagRendered
+		
+		ElseIf ( sDeviceString == "Blindfold" )
+			aWornDevice = xlibs.blindfoldBlocking
+			aRenderedDevice = xlibs.blindfoldBlockingRendered
+
+		ElseIf ( sDeviceString == "Belt" ) || ( sDeviceString == "belt" )
+			aWornDevice = libs.beltIron
+			aRenderedDevice = libs.beltIronRendered
+		
+		ElseIf ( sDeviceString == "PlugAnal" )
+			aWornDevice = xlibs.zadx_HR_IronPearAnalBlackInventory
+			aRenderedDevice = xlibs.zadx_HR_IronPearAnalBlackRendered
+		
+		ElseIf ( sDeviceString == "PlugVaginal" )
+			aWornDevice = xlibs.zadx_HR_IronPearVaginalBlackInventory
+			aRenderedDevice = xlibs.zadx_HR_IronPearVaginalBlackRendered
+		
+		ElseIf ( sDeviceString == "Gloves" ) || ( sDeviceString == "gloves" )
+			aWornDevice = xlibs.zadx_HR_ChainHarnessGlovesInventory
+			aRenderedDevice = xlibs.zadx_HR_ChainHarnessGlovesRendered
+		
+		ElseIf ( sDeviceString == "Boots" ) || ( sDeviceString == "boots" )
+			aWornDevice = xlibs.zadx_HR_ChainHarnessBootsInventory
+			aRenderedDevice = xlibs.zadx_HR_ChainHarnessBootsRendered
+		
+		ElseIf ( sDeviceString == "Corset" ) || ( sDeviceString == "corset" )
+			aWornDevice = xlibs.zadx_HR_ChainHarnessBodyInventory
+			aRenderedDevice = xlibs.zadx_HR_ChainHarnessBodyRendered
+		EndIf 
+
 
 	endIf
 
@@ -1785,141 +2039,141 @@ Function equipNonGenericDeviceNPCByString ( Actor kActor, String sDeviceString =
 			; Outfits by Material from SD Addon
 			elseif (sOutfitString == "Rusted")  
 				If ( sDeviceString == "Collar" ) || ( sDeviceString == "collar" ) 
-					aRenderedDevice = xlibs.zadx_HR_RustyIronCollarChain01Inventory 
-					aWornDevice = xlibs.zadx_HR_RustyIronCollarChain01Rendered
+					aWornDevice = xlibs.zadx_HR_RustyIronCollarChain01Inventory 
+					aRenderedDevice = xlibs.zadx_HR_RustyIronCollarChain01Rendered
 
 				ElseIf ( sDeviceString == "WristRestraints" ) || ( sDeviceString == "WristRestraint" )  || ( sDeviceString == "Armbinders" )
-					aRenderedDevice = xlibs.zadx_HR_RustyIronCuffsFrontInventory 
-					aWornDevice = xlibs.zadx_HR_RustyIronCuffsFrontRendered
+					aWornDevice = xlibs.zadx_HR_RustyIronCuffsFrontInventory 
+					aRenderedDevice = xlibs.zadx_HR_RustyIronCuffsFrontRendered
 				
 				ElseIf ( sDeviceString == "LegCuffs" )
-					aRenderedDevice = xlibs.zadx_HR_RustyChainHarnessBootsInventory 
-					aWornDevice = xlibs.zadx_HR_RustyChainHarnessBootsRendered
+					aWornDevice = xlibs.zadx_HR_RustyChainHarnessBootsInventory 
+					aRenderedDevice = xlibs.zadx_HR_RustyChainHarnessBootsRendered
 				
 				ElseIf ( sDeviceString == "Gag" )
-					aRenderedDevice = xlibs.zadx_HR_RustyPearGagInventory
-					aWornDevice = xlibs.zadx_HR_RustyPearGagRendered
+					aWornDevice = xlibs.zadx_HR_RustyPearGagInventory
+					aRenderedDevice = xlibs.zadx_HR_RustyPearGagRendered
 				
 				ElseIf ( sDeviceString == "Blindfold" )
-					aRenderedDevice = xlibs.blindfoldBlocking
-					aWornDevice = xlibs.blindfoldBlockingRendered
+					aWornDevice = xlibs.blindfoldBlocking
+					aRenderedDevice = xlibs.blindfoldBlockingRendered
 
 				ElseIf ( sDeviceString == "Belt" ) || ( sDeviceString == "belt" )
-					aRenderedDevice = libs.beltIron
-					aWornDevice = libs.beltIronRendered
+					aWornDevice = libs.beltIron
+					aRenderedDevice = libs.beltIronRendered
 				
 				ElseIf ( sDeviceString == "PlugAnal" )
-					aRenderedDevice = xlibs.zadx_HR_RustyIronPearAnalInventory
-					aWornDevice = xlibs.zadx_HR_RustyIronPearAnalRendered
+					aWornDevice = xlibs.zadx_HR_RustyIronPearAnalInventory
+					aRenderedDevice = xlibs.zadx_HR_RustyIronPearAnalRendered
 				
 				ElseIf ( sDeviceString == "PlugVaginal" )
-					aRenderedDevice = xlibs.zadx_HR_RustyIronPearVaginalInventory
-					aWornDevice = xlibs.zadx_HR_RustyIronPearVaginalRendered
+					aWornDevice = xlibs.zadx_HR_RustyIronPearVaginalInventory
+					aRenderedDevice = xlibs.zadx_HR_RustyIronPearVaginalRendered
 				EndIf
 
 			; Outfits by Material from SD Addon
 			elseif (sOutfitString == "Iron") 
 				If ( sDeviceString == "Collar" ) || ( sDeviceString == "collar" ) 
-					aRenderedDevice = xlibs.zadx_HR_IronCollarChain01Inventory 
-					aWornDevice = xlibs.zadx_HR_IronCollarChain01Rendered
+					aWornDevice = xlibs.zadx_HR_IronCollarChain01Inventory 
+					aRenderedDevice = xlibs.zadx_HR_IronCollarChain01Rendered
 
 				ElseIf ( sDeviceString == "WristRestraints" ) || ( sDeviceString == "WristRestraint" )  || ( sDeviceString == "Armbinders" )
-					aRenderedDevice = xlibs.zadx_HR_IronCuffsFrontInventory 
-					aWornDevice = xlibs.zadx_HR_IronCuffsFrontRendered
+					aWornDevice = xlibs.zadx_HR_IronCuffsFrontInventory 
+					aRenderedDevice = xlibs.zadx_HR_IronCuffsFrontRendered
 				
 				ElseIf ( sDeviceString == "LegCuffs" )
-					aRenderedDevice = xlibs.zadx_HR_ChainHarnessBootsInventory 
-					aWornDevice = xlibs.zadx_HR_ChainHarnessBootsRendered
+					aWornDevice = xlibs.zadx_HR_ChainHarnessBootsInventory 
+					aRenderedDevice = xlibs.zadx_HR_ChainHarnessBootsRendered
 				
 				ElseIf ( sDeviceString == "Gag" )
-					aRenderedDevice = xlibs.zadx_HR_PearGagInventory
-					aWornDevice = xlibs.zadx_HR_PearGagRendered
+					aWornDevice = xlibs.zadx_HR_PearGagInventory
+					aRenderedDevice = xlibs.zadx_HR_PearGagRendered
 				
 				ElseIf ( sDeviceString == "Blindfold" )
-					aRenderedDevice = xlibs.blindfoldBlocking
-					aWornDevice = xlibs.blindfoldBlockingRendered
+					aWornDevice = xlibs.blindfoldBlocking
+					aRenderedDevice = xlibs.blindfoldBlockingRendered
 
 				ElseIf ( sDeviceString == "Belt" ) || ( sDeviceString == "belt" )
-					aRenderedDevice = libs.beltIron
-					aWornDevice = libs.beltIronRendered
+					aWornDevice = libs.beltIron
+					aRenderedDevice = libs.beltIronRendered
 				
 				ElseIf ( sDeviceString == "PlugAnal" )
-					aRenderedDevice = xlibs.zadx_HR_IronPearAnalBlackInventory
-					aWornDevice = xlibs.zadx_HR_IronPearAnalBlackRendered
+					aWornDevice = xlibs.zadx_HR_IronPearAnalBlackInventory
+					aRenderedDevice = xlibs.zadx_HR_IronPearAnalBlackRendered
 				
 				ElseIf ( sDeviceString == "PlugVaginal" )
-					aRenderedDevice = xlibs.zadx_HR_IronPearVaginalBlackInventory
-					aWornDevice = xlibs.zadx_HR_IronPearVaginalBlackRendered
+					aWornDevice = xlibs.zadx_HR_IronPearVaginalBlackInventory
+					aRenderedDevice = xlibs.zadx_HR_IronPearVaginalBlackRendered
 				EndIf
 
 			; Outfits by Material from SD Addon
 			elseif (sOutfitString == "Leather")
 				If ( sDeviceString == "Collar" ) || ( sDeviceString == "collar" ) 
-					aRenderedDevice = libs.collarPostureLeather 
-					aWornDevice = libs.collarPostureLeatherRendered
+					aWornDevice = libs.collarPostureLeather 
+					aRenderedDevice = libs.collarPostureLeatherRendered
 
 				ElseIf ( sDeviceString == "WristRestraints" ) || ( sDeviceString == "WristRestraint" )  || ( sDeviceString == "Armbinders" )
-					aRenderedDevice = libs.armbinder 
-					aWornDevice = libs.armbinderRendered
+					aWornDevice = libs.armbinder 
+					aRenderedDevice = libs.armbinderRendered
 				
 				ElseIf ( sDeviceString == "LegCuffs" )
-					aRenderedDevice = libs.cuffsPaddedLegs 
-					aWornDevice = libs.cuffsPaddedLegsRendered
+					aWornDevice = libs.cuffsPaddedLegs 
+					aRenderedDevice = libs.cuffsPaddedLegsRendered
 				
 				ElseIf ( sDeviceString == "Gag" )
-					aRenderedDevice = libs.gagStrapRing
-					aWornDevice = libs.gagStrapRingRendered
+					aWornDevice = libs.gagStrapRing
+					aRenderedDevice = libs.gagStrapRingRendered
 				
 				ElseIf ( sDeviceString == "Blindfold" )
-					aRenderedDevice = libs.blindfold
-					aWornDevice = libs.blindfoldRendered
+					aWornDevice = libs.blindfold
+					aRenderedDevice = libs.blindfoldRendered
 
 				ElseIf ( sDeviceString == "Belt" ) || ( sDeviceString == "belt" )
-					aRenderedDevice = libs.beltPadded
-					aWornDevice = libs.beltPaddedRendered
+					aWornDevice = libs.beltPadded
+					aRenderedDevice = libs.beltPaddedRendered
 				
 				ElseIf ( sDeviceString == "PlugAnal" )
-					aRenderedDevice = libs.plugInflatableVag
-					aWornDevice = libs.plugInflatableVagRendered
+					aWornDevice = libs.plugInflatableVag
+					aRenderedDevice = libs.plugInflatableVagRendered
 				
 				ElseIf ( sDeviceString == "PlugVaginal" )
-					aRenderedDevice = libs.plugInflatableAn
-					aWornDevice = libs.plugInflatableAnRendered
+					aWornDevice = libs.plugInflatableAn
+					aRenderedDevice = libs.plugInflatableAnRendered
 				EndIf
 
 			; Outfits by Material from SD Addon
 			elseif (sOutfitString == "Rope") 
 				If ( sDeviceString == "Collar" ) || ( sDeviceString == "collar" ) 
-					aRenderedDevice = xlibs.zadx_Collar_Rope_1_Inventory 
-					aWornDevice = xlibs.zadx_Collar_Rope_1_Rendered
+					aWornDevice = xlibs.zadx_Collar_Rope_1_Inventory 
+					aRenderedDevice = xlibs.zadx_Collar_Rope_1_Rendered
 
 				ElseIf ( sDeviceString == "WristRestraints" ) || ( sDeviceString == "WristRestraint" )  || ( sDeviceString == "Armbinders" )
-					aRenderedDevice = xlibs.zadx_Armbinder_Rope_Inventory 
-					aWornDevice = xlibs.zadx_Armbinder_Rope_Rendered
+					aWornDevice = xlibs.zadx_Armbinder_Rope_Inventory 
+					aRenderedDevice = xlibs.zadx_Armbinder_Rope_Rendered
 				
 				ElseIf ( sDeviceString == "LegCuffs" )
-					aRenderedDevice = xlibs.zadx_ZaZ_IronChainShacklesInventory 
-					aWornDevice = xlibs.zadx_ZaZ_IronChainShacklesRendered
+					aWornDevice = xlibs.zadx_ZaZ_IronChainShacklesInventory 
+					aRenderedDevice = xlibs.zadx_ZaZ_IronChainShacklesRendered
 				
 				ElseIf ( sDeviceString == "Gag" )
-					aRenderedDevice = xlibs.zadx_gag_rope_bit_Inventory
-					aWornDevice = xlibs.zadx_gag_rope_bit_Rendered
+					aWornDevice = xlibs.zadx_gag_rope_bit_Inventory
+					aRenderedDevice = xlibs.zadx_gag_rope_bit_Rendered
 				
 				ElseIf ( sDeviceString == "Blindfold" )
-					aRenderedDevice = xlibs.zadx_blindfold_Rope_Inventory
-					aWornDevice = xlibs.zadx_blindfold_Rope_Rendered
+					aWornDevice = xlibs.zadx_blindfold_Rope_Inventory
+					aRenderedDevice = xlibs.zadx_blindfold_Rope_Rendered
 
 				ElseIf ( sDeviceString == "Belt" ) || ( sDeviceString == "belt" )
-					aRenderedDevice = libs.beltIron
-					aWornDevice = libs.beltIronRendered
+					aWornDevice = libs.beltIron
+					aRenderedDevice = libs.beltIronRendered
 				
 				ElseIf ( sDeviceString == "PlugAnal" )
-					aRenderedDevice = xlibs.zadx_HR_IronPearAnalBlackInventory
-					aWornDevice = xlibs.zadx_HR_IronPearAnalBlackRendered
+					aWornDevice = xlibs.zadx_HR_IronPearAnalBlackInventory
+					aRenderedDevice = xlibs.zadx_HR_IronPearAnalBlackRendered
 				
 				ElseIf ( sDeviceString == "PlugVaginal" )
-					aRenderedDevice = xlibs.zadx_HR_IronPearVaginalBlackInventory
-					aWornDevice = xlibs.zadx_HR_IronPearVaginalBlackRendered
+					aWornDevice = xlibs.zadx_HR_IronPearVaginalBlackInventory
+					aRenderedDevice = xlibs.zadx_HR_IronPearVaginalBlackRendered
 				EndIf
 
 			; Spriggan outfit - moved to Parasites as of 07/2021
