@@ -210,7 +210,7 @@ state STATE_AGING_FREQ ; SLIDER
 	endEvent
 
 	event OnHighlightST()
-		SetInfoText("Number od days in a year (before triggering an age increase)")
+		SetInfoText("Number of days in a year (before triggering an age increase)")
 	endEvent
 endState
  
@@ -278,6 +278,8 @@ state STATE_RACE_RESET ; TOGGLE
 		rPlayerRealRace = PlayerActor.getrace()
 		StorageUtil.SetFormValue(PlayerActor, "_FT_fPlayerRealRace", rPlayerRealRace as Form)
 		StorageUtil.SetFormValue(PlayerActor, "_FT_fPlayerCurrentRace", rPlayerRealRace as Form)
+		; Compatibility with Hormones
+		StorageUtil.SetFormValue(PlayerActor, "_SLH_fOrigRace",  rPlayerRealRace as Form) 
 
 		; Add an MCM checkbox later to disable morphs
 		If (playerAge <= 20)
