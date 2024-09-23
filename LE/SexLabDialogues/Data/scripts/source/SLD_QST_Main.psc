@@ -910,36 +910,36 @@ Function ForceFeedPlayerItem ( Actor _target, String sForceFeedItem, Int iItemCo
 			_targetRef.AddItem(Skooma, 1, true)
 			_target.EquipItem(Skooma, true, true)
 
-			_target.DamageAV("StaminaRate", 0.5)
-			_target.DamageAV("MagickaRate", 0.5)
-			_target.DamageAV("SpeedMult", 0.5)
+			; _target.DamageAV("StaminaRate", 0.5)
+			; _target.DamageAV("MagickaRate", 0.5)
+			; _target.DamageAV("SpeedMult", 0.5)
 
 		elseif ( sForceFeedItem == "StrongSkooma")
 			; Debug.Notification("You don't need that much money either.")
 			_targetRef.AddItem(StrongSkooma, 1, true)
 			_target.EquipItem(StrongSkooma, true, true)
 
-			_target.DamageAV("StaminaRate", 1.0)
-			_target.DamageAV("MagickaRate", 1.0)
-			_target.DamageAV("SpeedMult", 1.0)
+			; _target.DamageAV("StaminaRate", 1.0)
+			; _target.DamageAV("MagickaRate", 1.0)
+			; _target.DamageAV("SpeedMult", 1.0)
 		
 		elseif ( sForceFeedItem == "Wine")
 			; Debug.Notification("You don't need that much money either.")
 			_targetRef.AddItem(Wine, 1, true)
 			_target.EquipItem(Wine, true, true)
 
-			_target.DamageAV("StaminaRate", 0.3)
-			_target.DamageAV("MagickaRate", 0.3)
-			_target.DamageAV("SpeedMult", 0.3)
+			; _target.DamageAV("StaminaRate", 0.3)
+			; _target.DamageAV("MagickaRate", 0.3)
+			; _target.DamageAV("SpeedMult", 0.3)
 
 		elseif ( sForceFeedItem == "StrongWine")
 			; Debug.Notification("You don't need that much money either.")
 			_targetRef.AddItem(StrongWine, 1, true)
 			_target.EquipItem(StrongWine, true, true)
 
-			_target.DamageAV("StaminaRate", 0.5)
-			_target.DamageAV("MagickaRate", 0.5)
-			_target.DamageAV("SpeedMult", 0.5)
+			; _target.DamageAV("StaminaRate", 0.5)
+			; _target.DamageAV("MagickaRate", 0.5)
+			; _target.DamageAV("SpeedMult", 0.5)
 		
 		elseif ( sForceFeedItem == "Soup")
 			; Debug.Notification("You don't need that much money either.")
