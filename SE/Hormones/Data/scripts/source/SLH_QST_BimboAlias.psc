@@ -975,8 +975,11 @@ function bimboDailyProgressiveTransformation(int transformationDays, Int transfo
 		; Maintenance in case c=forced changes to the Bimbol look (ex: shaved head)
 		SetHairLength(transformationLevel)
 		SendModEvent("yps-HairColorBaseEvent", "Platinum Blonde", 0xCABFB1)
-		SendModEvent("yps-LipstickEvent", "Bimbo", -1)  ; SendModEvent("yps-LipstickEvent", "Red", 0xFF0000)  
-		SendModEvent("yps-EyeshadowEvent", "Bimbo", -1) ; SendModEvent("yps-EyeshadowEvent", "Black", 0x000000)   
+
+		if (StorageUtil.GetIntValue(BimboActor, "_SLH_iUseMakeup")==1)
+			SendModEvent("yps-LipstickEvent", "Bimbo", -1)  ; SendModEvent("yps-LipstickEvent", "Red", 0xFF0000)  
+			SendModEvent("yps-EyeshadowEvent", "Bimbo", -1) ; SendModEvent("yps-EyeshadowEvent", "Black", 0x000000)   
+		endif
 		BimboTattoo(BimboActor, "bimbo","Belly",false,true,true)
 		BimboTattoo(BimboActor, "bimbo","Tramp Stamp",false,true,true)
 		BimboTattoo(BimboActor, "bimbo","Tramp Stamp Upper",false,true,true)
@@ -1005,11 +1008,14 @@ function bimboDailyProgressiveTransformation(int transformationDays, Int transfo
 		BimboTattoo(BimboActor, "bimbo","Pubic Tattoo",false,true,true)
 		BimboTattoo(BimboActor, "bimbo","Permanent Bimbo",true,true,true)
 
-		SendModEvent("yps-LipstickEvent", "Bimbo", -1)  ; SendModEvent("yps-LipstickEvent", "Red", 0xFF0000)  
-		SendModEvent("yps-EyeshadowEvent", "Bimbo", -1) ; SendModEvent("yps-EyeshadowEvent", "Black", 0x000000)   
+		if (StorageUtil.GetIntValue(BimboActor, "_SLH_iUseMakeup")==1)
+			SendModEvent("yps-LipstickEvent", "Bimbo", -1)  ; SendModEvent("yps-LipstickEvent", "Red", 0xFF0000)  
+			SendModEvent("yps-EyeshadowEvent", "Bimbo", -1) ; SendModEvent("yps-EyeshadowEvent", "Black", 0x000000)  
+			SendModEvent("yps-LockMakeupEvent")
+			SendModEvent("yps-PermanentMakeupEvent")
+		endif
+
 		SendModEvent("yps-DisableSmudgingEvent")
-		SendModEvent("yps-LockMakeupEvent")
-		SendModEvent("yps-PermanentMakeupEvent")
 		SendModEvent("yps-HairColorBaseEvent", "Platinum Blonde", 0xCABFB1)
 		SendModEvent("yps-FingerNailsEvent", "", 29)
 		SendModEvent("yps-ToeNailsEvent", "", 29)
@@ -1040,8 +1046,11 @@ function bimboDailyProgressiveTransformation(int transformationDays, Int transfo
 			SLH_Control.playChuckle(BimboActor)
 
 			If (StorageUtil.GetIntValue(none, "ypsHairControlEnabled") == 1)
-				SendModEvent("yps-LipstickEvent", "Bimbo", -1)  ; SendModEvent("yps-LipstickEvent", "Red", 0xFF0000)  
 				SetHairLength(5)
+			endif
+
+			if (StorageUtil.GetIntValue(BimboActor, "_SLH_iUseMakeup")==1)
+				SendModEvent("yps-LipstickEvent", "Bimbo", -1)  ; SendModEvent("yps-LipstickEvent", "Red", 0xFF0000)  
 			else
 				fctColor.sendSlaveTatModEvent(BimboActor, "Bimbo","Lipstick", iColor = 0x66FF0984)
 			Endif
@@ -1053,8 +1062,11 @@ function bimboDailyProgressiveTransformation(int transformationDays, Int transfo
 			SLH_Control.playChuckle(BimboActor)
 
 			If (StorageUtil.GetIntValue(none, "ypsHairControlEnabled") == 1)
-				SendModEvent("yps-EyeshadowEvent", "Bimbo", -1) ; SendModEvent("yps-EyeshadowEvent", "Black", 0x000000)   
 				SetHairLength(5)
+			endif
+
+			if (StorageUtil.GetIntValue(BimboActor, "_SLH_iUseMakeup")==1)
+				SendModEvent("yps-EyeshadowEvent", "Bimbo", -1) ; SendModEvent("yps-EyeshadowEvent", "Black", 0x000000)   
 			else
 				fctColor.sendSlaveTatModEvent(BimboActor, "Bimbo","Eye Shadow", iColor = 0x99000000, bRefresh = True)
 			Endif

@@ -2432,6 +2432,9 @@ function setShapeStateDefault(Actor kActor)
 	EndIf
  
 	StorageUtil.SetFormValue(kActor, "_SLH_fOrigRace",  pActorBase.GetRace()) 
+	; Compatibility with Family Ties
+	StorageUtil.SetFormValue(kActor, "_FT_fPlayerRealRace", pActorBase.GetRace())
+	StorageUtil.SetFormValue(kActor, "_FT_fPlayerCurrentRace", pActorBase.GetRace())
 
 	setShapeState(kActor)
 

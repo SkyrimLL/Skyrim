@@ -25,7 +25,7 @@ Actor akSpeaker = akSpeakerRef as Actor
 			If AttackerMagicka > VictimMagicka
 				AttackerMagicka = VictimMagicka
 				If (SexLab.ValidateActor( kVictim) > 0) && (SexLab.ValidateActor(akSpeaker) > 0) 
-					Debug.MessageBox("Your body feels too warm and aroused for the effects of the healing spell. Your maind is just not strong enough to resist the urges...")
+					Debug.MessageBox("Your body feels too warm and aroused for the effects of the healing spell. Your mind is just not strong enough to resist the urges...")
 					SexLab.QuickStart(kVictim, akSpeaker , Victim = kVictim, AnimationTags = "Sex")
 				EndIf
 			EndIf

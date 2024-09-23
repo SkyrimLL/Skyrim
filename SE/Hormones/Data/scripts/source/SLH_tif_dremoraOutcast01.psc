@@ -20,7 +20,7 @@ Actor akSpeaker = akSpeakerRef as Actor
 		If AttackerMagicka > VictimMagicka
 			AttackerMagicka = VictimMagicka
 			If (SexLab.ValidateActor( kVictim) > 0) &&  (SexLab.ValidateActor(akSpeaker) > 0) 
-				Debug.MessageBox("You try to resist at first, but for some reason the only thing on your maind is SEX...")
+				Debug.MessageBox("You try to resist at first, but for some reason the only thing on your mind is SEX...")
 				SexLab.QuickStart(kVictim, akSpeaker, Victim = kVictim, AnimationTags = "Sex")
 			EndIf
 		EndIf

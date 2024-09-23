@@ -192,6 +192,7 @@ int			_blueShiftColor 		= 0
 float		_blueShiftColorMod 		= 1.0
 
 bool		_useHairColors			= true
+bool		_useMakeup				= true
 bool		_useHair				= true
 bool		_useHairLoss			= true
 int	 		_bimboHairColor 		= 0
@@ -391,6 +392,8 @@ event OnPageReset(string a_page)
 	_useSchlongNode = GV_useSchlongNode.GetValue()  as Int
 	_useWeight = GV_useWeight.GetValue()  as Int
 
+	_useMakeup = StorageUtil.GetIntValue(PlayerActor, "_SLH_iUseMakeup") as Bool  
+
 	_useHair = StorageUtil.GetIntValue(PlayerActor, "_SLH_iUseHair") as Bool  
 	_useHairLoss = StorageUtil.GetIntValue(PlayerActor, "_SLH_iUseHairloss") as Bool  
 
@@ -555,7 +558,13 @@ event OnPageReset(string a_page)
 
  		AddTextOption("$ Days as a Bimbo: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformGameDays")  as Int +"}", "", OPTION_FLAG_DISABLED)
 		AddTextOption("$ Cycles as a Bimbo: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformCycle")  as Int +"}", "", OPTION_FLAG_DISABLED)
-		AddTextOption("$ Bimbo Level: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformLevel")  as Int +"}", "", OPTION_FLAG_DISABLED)		
+		AddTextOption("$ Bimbo Level: {" + StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformLevel")  as Int +"}", "", OPTION_FLAG_DISABLED)	
+
+		if (StorageUtil.GetIntValue(PlayerActor, "_SLH_bimboTransformCycle") == 0)	
+			AddTextOption("$ Bimbo curse is reversible.", "", OPTION_FLAG_DISABLED)	
+		else
+			AddTextOption("$ Bimbo curse is irreversible.", "", OPTION_FLAG_DISABLED)	
+		endif
 
 		if (StorageUtil.GetFormValue(PlayerActor, "_SLH_fOrigRace") !=  (pActorBase.GetRace() as Form)) 
 			AddEmptyOption()
@@ -590,6 +599,9 @@ event OnPageReset(string a_page)
 		AddColorOptionST("STATE_BLUE_COLOR_SHIFT","$SLH_cBLUE_COLOR_SHIFT", _blueShiftColor as Int)
 		AddInputOptionST("STATE_BLUE_COLOR_TXT","$SLH_iBLUE_COLOR_TXT", IntToHex(_blueShiftColor) as String)
 		AddSliderOptionST("STATE_BLUE_COLOR_SHIFT_MOD","$SLH_sBLUE_COLOR_SHIFT_MOD", _blueShiftColorMod as Float,"{1}")
+
+		AddHeaderOption("$SLH_hMakeup")
+		AddToggleOptionST("STATE_CHANGE_MAKEUP","$SLH_bCHANGE_MAKEUP", _useMakeup as Float)
 
 		AddHeaderOption("$SLH_hHair")
 		AddToggleOptionST("STATE_CHANGE_HAIR","$SLH_bCHANGE_HAIR", _useHair as Float)
@@ -1932,6 +1944,26 @@ state STATE_CHANGE_COLOR ; TOGGLE
 	endEvent
 endState
 
+; AddToggleOptionST("STATE_CHANGE_Makeup","Change make up", _useMakeup)
+state STATE_CHANGE_MAKEUP ; TOGGLE
+	event OnSelectST()
+		_useHair = Math.LogicalXor( 1, _useMakeup as Int )
+		SetToggleOptionValueST( _useMakeup as Bool )
+		StorageUtil.SetIntValue(PlayerActor, "_SLH_iUseMakeup", _useMakeup as Int)
+		ForcePageReset()
+	endEvent
+
+	event OnDefaultST()
+		StorageUtil.SetIntValue(PlayerActor, "_SLH_iUseMakeup", 1)
+		SetToggleOptionValueST( true )
+		ForcePageReset()
+	endEvent
+
+	event OnHighlightST()
+		SetInfoText("$SLH_bCHANGE_MAKEUP_DESC")
+	endEvent
+endState
+
 ; AddToggleOptionST("STATE_CHANGE_Hair","Change hair", _useHair)
 state STATE_CHANGE_HAIR ; TOGGLE
 	event OnSelectST()
@@ -1943,7 +1975,7 @@ state STATE_CHANGE_HAIR ; TOGGLE
 
 	event OnDefaultST()
 		StorageUtil.SetIntValue(PlayerActor, "_SLH_iUseHair", 1)
-		SetToggleOptionValueST( false )
+		SetToggleOptionValueST( true )
 		ForcePageReset()
 	endEvent
 
@@ -1963,7 +1995,7 @@ state STATE_CHANGE_HAIRLOSS ; TOGGLE
 
 	event OnDefaultST()
 		StorageUtil.SetIntValue(PlayerActor, "_SLH_iUseHairLoss", 1)
-		SetToggleOptionValueST( false )
+		SetToggleOptionValueST( true )
 		ForcePageReset()
 	endEvent
 

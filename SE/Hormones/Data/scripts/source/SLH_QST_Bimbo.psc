@@ -119,7 +119,7 @@ EndFunction
 Function Fragment_12()
 ;BEGIN CODE
 ; TG - M to TG
-Debug.Messagebox("Boobs? A wet slit between my legs? my cock shrinking a little more with each sex act? I must find someone who knows about this gender bending curse and hopefully, find a way to end it before it is too late.")
+Debug.Messagebox("Something is happening to me.. my body is burning and changing with each sex act. I must find someone who knows about this curse and hopefully, find a way to end it before it is too late.")
 ;END CODE
 EndFunction
 ;END FRAGMENT
