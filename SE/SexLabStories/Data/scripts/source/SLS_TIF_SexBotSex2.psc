@@ -18,10 +18,14 @@ Actor kPlayer = Game.GetPlayer()
         ModEvent.PushBool(ECTrap, true)             ; Bool Use EC (basic) crowd control on hostiles 
         ModEvent.Send(ECtrap)
   else
-	If  (SexLab.ValidateActor( kPlayer ) > 0) &&  (SexLab.ValidateActor(akSpeaker) > 0) 
+  	If  (SexLab.ValidateActor( kPlayer ) > 0) &&  (SexLab.ValidateActor(akSpeaker) > 0) 
 
-		SexLab.QuickStart(akSpeaker , kPlayer ,  AnimationTags = "Sex")
-	EndIf
+      If (Utility.RandomInt(0,100)<30)
+        SexLab.QuickStart(kPlayer , akSpeaker,  AnimationTags = "Sex")
+      else
+        SexLab.QuickStart(akSpeaker , kPlayer ,  AnimationTags = "Sex")
+      Endif
+  	EndIf
 
   endIf
 ;END CODE

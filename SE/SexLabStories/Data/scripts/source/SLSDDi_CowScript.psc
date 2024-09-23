@@ -1,9 +1,15 @@
 Scriptname SLSDDi_CowScript extends zadRestraintScript  
 
 Function OnEquippedPre(actor akActor, bool silent=false)
+	if (StorageUtil.GetFloatValue(akActor, "_SLH_fHormoneLactationMod") == 0.0 )
+		StorageUtil.SetFloatValue(akActor, "_SLH_fHormoneLactationMod", 1.0) 
+	Endif
+				
 	if !silent
+
 		if akActor == libs.PlayerRef
 			libs.NotifyActor("You step in to the harness, securing it tightly against your body.", akActor, true)
+
 		Else
 			libs.NotifyActor(GetMessageName(akActor) +" steps in to the harness, securing it tightly against her body.", akActor, true)
 			

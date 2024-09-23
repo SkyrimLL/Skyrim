@@ -10,7 +10,12 @@ Actor kPlayer = Game.GetPlayer()
 
 	If  (SexLab.ValidateActor( kPlayer ) > 0) &&  (SexLab.ValidateActor(akSpeaker) > 0) 
 
+	If (Utility.RandomInt(0,100)<30)
+		SexLab.QuickStart(kPlayer , akSpeaker,  AnimationTags = "Sex")
+	else
 		SexLab.QuickStart(akSpeaker , kPlayer ,  AnimationTags = "Sex")
+	Endif
+
 	else
 		Debug.Notification("Ask again when both be found less occupied!")
 	endIf

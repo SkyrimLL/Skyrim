@@ -168,6 +168,10 @@ Event OnSexLabOrgasm(String _eventName, String _args, Float _argc, Form _sender)
 			; StorageUtil.SetIntValue(SexBotActor, "_SLS_SexBotEnergyLevel", 1)
 
 			; Debug.Notification("E.L.L.E is now recharged")
+
+			; ELLE is recharged - set Confidence to Coward
+            SexBotActor.ForceAV("Aggression", 1 )
+            SexBotActor.ForceAV("Confidence", 4 )
 			SexBotActor.EvaluatePackage()
 			Utility.Wait(1.0)
 			; Debug.SendAnimationEvent(Target, "IdleForceDefaultState")	
