@@ -34,12 +34,14 @@ Function Fragment_17()
 	_SLSD_PetFollow.SetValue(1)
 	_SLSD_PetPosition.SetValue(0)
 
+
 	Debug.Trace("[SL Stories] Removing Pet Slave")
 	PetFreeActorREF.MoveTo(PetSlaveActor)
 	FlameAuraFX.RemoteCast( PetSlaveActor, PetSlaveActor, Game.GetPlayer())
 	PetSlaveActor.Disable()
 
 	Debug.Trace("[SL Stories] Enabling Pet Free")
+	PetFreeActor.ResetHealthAndLimbs()
 	PetFreeActor.Enable()
 	IsPetHuman.SetValue(0)
 
@@ -62,7 +64,7 @@ Function Fragment_17()
 		PetFreeActor.IgnoreFriendlyHits()
 		   PetFreeActor.SetRelationshipRank(kPlayer, 3)
 
-EndIf
+	EndIf
 ;END CODE
 EndFunction
 ;END FRAGMENT

@@ -69,6 +69,8 @@ Float 		_buttSexBot
 Float 		_weightSexBot
 
 Float 		_breastMaxMilkFarm
+bool 		_toggleMilkNotifications
+
 bool 		_clearInventory
 bool 		_setInventory
 
@@ -165,6 +167,7 @@ event OnPageReset(string a_page)
 	; _fetishTower
 	; _fetishWarrior
 
+	_toggleMilkNotifications = StorageUtil.GetIntValue(kPlayer, "_SLS_toggleMilkNotifications" )
 	_breastMaxMilkFarm = StorageUtil.GetFloatValue(kPlayer, "_SLS_breastMaxMilkFarm" )
 
 	_breastSexBot = StorageUtil.GetFloatValue(kPlayer, "_SLS_breastSexBot" )
@@ -196,7 +199,7 @@ event OnPageReset(string a_page)
 		;  
 		; AddToggleOptionST("STATE_FETISH_MANUAL","Get effect manually", _fetishManual as Float, OPTION_FLAG_DISABLED)
 
-	 	AddEmptyOption()
+	 	; AddEmptyOption()
 		;  0- No fetish
 		; AddToggleOptionST("STATE_FETISH_NONE","No Fetish", _fetishNone as Float, OPTION_FLAG_DISABLED)
 
@@ -286,6 +289,7 @@ event OnPageReset(string a_page)
 		; AddHeaderOption(" Placeholder - No option yet")
 
 		AddHeaderOption(" The Milk Farm")
+		AddToggleOptionST("STATE_MILK_NOTIFICATION","Toggle Lactation Notifications", _toggleMilkNotifications as Float)
 		AddSliderOptionST("STATE_MILKFARM_BREAST","Max breast size", _breastMaxMilkFarm,"{1}")
 		; AddToggleOptionST("STATE_MILKFARM_START","Player starting quest", _startMilkFarm as Float, OPTION_FLAG_DISABLED)
 
@@ -496,7 +500,26 @@ state STATE_SEXBOT_WEIGHT ; SLIDER
 	endEvent
 endState
 
+; AddToggleOptionST("STATE_MILK_NOTIFICATION","Toggle Lactation Notifications", _toggleMilkNotifications as Float)
+state STATE_MILK_NOTIFICATION ; TOGGLE
+	event OnSelectST()
+		_toggleMilkNotifications  = Math.LogicalXor( 1, _toggleMilkNotifications  as Int )
+		SetToggleOptionValueST( _toggleMilkNotifications  as Bool )
+		StorageUtil.SetIntValue(kPlayer, "_SLS_toggleMilkNotifications", _toggleMilkNotifications  as Int)
+		ForcePageReset()
+	endEvent
 
+	event OnDefaultST()
+		StorageUtil.SetIntValue(kPlayer, "_SLS_toggleMilkNotifications", 1)
+		SetToggleOptionValueST( true )
+		ForcePageReset()
+	endEvent
+
+	event OnHighlightST()
+		SetInfoText("Toggle natural lactation notifications (outside of Milk Harness and Milking station)")
+	endEvent
+
+endState
 ; AddToggleOptionST("STATE_MILKFARM_BREAST","Max breast size", _breastMaxMilkFarm  as Float, OPTION_FLAG_DISABLED)
 state STATE_MILKFARM_BREAST ; SLIDER
 	event OnSliderOpenST()

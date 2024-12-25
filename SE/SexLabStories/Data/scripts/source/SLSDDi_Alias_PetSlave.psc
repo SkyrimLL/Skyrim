@@ -1,4 +1,5 @@
 Scriptname SLSDDi_Alias_PetSlave extends ReferenceAlias  
+; Pet human to Flame
 
 Event OnEnterBleedout()
   	; Debug.Trace("We entered bleedout...")
@@ -13,7 +14,7 @@ Event OnHit(ObjectReference akAggressor, Form akSource, Projectile akProjectile,
 	Actor PetSlaveActor= _SLSD_PetSlaveREF.GetReference() as Actor
 
 	float petSlaveHealth = PetSlaveActor.GetAVPercentage("Health")
- 	; Debug.Notification("[SL Stories] Pet Slave hit. Pct Health:  " + petSlaveHealth)
+ 	; Debug.Notification("[SL Stories] Pet Slave was hit. Pct Health:  " + petSlaveHealth)
 	if (petSlaveHealth < 0.5)
   	;	Debug.Trace("Bob has less then 10% health remaining")
 		FreeSlaveScene.Start()

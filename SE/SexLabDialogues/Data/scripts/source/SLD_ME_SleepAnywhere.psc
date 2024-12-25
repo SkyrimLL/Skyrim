@@ -282,7 +282,7 @@ State Sitting
 	endEvent
 	
 	Event OnEndState()
-		Game.GetPlayer().SendModEvent("SLDMeditate")		
+		Game.GetPlayer().SendModEvent("SLDMeditate","",2)		
 		Debug.SendAnimationEvent(Target, "idleChairExitStart")
 		Utility.Wait(0.5)	
 		Debug.SendAnimationEvent(Target, "IdleForceDefaultState")	
@@ -309,7 +309,7 @@ State Kneeling
 	endEvent
 	
 	Event OnEndState()
-		Game.GetPlayer().SendModEvent("SLDMeditate")		
+		Game.GetPlayer().SendModEvent("SLDMeditate","",3)		
 		Debug.SendAnimationEvent(Target, "idleChairExitStart")
 		Utility.Wait(0.5)	
 		Debug.SendAnimationEvent(Target, "IdleForceDefaultState")	

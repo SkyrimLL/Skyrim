@@ -1947,7 +1947,7 @@ endState
 ; AddToggleOptionST("STATE_CHANGE_Makeup","Change make up", _useMakeup)
 state STATE_CHANGE_MAKEUP ; TOGGLE
 	event OnSelectST()
-		_useHair = Math.LogicalXor( 1, _useMakeup as Int )
+		_useMakeup = Math.LogicalXor( 1, _useMakeup as Int )
 		SetToggleOptionValueST( _useMakeup as Bool )
 		StorageUtil.SetIntValue(PlayerActor, "_SLH_iUseMakeup", _useMakeup as Int)
 		ForcePageReset()

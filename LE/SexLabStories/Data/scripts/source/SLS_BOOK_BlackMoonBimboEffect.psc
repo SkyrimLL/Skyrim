@@ -6,7 +6,9 @@ event onRead()
 	Debug.Notification("The spiral makes you feel so good... read the book again.")
 	
 	; Heal the player - useful action to invite player to read the book often
-	kPlayer.resethealthandlimbs()
+	kPlayer.resethealthandlimbs() 
+	; Compatibility with SL Dialogues - Mage novice
+	kPlayer.SendModEvent("SLDMeditate","",6)	
 
 	; Mess with Hormone levels - similar to sex with Daedra
 	; This will move the player along toward a gradual transformation

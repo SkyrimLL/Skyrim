@@ -31,6 +31,7 @@ ObjectReference  PetSlaveActorREF= _SLSD_PetSlaveREF.GetReference()
 	PetFreeActor.Disable()
 
 	PetSlaveActor.Enable()
+	PetSlaveActor.ResetHealthAndLimbs()
 	IsPetHuman.SetValue(1)
 
 	Utility.Wait(1.0)

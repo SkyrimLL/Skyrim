@@ -19,6 +19,11 @@ event onRead()
     ReadSoundFX.Play(kPlayer as ObjectReference)
 	Utility.Wait(10)
 
+	; Health benefits - to keep them reading again
+	kPlayer.ResetHealthAndLimbs()
+	; Compatibility with SL Dialogues - Mage novice
+	kPlayer.SendModEvent("SLDMeditate","",6)		
+
 
 	; Mess with Hormone levels - similar to sex with Daedra
 	; This will move the player along toward a gradual transformation

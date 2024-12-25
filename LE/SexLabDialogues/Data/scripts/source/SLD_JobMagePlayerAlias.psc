@@ -129,13 +129,12 @@ Event OnSLDMeditate(String _eventName, String _args, Float _argc, Form _sender)
 	Int iBonus = _argc as Int
 	String iEventString = _args
 
-	iLastNumberPotionsUsed = Game.QueryStat("Potions Used")
+	if (iBonus==0)
+		iBonus = 3
+	Endif
 
-	PotionToxicityLowImod.Remove( )
-	PotionToxicityHighImod.Remove( )
-
-	_updateMagicka()
-	_updateMageMastery()
+	debug.Notification("You feel more focused." )
+	_updateToxicity(iBonus) ; equivalent of sleeping 3 hours
 
 EndEvent
 
@@ -164,6 +163,10 @@ endEvent
 
 Event OnSleepStop(bool abInterrupted)
 	fHoursSleep = (Utility.GetCurrentGameTime() - fDateSleep) * 24.0
+	_updateToxicity(fHoursSleep as Int)
+endEvent
+
+Function _updateToxicity(Int iHoursSleep = 1)
 	iNumberPotionsToday= iNumberPotionsToday - (fHoursSleep as Int)
 
 	if (iNumberPotionsToday<0)
@@ -176,7 +179,7 @@ Event OnSleepStop(bool abInterrupted)
 
 	_updateMagicka()
 	_updateMageMastery()
-endEvent
+EndFunction
 
 Event OnUpdate()
  	Actor PlayerActor= Game.GetPlayer() as Actor
