@@ -83,7 +83,7 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 
 			if (iMoonPhase==5) || (iMoonPhase==6) ; (iSeason == 0)
 				; Spring  
-				if (iRandomNum>70) && ( (iThisHour<=6) || (iThisHour>=8))
+				if (iRandomNum>70) && ( (iThisHour<=6) || (iThisHour>=20))
 					SummerSunAurora.SetActive(true)
 
 				elseif (iRandomNum>50) && ( (iThisHour>=7) || (iThisHour<=8))
@@ -101,9 +101,11 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 				elseif (iRandomNum>40)
 					; debug.notification("(Spring Showers)")
 					SpringShowers.SetActive(true)
-				else
+				elseif (iRandomNum>10)
 					; debug.notification("(Spring Cloudy)")
 					SpringCloudy.SetActive(true)
+				else
+					SpringFog.SetActive(true)
 				endif
 
 				; SpringImod.Apply( fImod )
@@ -118,7 +120,7 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 
 			elseif (iMoonPhase==7) || (iMoonPhase==0) ; (iSeason == 1)
 				; Summer  
-				if (iRandomNum>40) && ( (iThisHour<=6) || (iThisHour>=8))
+				if (iRandomNum>40) && ( (iThisHour<=6) || (iThisHour>=20))
 					SummerSunAurora.SetActive(true)
 
 				elseif (iRandomNum>80) && ( (iThisHour>=7) || (iThisHour<=8))
@@ -128,14 +130,11 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 					; debug.notification("(Summer Overcast)")
 					SummerOvercast.SetActive(true)
 				elseif (iRandomNum>70)
-					; debug.notification("(Summer Cloudy)")
-					SummerCloudy.SetActive(true)
-				elseif (iRandomNum>10)
-					; debug.notification("(Summer Sunny)")
-					SummerSunAurora.SetActive(true)
-				else
 					; debug.notification("(Summer Sunny)")
 					SummerSun.SetActive(true)
+				else
+					; debug.notification("(Summer Cloudy)")
+					SummerCloudy.SetActive(true) 
 				endif
 
 				; SummerImod.Apply( fImod )
@@ -151,7 +150,7 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 
 			elseif (iMoonPhase==1) || (iMoonPhase==2) || (iMoonPhase==3)  ; (iSeason == 2)
 				; Fall  
-				if (iRandomNum>80) && ( (iThisHour<=6) || (iThisHour>=8))
+				if (iRandomNum>80) && ( (iThisHour<=6) || (iThisHour>=20))
 					SummerSunAurora.SetActive(true)
 
 				elseif (iRandomNum>50) && ( (iThisHour>=7) || (iThisHour<=8))
@@ -167,11 +166,11 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 					; debug.notification("(Fall Light Rain)")
 					FallLightRain.SetActive(true)
 				elseif (iRandomNum>40)
-					; debug.notification("(Fall Heavy Fog)")
-					FallHeavyFog.SetActive(true)
-				else
 					; debug.notification("(Fall Cloudy)")
 					FallCloudy.SetActive(true)
+				else
+					; debug.notification("(Fall Heavy Fog)")
+					FallHeavyFog.SetActive(true)
 				endif
 
 				; FallImod.Apply( fImod )
@@ -186,7 +185,7 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 
 			elseif (iMoonPhase==4) ; (iSeason == 3)
 				; Winter 
-				if (iRandomNum>60) && ( (iThisHour<=6) || (iThisHour>=8))
+				if (iRandomNum>60) && ( (iThisHour<=6) || (iThisHour>=20))
 					SummerSunAurora.SetActive(true)
 
 				elseif (iRandomNum>70) && ( (iThisHour>=7) || (iThisHour<=8))
@@ -202,11 +201,11 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 					; debug.notification("(Winter Snow Fall)")
 					WinterSnowFall.SetActive(true)
 				elseif (iRandomNum>10)
-					; debug.notification("(Winter Fog)")
-					WinterFog.SetActive(true)
-				else
 					; debug.notification("(Winter Cloudy)")
 					WinterCloudy.SetActive(true)
+				else
+					; debug.notification("(Winter Fog)")
+					WinterFog.SetActive(true)
 				endif
  				StorageUtil.SetStringValue(none, "_FT_SeasonsMoonPhase", "New moon (winter)")
 

@@ -5,7 +5,7 @@ Scriptname QF_T03PostQuest_000FE479 Extends Quest Hidden
 ;BEGIN FRAGMENT Fragment_1
 Function Fragment_1()
 ;BEGIN CODE
-stop()
+Stop()
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -17,12 +17,12 @@ Function Fragment_0()
 if     (T03.GetStageDone(100))
 	; repair
 ; 	Debug.Trace("T03: Repairing tree.")
-;	TempleTreeDead.Disable()
-;	TempleTreeAlive.Enable()
+	TempleTreeDead.Disable()
+	TempleTreeAlive.Enable()
 elseif (T03.GetStageDone(105))
 	; sapling
 ; 	Debug.Trace("T03: Replacing tree.")
-;	BigTreeClutter.Disable()
+	BigTreeClutter.Disable()
 	SaplingAndClutter.Enable()
 endif
 

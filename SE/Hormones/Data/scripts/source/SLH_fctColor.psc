@@ -234,6 +234,7 @@ function initColorState(Actor kActor)
 	; Player by default  - kActor ignored 
 	Actor PlayerActor = Game.GetPlayer()
 	ActorBase pLeveledActorBase = PlayerActor.GetLeveledActorBase()
+	int iDefaultSkinColor =  setRGB(255,255,255) 
 	Int iOrigSkinColor = Game.GetTintMaskColor(6,0)
 	Int iOrigCheeksColor = Game.GetTintMaskColor(9,0)
 	Int iOrigLipsColor = Game.GetTintMaskColor(1,0)
@@ -243,8 +244,15 @@ function initColorState(Actor kActor)
 
 	if (StorageUtil.GetIntValue(PlayerActor, "_SLH_iUseColors") == 1)
 		; 
-		StorageUtil.SetIntValue(PlayerActor, "_SLH_iDefaultSkinColor", getRGBfromRGBA(iOrigSkinColor) )
-		StorageUtil.SetIntValue(PlayerActor, "_SLH_iSkinColor", getRGBfromRGBA(iOrigSkinColor) )
+		; StorageUtil.SetIntValue(PlayerActor, "_SLH_iDefaultSkinColor", getRGBfromRGBA(iOrigSkinColor) )
+		iDefaultSkinColor = StorageUtil.GetIntValue(PlayerActor, "_SLH_iDefaultSkinColor")
+		if (iDefaultSkinColor == 0)  
+			iDefaultSkinColor =  setRGB(255,255,255) 
+		Endif
+		
+		StorageUtil.SetIntValue(PlayerActor, "_SLH_iDefaultSkinColor", iDefaultSkinColor )
+		StorageUtil.SetIntValue(PlayerActor, "_SLH_iSkinColor", iDefaultSkinColor )
+
 		StorageUtil.SetIntValue(PlayerActor, "_SLH_iDefaultCheeksColor", getRGBfromRGBA(iOrigCheeksColor) )
 		StorageUtil.SetIntValue(PlayerActor, "_SLH_iDefaultLipsColor", getRGBfromRGBA(iOrigLipsColor) )
 		StorageUtil.SetIntValue(PlayerActor, "_SLH_iDefaultEyelinerColor", getRGBfromRGBA(iOrigEyelinerColor) )

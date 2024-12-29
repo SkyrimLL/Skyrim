@@ -13,15 +13,13 @@ Keyword Property LocTypeDraugrCrypt Auto
 ;-- Functions ---------------------------------------
 
 EVENT OnLocationChange(Location akOldLoc, Location akNewLoc)
-	if (akNewLoc != None)
-		IF akNewLoc.HasKeyword(LocTypeDraugrCrypt )
-			DES_NonCult.SetValue(100)
-			DES_Cult.SetValue(0)
-		ENDIF
-		
-		IF	DES_NonCultFormlist.HasForm(akNewLoc)
-			DES_NonCult.SetValue(0)
-			DES_Cult.SetValue(100)
-		ENDIF 
-	endif
+	IF akNewLoc.HasKeyword(LocTypeDraugrCrypt )
+		DES_NonCult.SetValue(100)
+		DES_Cult.SetValue(0)
+	ENDIF
+	
+	IF	DES_NonCultFormlist.HasForm(akNewLoc)
+		DES_NonCult.SetValue(0)
+		DES_Cult.SetValue(100)
+	ENDIF 
 ENDEVENT

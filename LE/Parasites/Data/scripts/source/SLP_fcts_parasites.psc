@@ -1366,7 +1366,7 @@ Function tryPlayerSpriggan(Actor Target)
  		return
  	endif
 
-  	if ( fTargetDistance  > 50.0)
+  	if ( fTargetDistance  > 200.0)
  		; Prevent Spriggan infection from large distances - Spriggan has to be in close proximity
  		debugTrace(" [tryPlayerSpriggan] Spriggan too far for infection - fTargetDistance: " + fTargetDistance)
  		return
