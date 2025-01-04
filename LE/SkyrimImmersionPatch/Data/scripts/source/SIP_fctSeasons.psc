@@ -85,27 +85,40 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 				; Spring  
 				if (iRandomNum>70) && ( (iThisHour<=6) || (iThisHour>=20))
 					SummerSunAurora.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Spring Aurora")
 
-				elseif (iRandomNum>50) && ( (iThisHour>=7) || (iThisHour<=8))
+				elseif (iRandomNum>50) && ( (iThisHour>=18) || (iThisHour<=20))
 					SpringFog.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Spring Evening Mist")
 
 				elseif (iRandomNum>60) && ( (iPercentSeason<=25) || (iPercentSeason>=75))
 					; debug.notification("(Spring Overcast)")
 					SpringOvercast.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Spring Overcast")
+
 				elseif (iRandomNum>80)
 					; debug.notification("(Spring Heavy Rain)")
 					SpringHeavyRain.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Spring Downpour")
+
 				elseif (iRandomNum>60)
 					; debug.notification("(Spring Light Rain)")
 					SpringLightRain.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Spring Rain")
+
 				elseif (iRandomNum>40)
 					; debug.notification("(Spring Showers)")
 					SpringShowers.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Spring Shower")
+
 				elseif (iRandomNum>10)
 					; debug.notification("(Spring Cloudy)")
 					SpringCloudy.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Spring Cloudy")
+
 				else
 					SpringFog.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Spring Fog")
 				endif
 
 				; SpringImod.Apply( fImod )
@@ -122,19 +135,26 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 				; Summer  
 				if (iRandomNum>40) && ( (iThisHour<=6) || (iThisHour>=20))
 					SummerSunAurora.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Summer Aurora")
 
-				elseif (iRandomNum>80) && ( (iThisHour>=7) || (iThisHour<=8))
+				elseif (iRandomNum>80) && ( (iThisHour>=18) || (iThisHour<=20))
 					SummerFog.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Summer Evening Fog")
 
 				elseif (iRandomNum>60) && ( (iPercentSeason<=25) || (iPercentSeason>=75))
 					; debug.notification("(Summer Overcast)")
 					SummerOvercast.SetActive(true)
-				elseif (iRandomNum>70)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Summer Overcast")
+
+				elseif (iRandomNum>30)
 					; debug.notification("(Summer Sunny)")
 					SummerSun.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Summer Sun")
+
 				else
 					; debug.notification("(Summer Cloudy)")
 					SummerCloudy.SetActive(true) 
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Summer Cloudy")
 				endif
 
 				; SummerImod.Apply( fImod )
@@ -152,25 +172,37 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 				; Fall  
 				if (iRandomNum>80) && ( (iThisHour<=6) || (iThisHour>=20))
 					SummerSunAurora.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Fall Aurora")
 
-				elseif (iRandomNum>50) && ( (iThisHour>=7) || (iThisHour<=8))
+				elseif (iRandomNum>50) &&  ( (iThisHour>=18) || (iThisHour<=20))
 					FallFog.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Fall Evening Mist")
 
 				elseif (iRandomNum>60) && ( (iPercentSeason<=25) || (iPercentSeason>=75))
 					; debug.notification("(Fall Overcast)")
 					FallOvercast.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Fall Overcast")
+
 				elseif (iRandomNum>80)
 					; debug.notification("(Fall Heavy Rain)")
 					FallHeavyRain.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Fall Storm")
+
 				elseif (iRandomNum>60)
 					; debug.notification("(Fall Light Rain)")
 					FallLightRain.SetActive(true)
-				elseif (iRandomNum>40)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Fall Rain")
+
+				elseif (iRandomNum>10)
 					; debug.notification("(Fall Cloudy)")
 					FallCloudy.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Fall Cloudy")
+
 				else
 					; debug.notification("(Fall Heavy Fog)")
 					FallHeavyFog.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Fall Heavy Fog")
+
 				endif
 
 				; FallImod.Apply( fImod )
@@ -187,25 +219,37 @@ Function updateWeather(Int iSeason, Int iPercentSeason, Bool bForceUpdate)
 				; Winter 
 				if (iRandomNum>60) && ( (iThisHour<=6) || (iThisHour>=20))
 					SummerSunAurora.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Winter Aurora")
 
-				elseif (iRandomNum>70) && ( (iThisHour>=7) || (iThisHour<=8))
+				elseif (iRandomNum>70) && ( (iThisHour>=18) || (iThisHour<=20))
 					WinterFog.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Winter Evening Fog")
 
 				elseif (iRandomNum>60) && ( (iPercentSeason<=25) || (iPercentSeason>=75))
 					; debug.notification("(Winter Overcast)")
 					WinterOvercast.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Winter Overcast")
+
 				elseif (iRandomNum>80)
 					; debug.notification("(Winter Snow Storm)")
 					WinterSnowStorm.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Winter Snow Storm")
+
 				elseif (iRandomNum>20)
 					; debug.notification("(Winter Snow Fall)")
 					WinterSnowFall.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Winter Snow Fall")
+
 				elseif (iRandomNum>10)
 					; debug.notification("(Winter Cloudy)")
 					WinterCloudy.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Winter Cloudy")
+
 				else
 					; debug.notification("(Winter Fog)")
 					WinterFog.SetActive(true)
+					StorageUtil.SetStringValue(none, "_FT_SeasonsWeather", "Winter Fog")
+
 				endif
  				StorageUtil.SetStringValue(none, "_FT_SeasonsMoonPhase", "New moon (winter)")
 

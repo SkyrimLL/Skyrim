@@ -282,7 +282,17 @@ State Sitting
 	endEvent
 	
 	Event OnEndState()
-		Game.GetPlayer().SendModEvent("SLDMeditate","",2)		
+		Actor PlayerActor= Game.GetPlayer() as Actor
+
+		If (Utility.RandomInt(0,100)>60)
+			; Small chance to reduce headaches over time
+			If (Utility.RandomInt(0,100)>80)
+				PlayerActor.SendModEvent("SLDMeditate","",2)
+			else
+				PlayerActor.SendModEvent("SLDMeditate","",1)
+			endif
+		EndIf 
+
 		Debug.SendAnimationEvent(Target, "idleChairExitStart")
 		Utility.Wait(0.5)	
 		Debug.SendAnimationEvent(Target, "IdleForceDefaultState")	
@@ -309,7 +319,17 @@ State Kneeling
 	endEvent
 	
 	Event OnEndState()
-		Game.GetPlayer().SendModEvent("SLDMeditate","",3)		
+		Actor PlayerActor= Game.GetPlayer() as Actor
+
+		If (Utility.RandomInt(0,100)>70)
+			; Small chance to reduce headaches over time
+			If (Utility.RandomInt(0,100)>90)
+				PlayerActor.SendModEvent("SLDMeditate","",4)
+			else
+				PlayerActor.SendModEvent("SLDMeditate","",1)
+			endif
+		EndIf 
+
 		Debug.SendAnimationEvent(Target, "idleChairExitStart")
 		Utility.Wait(0.5)	
 		Debug.SendAnimationEvent(Target, "IdleForceDefaultState")	

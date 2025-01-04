@@ -156,7 +156,8 @@ Function tryUpdateWeather(Bool bForceUpdate = False)
   	if (bForceUpdate) || ((Utility.RandomInt(0,100)<iChanceWeatherOverride)  && ((iThisHour - iHourLastCheck) >=1) )
   		fctSeasons.updateWeather(iSeason, iPercentSeason, bForceUpdate)
   		iHourLastCheck = iThisHour
-  		debug.notification("There's a shift in the air ... " + StorageUtil.GetStringValue(none, "_FT_SeasonsMoonPhase") )
+  		debug.notification("There's a shift in the air ... " + StorageUtil.GetStringValue(none, "_FT_SeasonsWeather") )
+  		; debug.notification("Moon phase: " + StorageUtil.GetStringValue(none, "_FT_SeasonsMoonPhase") )
   	else
   		if wCurrentWeather.GetClassification() == -1
 		  	Debug.Notification(">> Missing weather detected - weather classification is -1")

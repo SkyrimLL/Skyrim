@@ -173,6 +173,7 @@ Function _updateGlobals()
 	EndIf
 
 
+
 EndFunction
 
 
@@ -605,6 +606,8 @@ Event OnSexLabOrgasm(String _eventName, String _args, Float _argc, Form _sender)
 
 	If (_hasPlayer(actors))
 		Debug.Trace("SexLab Dialogues: Orgasm!")
+		; Orgasms cure headache from potions
+		PlayerActor.SendModEvent("SLDMeditate","",1)
 
 	EndIf
 	

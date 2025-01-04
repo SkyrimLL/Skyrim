@@ -12,6 +12,8 @@ ReferenceAlias Property _SLD_SkyShardRefAlias  Auto
 Potion Property RejuvenationPotion  Auto  
 Keyword Property RejuvenationPotionKeyword  Auto  
 
+Ingredient Property IngredientGarlic  Auto  
+
 Spell Property PotionToxicityLow  Auto    
 Spell Property PotionToxicityHigh  Auto  
 Spell Property PotionToxicityImmunity  Auto  
@@ -106,6 +108,25 @@ Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemRefere
 	  endif
 EndEvent
 
+Event OnObjectEquipped(Form akBaseObject, ObjectReference akReference)
+	Actor PlayerActor = Game.getPlayer() 
+ 
+  	if akBaseObject as Ingredient
+  		Ingredient thisIngredient = akBaseObject as Ingredient
+  		; eating
+    	; Debug.Notification("This actor just ate an ingredient type: " + akBaseObject.GetType())
+
+    	; Spider egg = type 30
+
+    	if (thisIngredient == IngredientGarlic) || (StringUtil.Find(akBaseObject.GetName(), "Garlic")>=0)
+    		; Debug.Notification("This actor just ate garlic") 
+    		PlayerActor.SendModEvent("SLDMeditate","",1)	
+    	endif
+
+    endif
+ 
+EndEvent
+
 Event OnSLDRefreshMagicka(String _eventName, String _args, Float _argc, Form _sender)
  	Actor kActor = _sender as Actor
 	Int iBonus = _argc as Int
@@ -153,6 +174,17 @@ Event OnCombatStateChanged(Actor akTarget, int aeCombatState)
 EndEvent
 
 Event OnLocationChange(Location akOldLoc, Location akNewLoc)
+	Actor PlayerActor= Game.GetPlayer() as Actor
+
+	If (Utility.RandomInt(0,100)>30)
+		; Small chance to reduce headaches over time
+		If (Utility.RandomInt(0,100)>80)
+			PlayerActor.SendModEvent("SLDMeditate","",2)
+		else
+			PlayerActor.SendModEvent("SLDMeditate","",1)
+		endif
+	EndIf 
+
 	_updateMagicka()
 	_updateMageMastery()
 EndEvent
@@ -167,13 +199,23 @@ Event OnSleepStop(bool abInterrupted)
 endEvent
 
 Function _updateToxicity(Int iHoursSleep = 1)
-	iNumberPotionsToday= iNumberPotionsToday - (fHoursSleep as Int)
+	iNumberPotionsToday= iNumberPotionsToday - iHoursSleep 
+	; Debug.Notification("[SLD] _updateToxicity: " + iHoursSleep )
+	; Debug.Notification("[SLD] iNumberPotionsToday: " + iNumberPotionsToday )
+	; Debug.Notification("[SLD] stat Potions Used: " + Game.QueryStat("Potions Used") )
+	; Debug.Notification("[SLD] iLastNumberPotionsUsed: " + iLastNumberPotionsUsed )
 
-	if (iNumberPotionsToday<0)
+	if (iNumberPotionsToday<=0)
 		iNumberPotionsToday=0
-		iLastNumberPotionsUsed = Game.QueryStat("Potions Used")
 	Endif
 
+	if (iNumberPotionsToday>0)
+		Debug.Notification("[SLD] Toxicity level: " + iNumberPotionsToday )
+	endif
+	
+	iLastNumberPotionsUsed = Game.QueryStat("Potions Used") - iNumberPotionsToday
+
+	; Remove here - add again in _updateMagicka() if needed
 	PotionToxicityLowImod.Remove( )
 	PotionToxicityHighImod.Remove( )
 
@@ -200,7 +242,7 @@ Event OnUpdate()
 
 	If (iDaysSinceLastCheck > 0)
 		; New day
-		iNumberPotionsToday=0
+		; iNumberPotionsToday=0
 		iLastNumberPotionsUsed = Game.QueryStat("Potions Used")
 
 	else
