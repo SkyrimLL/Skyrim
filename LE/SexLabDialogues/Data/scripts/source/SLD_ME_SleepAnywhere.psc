@@ -286,6 +286,9 @@ State Sitting
 
 		If (Utility.RandomInt(0,100)>60)
 			; Small chance to reduce headaches over time
+
+			debug.Notification("You feel more rested." )
+
 			If (Utility.RandomInt(0,100)>80)
 				PlayerActor.SendModEvent("SLDMeditate","",2)
 			else
@@ -323,6 +326,8 @@ State Kneeling
 
 		If (Utility.RandomInt(0,100)>70)
 			; Small chance to reduce headaches over time
+
+			debug.Notification("You feel more focused." )
 			If (Utility.RandomInt(0,100)>90)
 				PlayerActor.SendModEvent("SLDMeditate","",4)
 			else

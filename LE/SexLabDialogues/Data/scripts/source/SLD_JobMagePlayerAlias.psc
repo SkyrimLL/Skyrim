@@ -154,7 +154,6 @@ Event OnSLDMeditate(String _eventName, String _args, Float _argc, Form _sender)
 		iBonus = 3
 	Endif
 
-	debug.Notification("You feel more focused." )
 	_updateToxicity(iBonus) ; equivalent of sleeping 3 hours
 
 EndEvent
