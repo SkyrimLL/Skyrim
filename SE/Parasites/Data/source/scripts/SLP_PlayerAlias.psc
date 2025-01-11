@@ -2140,7 +2140,7 @@ Event OnSLPRefreshParasites(String _eventName, String _args, Float _argc = 1.0, 
 EndEvent
 
 Function refreshAllPArasites(Actor kActor)
-	debug.notification("[SLP] Refreshing parasites")
+	debug.Trace("[SLP] Refreshing parasites")
 	fctParasites.refreshParasite(kActor, "SpiderEgg")
 	fctParasites.refreshParasite(kActor, "SpiderPenis")
 	fctParasites.refreshParasite(kActor, "ChaurusWorm")
@@ -2159,7 +2159,7 @@ Function refreshAllPArasites(Actor kActor)
 	fctParasites.refreshParasite(kActor, "ChaurusQueenSkin") 
 	fctParasites.refreshParasite(kActor, "ChaurusQueenArmor") 
 	fctParasites.refreshParasite(kActor, "ChaurusQueenBody") 
-	debug.notification("[SLP] Refreshing parasites - done")
+	debug.Trace("[SLP] Refreshing parasites - done")
 EndFunction
 
 
