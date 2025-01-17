@@ -1,4 +1,4 @@
-Scriptname _SDDA_BlackoutSpriggan extends daymoyl_QuestTemplate  
+Scriptname _SDDA_BlackoutSpriggan extends _sd_daymoyl_questtemplate
 
 GlobalVariable Property GameHour Auto
 

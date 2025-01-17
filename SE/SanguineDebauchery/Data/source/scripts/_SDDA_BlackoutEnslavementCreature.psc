@@ -1,4 +1,4 @@
-Scriptname _SDDA_BlackoutEnslavementCreature extends daymoyl_QuestTemplate  
+Scriptname _SDDA_BlackoutEnslavementCreature extends _sd_daymoyl_questtemplate
 
 GlobalVariable Property GameHour Auto
 

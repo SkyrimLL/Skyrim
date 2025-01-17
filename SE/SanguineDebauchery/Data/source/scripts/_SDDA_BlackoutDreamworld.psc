@@ -1,4 +1,4 @@
-Scriptname _SDDA_BlackoutDreamworld extends daymoyl_QuestTemplate  
+Scriptname _SDDA_BlackoutDreamworld extends _sd_daymoyl_questtemplate
 
 
 GlobalVariable Property GameHour Auto

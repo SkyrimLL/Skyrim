@@ -68,12 +68,12 @@ Function DeviceMenuPickLock()
 		zad_GagArmsTiedMsg.Show()
 		return
 	EndIf
-	int unlockChance = libs.CheckDeviceEscape(libs.GetUnlockThreshold(), skillName)
-        if (unlockChance == -1)
-		DeviceMenuPickLockSuccess()
-	else
-		DeviceMenuPickLockFail()
-	endif
+	; int unlockChance = libs.CheckDeviceEscape(libs.GetUnlockThreshold(), skillName)
+    ;    if (unlockChance == -1)
+	;	DeviceMenuPickLockSuccess()
+	;else
+	;	DeviceMenuPickLockFail()
+	;endif
 EndFunction
 
 Function DeviceMenuBruteForce()

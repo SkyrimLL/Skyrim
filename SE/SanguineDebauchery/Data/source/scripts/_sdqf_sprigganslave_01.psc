@@ -229,8 +229,8 @@ If ( aSpriggan.IsDead() )
 ;	aSpriggan.Resurrect()
 EndIf
 
-fctConstraints.actorCombatShutdown( aSpriggan )
-fctConstraints.actorCombatShutdown( aHost )
+; fctConstraints.actorCombatShutdown( aSpriggan, aHost )
+; fctConstraints.actorCombatShutdown( aHost, aHost )
 
 ; _SDSP_cum.RemoteCast( oHost, aHost, aHost )
 
@@ -298,8 +298,8 @@ If ( aSpriggan.IsDead() )
 ;	aSpriggan.Resurrect()
 EndIf
 
-fctConstraints.actorCombatShutdown( aSpriggan )
-fctConstraints.actorCombatShutdown( aHost )
+; fctConstraints.actorCombatShutdown( aSpriggan, aHost )
+; fctConstraints.actorCombatShutdown( aHost, aHost )
 
 ; _SDSP_cum.RemoteCast( oHost, aHost, aHost )
 

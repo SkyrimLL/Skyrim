@@ -1,4 +1,4 @@
-Scriptname _SDDA_BlackoutEnslavementFalmer extends daymoyl_QuestTemplate  
+Scriptname _SDDA_BlackoutEnslavementFalmer extends _sd_daymoyl_questtemplate
 
 GlobalVariable Property GameHour Auto
 
