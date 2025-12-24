@@ -150,7 +150,7 @@ function StartSlavery( Actor kMaster, Actor kSlave)
 	StorageUtil.SetFloatValue(kSlave, "_SD_fEnslavementDuration", 0.0)
 	StorageUtil.SetFloatValue(kSlave, "_SD_fPunishmentGameTime", 0.0)
 	StorageUtil.SetFloatValue(kSlave, "_SD_fPunishmentDuration", 0.0)
-	StorageUtil.SetFloatValue(kSlave, "_SD_iEnslavementDays", 0)
+	StorageUtil.SetFloatValue(kSlave, "_SD_fEnslavementDays", 0)
 
 	; Acts performed today
 	StorageUtil.SetIntValue(kSlave, "_SD_iSexCountToday", 0)
@@ -1353,8 +1353,10 @@ EndFunction
 Function InitSlaveryTaskList()
 	debugTrace(" Initialize tasks list")
 
+
 	StorageUtil.FormListClear(none, "_SD_lSlaveryTaskList")
 	StorageUtil.FormListClear(none, "_SD_lSlaveryCurrentTaskList")
+	StorageUtil.FormListClear( none, "_SD_lTaskList") ;Bane - to support Patching of running games
 	; Initialize form list of active task forms
 	; _SDGVP_CurrentTaskID.SetValue(iTaskID)
 	; _SDGVP_CurrentTaskStatus.SetValue(0)  ; -1 fail / 0 started / 1 completed
@@ -1405,9 +1407,9 @@ Function RegisterSlaveryTask(Int iTaskID, Form fKeyword, String sTaskName, Int i
 
 		StorageUtil.SetIntValue(fKeyword, "_SD_iTaskID",  iTaskID ) ; task ID - easier to handle than form for conditions, dialogue topcis...
 		StorageUtil.SetStringValue(fKeyword, "_SD_sTaskName",  sTaskName ) ; task name - for more readable coding
-		StorageUtil.SetFloatValue(fKeyword, "_SD_iTaskChance",  iTaskChance ) ; chance of triggering the task
+		StorageUtil.SetIntValue(fKeyword, "_SD_iTaskChance",  iTaskChance ) ; chance of triggering the task  ----> BUG Bane - was SetFloatValue!!!
 		StorageUtil.SetFloatValue(fKeyword, "_SD_fTaskDuration",  fTaskDuration ) ; duration of task, roughly in hours
-		StorageUtil.SetFormValue(fKeyword, "_SD_fTaskTargetItem",  fTaskTargetItem ) ; Form - can be direct item Form ID or Form List to pick from. If None, detection should be handled according to taks ID
+		StorageUtil.SetFormValue(fKeyword, "_SD_TaskTargetItem",  fTaskTargetItem ) ; Form - can be direct item Form ID or Form List to pick from. If None, detection should be handled according to taks ID
 		StorageUtil.SetIntValue(fKeyword, "_SD_iTaskTargetCount",  iTaskTargetCount ) ; number of expected items to complete task 
 		StorageUtil.SetIntValue(fKeyword, "_SD_iTaskTargetDifference",  iTaskTargetDifference ) ; expected difference between positive and negative counts. Use 0 to ignore (optional)
 		StorageUtil.SetIntValue(fKeyword, "_SD_iTaskPositiveMod",  iTaskPositiveMod  ) ; trust points as a reward for successful task
@@ -1460,12 +1462,11 @@ Function PickSlaveryTask(Actor kSlave, String sTaskName = "")
 	If (sTaskName == "") ; pick random task
 		int valueCount = StorageUtil.FormListCount(none, "_SD_lTaskList")
 		int i = 0
-
 		debugTrace(" Pick random slavery task: " )
 		while(i < iSlaveLevel) && (!bFound) ; allow for iSlaveLevel attempts at picking a task - ie. up to iSlaveLevel tasks active at a time
 			iTaskID = Utility.RandomInt(1,valueCount)
 			fKeyword = GetSlaveryTaskFromID(iTaskID)
-			if (StorageUtil.GetFloatValue(fKeyword, "_SD_fTaskStartDate")==0) && (Utility.RandomInt(0,100) <= StorageUtil.GetIntValue(fKeyword, "_SD_fTaskChance"))
+			if (StorageUtil.GetFloatValue(fKeyword, "_SD_fTaskStartDate")==0) && (Utility.RandomInt(0,100) <= StorageUtil.GetIntValue(fKeyword, "_SD_iTaskChance")) ;BUG ---> Bane was "_SD_fTaskChance"
 				debugTrace("      Task found: " + iTaskID + " [" + fKeyword + "]")
 				bFound = true
 				StartSlaveryTask(kSlave, iTaskID)
@@ -1486,6 +1487,7 @@ EndFunction
 
 
 Function StartSlaveryTask(Actor kSlave, Int iTaskID)
+
 	Form fKeyword 
 	int valueCount = StorageUtil.FormListCount(none, "_SD_lTaskList")
 	Int iSlaveLevel = StorageUtil.GetIntValue(kSlave, "_SD_iSlaveryLevel") 
@@ -1577,7 +1579,7 @@ Function StartSlaveryTask(Actor kSlave, Int iTaskID)
 	; slaveryQuest.SetStage( 50 + iTaskID )
 	slaveryQuest.SetObjectiveDisplayed( 50 + iTaskID, abDisplayed = true)
 
-	StorageUtil.FormListAdd( none, "_SD_lCurrentTaskList", fKeyword)   
+	StorageUtil.FormListAdd( none, "_SD_lCurrentTaskList", fKeyword, false)    ;Bane - No Duplicates
 
 EndFunction
 
@@ -1603,7 +1605,6 @@ Function EvaluateSlaveryTaskList(Actor kSlave)
 	while(i < valueCount)   
 		fKeyword = StorageUtil.FormListGet( none, "_SD_lCurrentTaskList", i)
 		EvaluateSlaveryTask( kSlave,  fKeyword)
-
 		i += 1
 	endwhile
 
@@ -1611,6 +1612,13 @@ Function EvaluateSlaveryTaskList(Actor kSlave)
 
 	If (valueCount < iSlaveLevel) && (Utility.RandomInt(0,100)>(40 + iSlaveLevel*10))
 		PickSlaveryTask(kSlave)
+	Else
+		If !StorageUtil.FormListHas(none, "_SD_lCurrentTaskList", _SDTSK_IGNORE as Form) ;Bane - No message if ignoring
+			If valueCount > 1 && funct.GetPlayerDialogueTarget() == kMaster
+			Else
+				Debug.Notification("I gave you a task Slut - get on with it...")
+			EndIf
+		EndIf
 	Endif
 
 EndFunction

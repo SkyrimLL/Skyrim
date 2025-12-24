@@ -43,7 +43,7 @@ Bool Function addToQueue( ObjectReference akObject )
 	Endif	
 
 	If ( akObject != None ) && ( akActor != None )
-		If (!akActor.IsGhost()) && (!akObject.IsDisabled()) &&  (SexLab.ValidateActor( akActor ) > 0) 
+		If (!akActor.IsGhost()) && (!akObject.IsDisabled()) &&  (SexLab.ValidateActor( akActor ) > 0 ) && ( funct.checkGenderRestriction(akActor, akPlayer) ) ;Gender Restriction Check Added by Bane
 			Int iIdx = 0
 			While ( !bAdded && iIdx < _SDORP_queue.Length )
 				If ( _SDORP_queue[iIdx] == None )

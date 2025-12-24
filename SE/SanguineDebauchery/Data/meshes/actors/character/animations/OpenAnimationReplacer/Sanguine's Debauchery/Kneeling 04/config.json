@@ -1,0 +1,90 @@
+{
+    "name": "Kneeling 04",
+    "priority": 2140000504,
+    "conditions": [
+        {
+            "condition": "AND",
+            "requiredVersion": "1.0.0.0",
+            "Conditions": [
+                {
+                    "condition": "IsChild",
+                    "requiredVersion": "1.0.0.0",
+                    "negated": true
+                },
+                {
+                    "condition": "PLAYER",
+                    "requiredVersion": "1.3.0.0",
+                    "Conditions": [
+                        {
+                            "condition": "FactionRank",
+                            "requiredVersion": "1.0.0.0",
+                            "Faction": {
+                                "pluginName": "sanguinesDebauchery.esp",
+                                "formID": "26BC88"
+                            },
+                            "Comparison": "==",
+                            "Numeric value": {
+                                "value": 1.0
+                            }
+                        },
+                        {
+                            "condition": "FactionRank",
+                            "requiredVersion": "1.0.0.0",
+                            "Faction": {
+                                "pluginName": "sanguinesDebauchery.esp",
+                                "formID": "25750E"
+                            },
+                            "Comparison": "==",
+                            "Numeric value": {
+                                "value": 4.0
+                            }
+                        }
+                    ]
+                },
+                {
+                    "condition": "OR",
+                    "requiredVersion": "1.0.0.0",
+                    "Conditions": [
+                        {
+                            "condition": "IsActorBase",
+                            "requiredVersion": "1.0.0.0",
+                            "Actor base": {
+                                "pluginName": "Skyrim.esm",
+                                "formID": "7"
+                            }
+                        },
+                        {
+                            "condition": "HasKeyword",
+                            "requiredVersion": "1.0.0.0",
+                            "Keyword": {
+                                "form": {
+                                    "pluginName": "Follower Slavery Mod.esp",
+                                    "formID": "19A90D"
+                                }
+                            }
+                        },
+                        {
+                            "condition": "HasKeyword",
+                            "requiredVersion": "1.0.0.0",
+                            "Keyword": {
+                                "form": {
+                                    "pluginName": "sanguinesDebauchery.esp",
+                                    "formID": "22DF93"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "condition": "IsInFaction",
+                    "requiredVersion": "1.0.0.0",
+                    "negated": true,
+                    "Faction": {
+                        "pluginName": "SexLab.esm",
+                        "formID": "E50F"
+                    }
+                }
+            ]
+        }
+    ]
+}

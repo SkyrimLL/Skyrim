@@ -167,7 +167,8 @@ String Function sanitizeStringCode(String sText)
 		sReturnText += "Yoke"
  	ElseIf (sText == "VaginalPiercing")  || (sText == "vaginalpiercing") || (sText == "VAGINALPIERCING")
 		sReturnText += "VaginalPiercing"
- 
+ 	ElseIf (sText == "NipplePiercing")  || (sText == "nipplepiercing") || (sText == "NIPPLEPIERCING")
+		sReturnText += "NipplePiercing"
 	Else
 		debug.notification(" No sanitized match found for " + sText)
 		debugTrace(" No match found for " + sText)
@@ -358,21 +359,22 @@ EndFunction
 
 Function initSlaveryGearHumanoidDefault ( Form thisRace )
 	registerSlaveryGearDevice( fRace=thisRace, deviceString="Collar", deviceKeyword=libs.zad_DeviousCollar, deviceInventory=xlibs.zadx_HR_IronCollarInventory, deviceRendered=xlibs.zadx_HR_IronCollarRendered )
-	registerSlaveryGearDevice( fRace=thisRace, deviceString="WristRestraint", deviceKeyword=libs.zad_DeviousHeavyBondage, deviceInventory=xlibs.zadx_HR_WristShacklesInventory, deviceRendered=xlibs.zadx_HR_WristShacklesRendered  )
-	registerSlaveryGearDevice( fRace=thisRace, deviceString="LegCuffs", deviceKeyword=libs.zad_DeviousLegCuffs, deviceInventory=xlibs.zadx_HR_ChainHarnessBootsInventory, deviceRendered=xlibs.zadx_HR_ChainHarnessBootsRendered  )
+	registerSlaveryGearDevice( fRace=thisRace, deviceString="WristRestraint", deviceKeyword=libs.zad_DeviousHeavyBondage, deviceInventory=xlibs.zadx_shackles_steel_Inventory, deviceRendered=xlibs.zadx_shackles_steel_Rendered  )
+	registerSlaveryGearDevice( fRace=thisRace, deviceString="LegCuffs", deviceKeyword=libs.zad_DeviousLegCuffs, deviceInventory=libs.cuffsPaddedLegs, deviceRendered=libs.cuffsPaddedLegsRendered  )
 	registerSlaveryGearDevice( fRace=thisRace, deviceString="Belt", deviceKeyword=libs.zad_DeviousBelt, deviceInventory=libs.beltIron, deviceRendered=libs.beltIronRendered)
 	registerSlaveryGearDevice( fRace=thisRace, deviceString="PlugVaginal", deviceKeyword=libs.zad_DeviousPlugVaginal, deviceInventory=xlibs.zadx_HR_RustyIronPearVaginalInventory, deviceRendered=xlibs.zadx_HR_RustyIronPearVaginalRendered )
 	registerSlaveryGearDevice( fRace=thisRace, deviceString="PlugAnal", deviceKeyword=libs.zad_DeviousPlugAnal, deviceInventory=xlibs.zadx_HR_IronPearAnalBlackInventory, deviceRendered=xlibs.zadx_HR_IronPearAnalBlackRendered  )
 	registerSlaveryGearDevice( fRace=thisRace, deviceString="Gag", deviceKeyword=libs.zad_DeviousGag, deviceInventory=xlibs.zadx_HR_BridleBaseInventory, deviceRendered=xlibs.zadx_HR_BridleBaseRendered    )
 	registerSlaveryGearDevice( fRace=thisRace, deviceString="Blindfold", deviceKeyword=libs.zad_DeviousBlindfold, deviceInventory=xlibs.blindfoldBlocking, deviceRendered=xlibs.blindfoldBlockingRendered   )
 
-	registerSlaveryGearDevice( fRace=thisRace, deviceString="Gloves", deviceKeyword=libs.zad_DeviousHeavyBondage, deviceInventory=xlibs.zadx_HR_ChainHarnessGlovesInventory, deviceRendered=xlibs.zadx_HR_ChainHarnessGlovesRendered  )
-	registerSlaveryGearDevice( fRace=thisRace, deviceString="Boots", deviceKeyword=libs.zad_DeviousBoots, deviceInventory=xlibs.zadx_HR_ChainHarnessBootsInventory, deviceRendered=xlibs.zadx_HR_ChainHarnessBootsRendered  )
-	registerSlaveryGearDevice( fRace=thisRace, deviceString="Corset", deviceKeyword=libs.zad_DeviousCorset, deviceInventory=xlibs.zadx_HR_ChainHarnessBodyInventory, deviceRendered=xlibs.zadx_HR_ChainHarnessBodyRendered   )
+	registerSlaveryGearDevice( fRace=thisRace, deviceString="Gloves", deviceKeyword=libs.zad_DeviousHeavyBondage, deviceInventory=libs.glovesRestrictive, deviceRendered=libs.glovesRestrictiveRendered  )
+	registerSlaveryGearDevice( fRace=thisRace, deviceString="Boots", deviceKeyword=libs.zad_DeviousBoots, deviceInventory=xlibs.restrictiveBoots, deviceRendered=xlibs.restrictiveBootsRendered  )
+	registerSlaveryGearDevice( fRace=thisRace, deviceString="Corset", deviceKeyword=libs.zad_DeviousCorset, deviceInventory=libs.corset, deviceRendered=libs.corsetRendered   )
 
 	registerSlaveryGearDevice( fRace=thisRace, deviceString="Yoke", deviceKeyword=libs.zad_DeviousYoke, deviceInventory=libs.yoke, deviceRendered=libs.yokeRendered   )
 
 	registerSlaveryGearDevice( fRace=thisRace, deviceString="VaginalPiercing", deviceKeyword=libs.zad_DeviousPiercingsVaginal, deviceInventory=libs.piercingVSoul, deviceRendered=libs.piercingVSoulRendered   )
+	registerSlaveryGearDevice( fRace=thisRace, deviceString="NipplePiercing", deviceKeyword=libs.zad_DeviousPiercingsNipple, deviceInventory=libs.piercingNSoul, deviceRendered=libs.piercingNSoulRendered   ) ;Bane
 EndFunction
 
 
@@ -399,8 +401,8 @@ Function initSlaveryGearForThisRace ( Form thisRace )
 			ElseIf (StringUtil.Find(sRaceName, "Hagraven")!= -1)
 				registerSlaveryOptions( fRace=thisRace, allowCollar=1, allowArmbinders=1, allowPunishmentDevice=1, allowPunishmentScene=1, allowWhippingScene=1, defaultStance="Kneeling", raceSlaveTat="Hagraven Tribal (breast)", raceSlaveTatDuration=8 )
 				registerSlaveryGearDevice( fRace=thisRace, deviceString="Collar", deviceKeyword=libs.zad_DeviousCollar, deviceInventory=xlibs.zadx_HR_IronCollarInventory, deviceRendered=xlibs.zadx_HR_IronCollarRendered )
-				registerSlaveryGearDevice( fRace=thisRace, deviceString="WristRestraint", deviceKeyword=libs.zad_DeviousHeavyBondage, deviceInventory=xlibs.zadx_HR_WristShacklesInventory, deviceRendered=xlibs.zadx_HR_WristShacklesRendered  )
-				registerSlaveryGearDevice( fRace=thisRace, deviceString="LegCuffs", deviceKeyword=libs.zad_DeviousLegCuffs, deviceInventory=xlibs.zadx_HR_ChainHarnessBootsInventory, deviceRendered=xlibs.zadx_HR_ChainHarnessBootsRendered  )
+				registerSlaveryGearDevice( fRace=thisRace, deviceString="WristRestraint", deviceKeyword=libs.zad_DeviousHeavyBondage, deviceInventory=xlibs.zadx_shackles_steel_Inventory, deviceRendered=xlibs.zadx_shackles_steel_Rendered  )
+				registerSlaveryGearDevice( fRace=thisRace, deviceString="LegCuffs", deviceKeyword=libs.zad_DeviousLegCuffs, deviceInventory=libs.cuffsPaddedLegs, deviceRendered=libs.cuffsPaddedLegsRendered  )
 				registerSlaveryGearDevice( fRace=thisRace, deviceString="Belt", deviceKeyword=libs.zad_DeviousBelt, deviceInventory=libs.beltIron, deviceRendered=libs.beltIronRendered)
 				registerSlaveryGearDevice( fRace=thisRace, deviceString="PlugVaginal", deviceKeyword=libs.zad_DeviousPlugVaginal, deviceInventory=xlibs.zadx_HR_IronPearVaginalBellBlackInventory, deviceRendered=xlibs.zadx_HR_IronPearVaginalBellBlackRendered )
 				registerSlaveryGearDevice( fRace=thisRace, deviceString="PlugAnal", deviceKeyword=libs.zad_DeviousPlugAnal, deviceInventory=xlibs.zadx_HR_IronPearAnalBlackInventory, deviceRendered=xlibs.zadx_HR_IronPearAnalBlackRendered  )
@@ -430,8 +432,8 @@ Function initSlaveryGearForThisRace ( Form thisRace )
 			ElseIf (StringUtil.Find(sRaceName, "Giant")!= -1)
 				registerSlaveryOptions( fRace=thisRace, allowCollar=1, allowArmbinders=0, allowPunishmentDevice=0, allowPunishmentScene=0, allowWhippingScene=0, defaultStance="Standing", raceSlaveTat="Giant Paint (body)", raceSlaveTatDuration=20 )
 				registerSlaveryGearDevice( fRace=thisRace, deviceString="Collar", deviceKeyword=libs.zad_DeviousCollar, deviceInventory=xlibs.zadx_HR_IronCollarInventory, deviceRendered=xlibs.zadx_HR_IronCollarRendered )
-				registerSlaveryGearDevice( fRace=thisRace, deviceString="WristRestraint", deviceKeyword=libs.zad_DeviousHeavyBondage, deviceInventory=xlibs.zadx_HR_WristShacklesInventory, deviceRendered=xlibs.zadx_HR_WristShacklesRendered  )
-				registerSlaveryGearDevice( fRace=thisRace, deviceString="LegCuffs", deviceKeyword=libs.zad_DeviousLegCuffs, deviceInventory=xlibs.zadx_HR_ChainHarnessBootsInventory, deviceRendered=xlibs.zadx_HR_ChainHarnessBootsRendered  )
+				registerSlaveryGearDevice( fRace=thisRace, deviceString="WristRestraint", deviceKeyword=libs.zad_DeviousHeavyBondage, deviceInventory=xlibs.zadx_shackles_steel_Inventory, deviceRendered=xlibs.zadx_shackles_steel_Rendered  )
+				registerSlaveryGearDevice( fRace=thisRace, deviceString="LegCuffs", deviceKeyword=libs.zad_DeviousLegCuffs, deviceInventory=libs.cuffsPaddedLegs, deviceRendered=libs.cuffsPaddedLegsRendered  )
 
 			; Chaurus   
 			ElseIf (StringUtil.Find(sRaceName, "Chaurus")!= -1)
@@ -453,8 +455,8 @@ Function initSlaveryGearForThisRace ( Form thisRace )
 
 				registerSlaveryOptions( fRace=thisRace, allowCollar=1, allowArmbinders=1, allowPunishmentDevice=1, allowPunishmentScene=0, allowWhippingScene=1, defaultStance="Kneeling", raceSlaveTat="Draugr Runes (breast)", raceSlaveTatDuration=20, raceSlaveTatColor = slaveTatColor, raceSlaveTatGlow = 1  )
 				registerSlaveryGearDevice( fRace=thisRace, deviceString="Collar", deviceKeyword=libs.zad_DeviousCollar, deviceInventory=xlibs.zadx_HR_RustyIronCollarInventory, deviceRendered=xlibs.zadx_HR_RustyIronCollarRendered )
-				registerSlaveryGearDevice( fRace=thisRace, deviceString="WristRestraint", deviceKeyword=libs.zad_DeviousHeavyBondage, deviceInventory=xlibs.zadx_HR_RustyWristShacklesInventory, deviceRendered=xlibs.zadx_HR_RustyWristShacklesRendered  )
-				registerSlaveryGearDevice( fRace=thisRace, deviceString="LegCuffs", deviceKeyword=libs.zad_DeviousLegCuffs, deviceInventory=xlibs.zadx_HR_RustyChainHarnessBootsInventory, deviceRendered=xlibs.zadx_HR_RustyChainHarnessBootsRendered  )
+				registerSlaveryGearDevice( fRace=thisRace, deviceString="WristRestraint", deviceKeyword=libs.zad_DeviousHeavyBondage, deviceInventory=xlibs.zadx_HR_RustyIronCuffsFrontInventory, deviceRendered=xlibs.zadx_HR_RustyIronCuffsFrontRendered  )
+				registerSlaveryGearDevice( fRace=thisRace, deviceString="LegCuffs", deviceKeyword=libs.zad_DeviousLegCuffs, deviceInventory=xlibs.zadx_HR_RustyChainHarnessLegsInventory, deviceRendered=xlibs.zadx_HR_RustyChainHarnessLegsRendered  )
 				registerSlaveryGearDevice( fRace=thisRace, deviceString="PlugVaginal", deviceKeyword=libs.zad_DeviousPlugVaginal, deviceInventory=xlibs.zadx_HR_RustyIronPearVaginalBellInventory, deviceRendered=xlibs.zadx_HR_RustyIronPearVaginalBellRendered )
 				registerSlaveryGearDevice( fRace=thisRace, deviceString="PlugAnal", deviceKeyword=libs.zad_DeviousPlugAnal, deviceInventory=xlibs.zadx_HR_RustyIronPearAnalInventory, deviceRendered=xlibs.zadx_HR_RustyIronPearAnalRendered  )
 				registerSlaveryGearDevice( fRace=thisRace, deviceString="Gag", deviceKeyword=libs.zad_DeviousGag, deviceInventory=xlibs.zadx_HR_RustyPearGagInventory, deviceRendered=xlibs.zadx_HR_RustyPearGagRendered    )
@@ -469,7 +471,6 @@ Function initSlaveryGearForThisRace ( Form thisRace )
 			; Nord  
 			If (StringUtil.Find(sRaceName, "Nord")!= -1)
 				registerSlaveryOptions( fRace=thisRace, allowCollar=1, allowArmbinders=1, allowPunishmentDevice=1, allowPunishmentScene=1, allowWhippingScene=1, defaultStance="Kneeling", raceSlaveTat="Nord Ankle (leg)" )
-
 			; Breton
 			ElseIf (StringUtil.Find(sRaceName, "Breton")!= -1)
 				registerSlaveryOptions( fRace=thisRace, allowCollar=1, allowArmbinders=1, allowPunishmentDevice=1, allowPunishmentScene=1, allowWhippingScene=1, defaultStance="Kneeling", raceSlaveTat="Breton Wheel (belly)" )
@@ -732,12 +733,12 @@ Function getDeviceNPCByString ( Actor akActor, String sDeviceString = "", String
 			aRenderedDevice = xlibs.zadx_HR_IronCollarChain01Rendered
 
 		ElseIf ( sDeviceString == "WristRestraints" ) || ( sDeviceString == "WristRestraint" )  || ( sDeviceString == "Armbinders" )
-			aWornDevice = xlibs.zadx_HR_IronCuffsFrontInventory 
-			aRenderedDevice = xlibs.zadx_HR_IronCuffsFrontRendered
+			aWornDevice = xlibs.zadx_shackles_steel_Inventory 
+			aRenderedDevice = xlibs.zadx_shackles_steel_Rendered
 		
 		ElseIf ( sDeviceString == "LegCuffs" )
-			aWornDevice = xlibs.zadx_HR_ChainHarnessBootsInventory 
-			aRenderedDevice = xlibs.zadx_HR_ChainHarnessBootsRendered
+			aWornDevice = libs.cuffsPaddedLegs 
+			aRenderedDevice = libs.cuffsPaddedLegsRendered
 		
 		ElseIf ( sDeviceString == "Gag" )
 			aWornDevice = xlibs.zadx_HR_PearGagInventory
@@ -782,7 +783,7 @@ Function getDeviceNPCByString ( Actor akActor, String sDeviceString = "", String
  	; ElseIf generic device tag is set, use it
  	; Else force random generic item
 
-	If (kwDeviceKeyword != None)
+	If (kwDeviceKeyword != None) && !akActor.WornHasKeyword(kwDeviceKeyword)
 
 			if (sOutfitString!="")
 				Debug.Messagebox("[SD] getDeviceByString called with message: " + sOutfitString)  
@@ -938,12 +939,12 @@ Function equipDeviceNPCByString ( Actor akActor, String sDeviceString = "", Stri
 			aRenderedDevice = xlibs.zadx_HR_IronCollarChain01Rendered
 
 		ElseIf ( sDeviceString == "WristRestraints" ) || ( sDeviceString == "WristRestraint" )  || ( sDeviceString == "Armbinders" )
-			aWornDevice = xlibs.zadx_HR_IronCuffsFrontInventory 
-			aRenderedDevice = xlibs.zadx_HR_IronCuffsFrontRendered
+			aWornDevice = xlibs.zadx_shackles_steel_Inventory 
+			aRenderedDevice = xlibs.zadx_shackles_steel_Rendered
 		
 		ElseIf ( sDeviceString == "LegCuffs" )
-			aWornDevice = xlibs.zadx_HR_ChainHarnessBootsInventory 
-			aRenderedDevice = xlibs.zadx_HR_ChainHarnessBootsRendered
+			aWornDevice = libs.cuffsPaddedLegs 
+			aRenderedDevice = libs.cuffsPaddedLegsRendered
 		
 		ElseIf ( sDeviceString == "Gag" )
 			aWornDevice = xlibs.zadx_HR_PearGagInventory
@@ -966,16 +967,16 @@ Function equipDeviceNPCByString ( Actor akActor, String sDeviceString = "", Stri
 			aRenderedDevice = xlibs.zadx_HR_IronPearVaginalBlackRendered
 		
 		ElseIf ( sDeviceString == "Gloves" ) || ( sDeviceString == "gloves" )
-			aWornDevice = xlibs.zadx_HR_ChainHarnessGlovesInventory
-			aRenderedDevice = xlibs.zadx_HR_ChainHarnessGlovesRendered
+			aWornDevice = libs.glovesRestrictive
+			aRenderedDevice = libs.glovesRestrictiveRendered
 		
 		ElseIf ( sDeviceString == "Boots" ) || ( sDeviceString == "boots" )
-			aWornDevice = xlibs.zadx_HR_ChainHarnessBootsInventory
-			aRenderedDevice = xlibs.zadx_HR_ChainHarnessBootsRendered
+			aWornDevice = xlibs.restrictiveBoots
+			aRenderedDevice = xlibs.restrictiveBootsRendered
 		
 		ElseIf ( sDeviceString == "Corset" ) || ( sDeviceString == "corset" )
-			aWornDevice = xlibs.zadx_HR_ChainHarnessBodyInventory
-			aRenderedDevice = xlibs.zadx_HR_ChainHarnessBodyRendered
+			aWornDevice = libs.corset
+			aRenderedDevice = libs.corsetRendered
 		EndIf 
 
 
@@ -1093,7 +1094,6 @@ EndFunction
 Bool Function equipDevice(Armor ddArmorInventory)
 	Actor PlayerActor = Game.GetPlayer() as Actor
 	Bool bDeviceEquipSuccess
-
 	bDeviceEquipSuccess = equipDeviceNPC(PlayerActor, ddArmorInventory)
 
 	return bDeviceEquipSuccess
@@ -1104,7 +1104,6 @@ Bool Function equipDeviceNPC(Actor akActor, Armor ddArmorInventory)
 	Bool bDeviceEquipSuccess = False
 
 	libs.Log("[SD] equipDevice for " +  akActor)
-
 	bDeviceEquipSuccess = libs.LockDevice(akActor, ddArmorInventory )
 
 	return bDeviceEquipSuccess
@@ -1961,7 +1960,7 @@ Function clearNonGenericDeviceByString ( String sDeviceString = "", String sOutf
 EndFunction
 
 Function equipNonGenericDeviceNPCByString ( Actor kActor, String sDeviceString = "", String sOutfitString = "")
-	; Test for unique, non generic keyword should be done before calling this function
+; Test for unique, non generic keyword should be done before calling this function
 
 	Keyword kwDeviceKeyword = none
 	Actor PlayerActor = Game.GetPlayer() as Actor
@@ -2046,7 +2045,7 @@ Function equipNonGenericDeviceNPCByString ( Actor kActor, String sDeviceString =
 					aWornDevice = xlibs.zadx_HR_RustyIronCuffsFrontInventory 
 					aRenderedDevice = xlibs.zadx_HR_RustyIronCuffsFrontRendered
 				
-				ElseIf ( sDeviceString == "LegCuffs" )
+				ElseIf ( sDeviceString == "Boots" )
 					aWornDevice = xlibs.zadx_HR_RustyChainHarnessBootsInventory 
 					aRenderedDevice = xlibs.zadx_HR_RustyChainHarnessBootsRendered
 				
@@ -2078,10 +2077,10 @@ Function equipNonGenericDeviceNPCByString ( Actor kActor, String sDeviceString =
 					aRenderedDevice = xlibs.zadx_HR_IronCollarChain01Rendered
 
 				ElseIf ( sDeviceString == "WristRestraints" ) || ( sDeviceString == "WristRestraint" )  || ( sDeviceString == "Armbinders" )
-					aWornDevice = xlibs.zadx_HR_IronCuffsFrontInventory 
-					aRenderedDevice = xlibs.zadx_HR_IronCuffsFrontRendered
+					aWornDevice = xlibs.zadx_shackles_steel_Inventory 
+					aRenderedDevice = xlibs.zadx_shackles_steel_Rendered
 				
-				ElseIf ( sDeviceString == "LegCuffs" )
+				ElseIf ( sDeviceString == "Boots" )
 					aWornDevice = xlibs.zadx_HR_ChainHarnessBootsInventory 
 					aRenderedDevice = xlibs.zadx_HR_ChainHarnessBootsRendered
 				

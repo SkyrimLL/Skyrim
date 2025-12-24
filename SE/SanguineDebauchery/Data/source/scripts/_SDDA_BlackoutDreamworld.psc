@@ -1,4 +1,4 @@
-Scriptname _SDDA_BlackoutDreamworld extends _sd_daymoyl_questtemplate
+Scriptname _SDDA_BlackoutDreamworld extends daymoyl_QuestTemplate  
 
 
 GlobalVariable Property GameHour Auto
@@ -18,8 +18,8 @@ Bool Function QuestCondition(Location akLocation, Actor akAggressor, Actor akFol
 	Debug.Trace("[SDDA] Blackout Dreamworld start enslavement attempt (Humanoid):" + thisAggressor)
 	Debug.Trace("	start master is Humanoid:" + StorageUtil.GetIntValue( thisAggressor, "_SD_bIsSlaverHumanoid"))
 	
-	if (StorageUtil.GetIntValue(thisPlayer, "_SD_iSanguineBlessings") > 0)  && (StorageUtil.GetIntValue(thisPlayer, "_SD_iEnslaved")==0)
-
+	;if (StorageUtil.GetIntValue(thisPlayer, "_SD_iSanguineBlessings") > 0)  && (StorageUtil.GetIntValue(thisPlayer, "_SD_iEnslaved")==0)
+	if (StorageUtil.GetIntValue(thisPlayer, "_SD_iEnslaved")==0)
 		return true
 	else
 		return false

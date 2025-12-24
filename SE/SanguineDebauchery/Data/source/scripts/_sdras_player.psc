@@ -166,11 +166,15 @@ Bool allowPlayerHRT = False
 Bool allowPlayerTG = False
 Bool allowPlayerBimbo = False
 
+Bool bBusy ;Bane
+
 String lastStance = ""
 bool bOk
 
 Actor kCombatTarget = None
 Actor kSubmitTarget = None
+
+Bool bTaskBugFixed
 
 
 Event OnInit()
@@ -315,7 +319,15 @@ Function _Maintenance()
 	_SDGVP_allowPlayerHRT.SetValue(allowPlayerHRT as Int)
 	_SDGVP_allowPlayerTG.SetValue(allowPlayerTG as Int)
 	_SDGVP_allowPlayerBimbo.SetValue(allowPlayerBimbo as Int)
- 
+
+	If !bTaskBugFixed
+		fctSlavery.InitSlaveryTaskList()
+		bTaskBugFixed = true
+		Debug.Notification("SD: Patched Task List ")
+	EndIf
+
+	fctOutfit.initSlaveryGearByRace (  ) ;Bane TEMP FIX
+
 EndFunction
 
 Event OnSleepStop(bool abInterrupted)
@@ -1095,8 +1107,8 @@ Event OnSDPickNextTask(String _eventName = "", String _args ="", Float _argc = 1
 	Debug.Trace("[_sdras_player] Receiving pick slavery task mod story event [" + _args  + "] [" + _argc as Int + "]")
 
 	If (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 1)
-		If (iEventString=="") ; no task provided, pick at random
-			fctSlavery.EvaluateSlaveryTaskList(kPlayer) ; First evaluate current task in case it can be completed 
+		If StorageUtil.FormListCount(none, "_SD_lCurrentTaskList") > 0  ; no task provided, pick at random  Bane cut (iEventString=="")  && 
+			fctSlavery.EvaluateSlaveryTaskList(kPlayer) ; First evaluate current task in case it can be completed  - Bane && there is a current task to evaluate!
 		Else
 			fctSlavery.PickSlaveryTask( kPlayer,  iEventString )
 		endif
@@ -2191,7 +2203,7 @@ State monitor
 					StorageUtil.SetStringValue(kPlayer, "_SD_sDefaultStance", "Standing")
 					kPlayer.SendModEvent("SLDRefreshGlobals")
 					kPlayer.SendModEvent("SDStanding")
-					Debug.Notification("$Standing...")
+					Debug.Notification("$Standing...")					
 				; Else
 				; 	Debug.Notification("You are not allowed to stand")
 				; Endif
@@ -2216,20 +2228,21 @@ State monitor
 				kPlayer.SendModEvent("SDCrawling")
 				Debug.Notification("$Already crawling...")
 
-			elseIf (StorageUtil.GetStringValue(kPlayer, "_SD_sDefaultStance") == "Kneeling")  && (!bIsWristRestraintEquipped) ; && (StorageUtil.GetIntValue(kPlayer, "_SD_iEnableCrawl") == 1 )
+			elseIf (StorageUtil.GetStringValue(kPlayer, "_SD_sDefaultStance") == "Kneeling")  ; && (StorageUtil.GetIntValue(kPlayer, "_SD_iEnableCrawl") == 1 )
 				; If (fctSlavery.CheckSlavePrivilege( kPlayer , "_SD_iEnableCrawl") && (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 1) ) || (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 0)
+				If !bIsWristRestraintEquipped
 					StorageUtil.SetStringValue(kPlayer, "_SD_sDefaultStance", "Crawling")
 					kPlayer.SendModEvent("SLDRefreshGlobals")
 					kPlayer.SendModEvent("SDCrawling")
 					Debug.Notification("$Crawling...")
-				; Else
-				; 	Debug.Notification("You are not allowed to crawl")
-				; Endif
+				 Else
+				 	Debug.Notification("You cannnot crawl with bound wrists...")
+				 Endif
 
 			elseIf (StorageUtil.GetStringValue(kPlayer, "_SD_sDefaultStance") == "Standing") ; && (StorageUtil.GetIntValue(kPlayer, "_SD_iEnableKneel") == 1 )
 				; If (fctSlavery.CheckSlavePrivilege( kPlayer , "_SD_iEnableKneel") && (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 1) ) || (StorageUtil.GetIntValue(kPlayer, "_SD_iEnslaved") == 0)
 					StorageUtil.SetStringValue(kPlayer, "_SD_sDefaultStance", "Kneeling")
-					kPlayer.SendModEvent("SLDRefreshGlobals")
+					kPlayer.SendModEvent("SLDRefreshGlobals")				
 					kPlayer.SendModEvent("SDKneeling")
 					Debug.Notification("$Kneeling...")
 				; Else
@@ -2258,53 +2271,57 @@ State monitor
 		Bool bHitByRanged = FALSE ; True if likely his by Ranged attack.
 		Bool bCheckForSlaver = FALSE
 		 
-		If (akAggressor != None) 
-			IF akActor != PlayerRef && PlayerRef.IsInCombat() && akActor.IsHostileToActor(PlayerRef) && akActor.IsAIEnabled() ; GetEquippedItemType make error Logs if IsAIEnabled == false
-			; The above is really to rule out run of the mill physical traps.
-			 
-				IF ((akActor.GetEquippedItemType(0) == 8) || (akActor.GetEquippedItemType(1) == 8) \
-					|| (akActor.GetEquippedItemType(0) == 9) || (akActor.GetEquippedItemType(1) == 9))  && akProjectile != None
-					; bHitByMagic = TRUE
+		If !bBusy
+			bBusy = True
+			If (akAggressor != None) 
+				IF akActor != PlayerRef && PlayerRef.IsInCombat() && akActor.IsHostileToActor(PlayerRef) && akActor.IsAIEnabled() ; GetEquippedItemType make error Logs if IsAIEnabled == false
+				; The above is really to rule out run of the mill physical traps.
+				 
+					IF ((akActor.GetEquippedItemType(0) == 8) || (akActor.GetEquippedItemType(1) == 8) \
+						|| (akActor.GetEquippedItemType(0) == 9) || (akActor.GetEquippedItemType(1) == 9))  && akProjectile != None
+						; bHitByMagic = TRUE
 
-					If (Utility.RandomInt(0,100)<30) ; throttle checks for slavery way down in case of magick attack
+						If (Utility.RandomInt(0,100)<30) ; throttle checks for slavery way down in case of magick attack
+							bCheckForSlaver = TRUE
+						Endif
+
+					ELSEIF (akActor .GetEquippedItemType(0) != 7) && akProjectile == None
+						; bHitByMelee = TRUE
 						bCheckForSlaver = TRUE
+
+					ELSEIF (akActor .GetEquippedItemType(0) == 7)
+						; bHitByRanged = TRUE
+						bCheckForSlaver = TRUE
+					ENDIF
+				ENDIF
+
+				If (bCheckForSlaver)
+					if (StorageUtil.GetIntValue( akActor, "_SD_iDateSlaverChecked")==0)
+						fctFactions.checkIfSlaver ( akActor )
 					Endif
 
-				ELSEIF (akActor .GetEquippedItemType(0) != 7) && akProjectile == None
-					; bHitByMelee = TRUE
-					bCheckForSlaver = TRUE
-
-				ELSEIF (akActor .GetEquippedItemType(0) == 7)
-					; bHitByRanged = TRUE
-					bCheckForSlaver = TRUE
-				ENDIF
-			ENDIF
-
-			If (bCheckForSlaver)
-				if (StorageUtil.GetIntValue( akActor, "_SD_iDateSlaverChecked")==0)
-					fctFactions.checkIfSlaver ( akActor )
+					if (StorageUtil.GetIntValue( akActor, "_SD_iDateBeastSlaverChecked")==0)
+						fctFactions.checkIfSlaverCreature ( akActor )
+					Endif
 				Endif
 
-				if (StorageUtil.GetIntValue( akActor, "_SD_iDateBeastSlaverChecked")==0)
-					fctFactions.checkIfSlaverCreature ( akActor )
+				; Basic trigger for enslavement - slider should be by percent health eventually. Right now, simply actual value for tests.
+				; This is provided in case no other mod handles enslavement situaltions, like Death Laternative - Your Money or your life. (DAYMOL)
+				If ((PlayerRef.GetActorValue("Health") <= StorageUtil.GetIntValue(PlayerRef, "_SD_iPercentHealthSubmit") ) && (StorageUtil.GetIntValue(PlayerRef, "_SD_iPercentHealthSubmit")>0))
+					If (!akActor.IsDead())
+						Debug.Notification("$[SD] Surrender to aggressor")
+						StorageUtil.SetIntValue(kPlayer, "_SD_iSurrenderOn", 0)
+						; akActor.SendModEvent("PCSubSurrender")
+						fctOutfit.initSlaveryGearByActor ( akActor )
+						SDSurrenderOrRape(akActor, "" )
+						GoToState("monitor")
+
+					Endif
 				Endif
+
 			Endif
-
-			; Basic trigger for enslavement - slider should be by percent health eventually. Right now, simply actual value for tests.
-			; This is provided in case no other mod handles enslavement situaltions, like Death Laternative - Your Money or your life. (DAYMOL)
-			If ((PlayerRef.GetActorValue("Health") <= StorageUtil.GetIntValue(PlayerRef, "_SD_iPercentHealthSubmit") ) && (StorageUtil.GetIntValue(PlayerRef, "_SD_iPercentHealthSubmit")>0))
-				If (!akActor.IsDead())
-					Debug.Notification("$[SD] Surrender to aggressor")
-					StorageUtil.SetIntValue(kPlayer, "_SD_iSurrenderOn", 0)
-					; akActor.SendModEvent("PCSubSurrender")
-					fctOutfit.initSlaveryGearByActor ( akActor )
-					SDSurrenderOrRape(akActor, "" )
-					GoToState("monitor")
-
-				Endif
-			Endif
-
-		Endif
+			bBusy = False
+		EndIf
 	EndEvent
 	
 	Event OnTrapHit(ObjectReference akTarget, float afXVel, float afYVel, float afZVel, float afXPos, float afYPos, float afZPos, int aeMaterial, bool abInitialHit, int aeMotionType)

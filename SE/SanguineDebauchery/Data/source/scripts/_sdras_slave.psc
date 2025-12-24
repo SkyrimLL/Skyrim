@@ -400,7 +400,7 @@ EndEvent
 
 State waiting
 	Event OnUpdate()
-		; Debug.Notification( "[SD] Waiting")
+		; Debug.Notification( "[SD]: " + GetState())
 		UpdateMasterSlave()
 
 		If ( Self.GetOwningQuest().IsRunning() ) && (kMaster) ; && ( kMaster.Is3DLoaded() ); && (StorageUtil.GetIntValue(kSlave, "_SD_iEnslavementInitSequenceOn")==0) ; wait for end of enslavement sequence
@@ -425,7 +425,8 @@ EndState
 
 State monitor
 	Event OnBeginState()
-		; debugTrace(" Begin Monitor State")
+		; Debug.Notification( "[SD]: " + GetState())
+		;debugTrace(" Begin Monitor State")
 
 		UpdateMasterSlave()
 
@@ -870,6 +871,7 @@ EndState
 
 State escape_shock
 	Event OnBeginState()
+		; Debug.Notification( "[SD]: " + GetState())
 		kPlayer = Game.GetPlayer()
 		; Debug.Notification( "$SD_MESSAGE_ESCAPE_NOW" )
 		Debug.Notification( "$Your collar vibrates as you wander off." )
@@ -1097,6 +1099,7 @@ EndState
 
 State escape_choke
 	Event OnBeginState()
+		; Debug.Notification( "[SD]: " + GetState())
 		kPlayer = Game.GetPlayer()
 
 		; Debug.Notification( "$SD_MESSAGE_ESCAPE_NOW" )
@@ -1331,6 +1334,7 @@ EndState
 
 State caged
 	Event OnBeginState()
+		; Debug.Notification( "[SD]: " + GetState())
 		; Debug.Notification( "[SD] Cage state - start" )
 		debugTrace(" Cage state - start" )
 		iPlayerGender = Game.GetPlayer().GetLeveledActorBase().GetSex() as Int
@@ -1392,6 +1396,7 @@ EndState
 
 State doNothing
 	Event OnBeginState()
+		; Debug.Notification( "[SD]: " + GetState())
 	EndEvent
 	
 	Event OnEndState()
@@ -1514,7 +1519,7 @@ Function _slaveStatusTicker()
 			enslavement.ResetCage( kSlave)
 		endIf
 
-		StorageUtil.SetFloatValue(kSlave, "_SD_iEnslavementDays", 	StorageUtil.GetFloatValue(kSlave, "_SD_iEnslavementDays") + 1)
+		StorageUtil.SetFloatValue(kSlave, "_SD_fEnslavementDays", 	StorageUtil.GetFloatValue(kSlave, "_SD_fEnslavementDays") + 1)
 		StorageUtil.SetFloatValue(kSlave, "_SD_fPunishmentDuration", 0.0)
 
 		StorageUtil.SetIntValue(kMaster, "_SD_iDispositionThreshold", _SDGVP_config_disposition_threshold.GetValue() as Int) 

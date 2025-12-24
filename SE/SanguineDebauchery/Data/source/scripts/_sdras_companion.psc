@@ -216,12 +216,12 @@ Function enslaveCompanion( Actor kActor)
 				EndIf
 				
 				; Slave gear for Follower disabled for now ... potential issue with disabling all dialogues
-
 				idx = 0
 				While idx < _SDFLP_companion_items.GetSize()
 				  	nthArmor = _SDFLP_companion_items.GetAt(idx) as Armor
-				  	kActor.AddItem( nthArmor, 1 )
-				  	kActor.EquipItem( nthArmor, True, True )
+				  	;kActor.AddItem( nthArmor, 1 )
+				  	;kActor.EquipItem( nthArmor, True, True )
+				  	fctOutfit.libs.LockDevice(kActor, nthArmor, false) ;Bane Now Using Devious Devices
 				  	idx += 1
 				EndWhile
 
@@ -248,7 +248,7 @@ Function enslaveCompanion( Actor kActor)
 
 		EndIf
 
-		Debug.Trace("[_sdras_companion]       Enslavement complete for " + kActor.GetName()) 
+		Debug.Trace("[_sdras_companion]       Enslavement complete for " + kActor.GetLeveledActorBase().GetName()) 
 	endif
 EndFunction
 

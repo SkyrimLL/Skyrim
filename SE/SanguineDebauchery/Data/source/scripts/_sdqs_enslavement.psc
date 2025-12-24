@@ -379,6 +379,7 @@ Function TransferSlave(Actor akOldMaster, Actor akNewMaster, Actor akSlave)
 	fctFactions.clearSlaveFactions( akSlave )
 
 	_SDRAP_master.ForceRefTo(akNewMaster as ObjectReference)
+	StorageUtil.SetFormValue(none, "_SD_CurrentOwner", akNewMaster) ;Bane
 
 	EnslavePlayer(akNewMaster, akSlave, _SDGVP_config[3].GetValue() as Bool)
 
@@ -516,9 +517,10 @@ Function UpdateSlaveState(Actor akMaster, Actor akSlave)
 EndFunction
 
 Bool Function PunishSlave(Actor akMaster, Actor akSlave, String sDevice)
+	ConsoleUtil.PrintMessage("PunishSlave Called: Master = " + akMaster + " at distance " + akSlave.GetDistance(akMaster))
 	Bool punishmentAdded = False
 	Keyword kwDeviceKeyword = fctOutfit.getDeviousKeywordByString(sDevice)
-
+	ConsoleUtil.PrintMessage("KW: " + kwDeviceKeyword.GetString() + " Punish On = " + StorageUtil.GetIntValue(akSlave, "_SD_iSlaveryPunishmentOn") + " Leash Dist: " + StorageUtil.GetIntValue(kSlave, "_SD_iLeashLength") + " fMasterDistance = " + (akSlave as ObjectReference).GetDistance(akMaster as ObjectReference))
 	If (akSlave == Game.GetPlayer()) && (StorageUtil.GetIntValue(akSlave, "_SD_iSlaveryPunishmentOn") == 1)
 		float fMasterDistance = (akSlave as ObjectReference).GetDistance(akMaster as ObjectReference)
 
@@ -528,6 +530,7 @@ Bool Function PunishSlave(Actor akMaster, Actor akSlave, String sDevice)
 			if (!fctOutfit.isDeviceEquippedString(kSlave,sDevice))  
 				; AddSlavePunishment( akSlave, sDevice)
 				fctOutfit.QueueSlavePunishment(akSlave, sDevice, 1.0 + Utility.RandomFloat(1.0, 23.0))
+				ConsoleUtil.PrintMessage("dD Punishment was Queued")
 				punishmentAdded = True
 
 			Else

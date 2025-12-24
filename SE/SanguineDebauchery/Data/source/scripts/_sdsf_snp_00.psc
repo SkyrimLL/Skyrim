@@ -1,18 +1,23 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
 ;NEXT FRAGMENT INDEX 159
-Scriptname _sdsf_snp_00 Extends Scene Hidden
+Scriptname _SDSF_snp_00 Extends Scene Hidden
 
-;BEGIN FRAGMENT Fragment_7
-Function Fragment_7()
+;BEGIN FRAGMENT Fragment_57
+Function Fragment_57()
 ;BEGIN CODE
-Actor player = Game.GetPlayer()
+snp._SDUIP_phase = 0
+_SDGVP_snp_busy.SetValue(0)
+; Debug.Notification("Hands grope you as you walk by [" + snp._SDUIP_phase+"]")
 
-Actor male = _SDRAP_male.GetReference() as Actor
-Actor female = _SDRAP_female.GetReference() as Actor
+; Debug.Notification("Hands grope you as you walk by [sex start]")
+; libs.SetAnimating(Game.GetPlayer(), true)
 
-Debug.SendAnimationEvent(player , "UnequipNoAnim")
-  
-_SDSP_sex.Cast( male, female )
+
+if (fctOutfit.isArmbinderEquipped( Game.getPlayer()  )) && (Utility.RandomInt(0,100) > 30)
+	;fctOutfit.setDeviceArmbinder ( bDevEquip = False, sDevMessage = "")
+	fctOutfit.removePunishmentDevice("Armbinder")
+	StorageUtil.SetIntValue(Game.getPlayer() , "_SD_iHandsFreeSex", 1)
+EndIf
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -41,40 +46,6 @@ EndIf
 _SDGVP_snp_busy.SetValue(-1)
 ; Self.GetowningQuest().Stop()
 ; libs.SetAnimating(Game.GetPlayer(),false)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_57
-Function Fragment_57()
-;BEGIN CODE
-snp._SDUIP_phase = 0
-_SDGVP_snp_busy.SetValue(0)
-; Debug.Notification("Hands grope you as you walk by [" + snp._SDUIP_phase+"]")
-
-; Debug.Notification("Hands grope you as you walk by [sex start]")
-; libs.SetAnimating(Game.GetPlayer(), true)
-
-
-if (fctOutfit.isArmbinderEquipped( Game.getPlayer()  )) && (Utility.RandomInt(0,100) > 30)
-	; fctOutfit.setDeviceArmbinder ( bDevEquip = False, sDevMessage = "")
-	fctOutfit.clearDeviceByString("Armbinder", "")
-	StorageUtil.SetIntValue(Game.getPlayer() , "_SD_iHandsFreeSex", 1)
-EndIf
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_81
-Function Fragment_81()
-;BEGIN CODE
-snp._SDUIP_phase = 1
-; Debug.Notification("[sex] phase =" + snp._SDUIP_phase)
-
-Actor female = _SDRAP_female.GetReference() as Actor
-ObjectReference marker = _SDRAP_marker.GetReference() as ObjectReference
-
-marker.MoveTo( female, -64, 0, 0 )
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -109,6 +80,35 @@ If ( female == Game.GetPlayer() && female.HasKeyword( _SDKP_vampire ) && _SDGVP_
 ;	female.StartVampireFeed( male )
 ;	PlayerVampireQuest.VampireFeed()
 EndIf
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_81
+Function Fragment_81()
+;BEGIN CODE
+snp._SDUIP_phase = 1
+; Debug.Notification("[sex] phase =" + snp._SDUIP_phase)
+
+Actor female = _SDRAP_female.GetReference() as Actor
+ObjectReference marker = _SDRAP_marker.GetReference() as ObjectReference
+
+marker.MoveTo( female, -64, 0, 0 )
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_7
+Function Fragment_7()
+;BEGIN CODE
+Actor player = Game.GetPlayer()
+
+Actor male = _SDRAP_male.GetReference() as Actor
+Actor female = _SDRAP_female.GetReference() as Actor
+
+Debug.SendAnimationEvent(player , "UnequipNoAnim")
+  
+_SDSP_sex.Cast( male, female )
 ;END CODE
 EndFunction
 ;END FRAGMENT

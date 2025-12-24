@@ -701,7 +701,7 @@ event OnPageReset(string a_page)
  		AddTextOption("$SLH_hShapeChangePickOne", "", OPTION_FLAG_DISABLED)
 		AddToggleOptionST("STATE_ENABLE_BASIC_NETIMMERSE","$SLH_bENABLE_BASIC_NETIMMERSE", StorageUtil.GetIntValue(none, "_SLH_BasicNetImmerseON") as Float)
 		AddToggleOptionST("STATE_ENABLE_SLIF_OVERRIDE","$SLH_bENABLE_SLIF_OVERRIDE", StorageUtil.GetIntValue(none, "_SLH_SLIFOverrideON") as Float)
-		AddToggleOptionST("STATE_ENABLE_NODE_OVERRIDE","$SLH_bENABLE_NODE_OVERRIDE", StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON") as Float)
+		; AddToggleOptionST("STATE_ENABLE_NODE_OVERRIDE","$SLH_bENABLE_NODE_OVERRIDE", StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON") as Float, OPTION_FLAG_DISABLED)
 		AddToggleOptionST("STATE_ENABLE_BODYMORPHS","Enable BodyMorphs", StorageUtil.GetIntValue(none, "_SLH_BodyMorphsON") as Float)
 		
 		; AddToggleOptionST("STATE_BALANCE","$SLH_sBALANCE", _applyNodeBalancing  as Float)

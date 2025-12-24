@@ -47,8 +47,8 @@ Event OnStoryCrimeGold(ObjectReference akVictim, ObjectReference akCriminal, For
 		kMaster.SendModEvent("PCSubWhip")
 	 
 	elseIf ( akFaction && (akCriminal as Actor == kSlave) )
-		fctConstraints.actorCombatShutdown( akVictim as Actor, kSlave )
-		; fctConstraints.actorCombatShutdown( kSlave, kSlave )
+		fctConstraints.actorCombatShutdown( kSlave, akVictim as Actor )
+		;fctConstraints.actorCombatShutdown( kSlave )
 		
 		storyStartTime = GetCurrentRealTime()
 		

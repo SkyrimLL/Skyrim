@@ -121,7 +121,7 @@ s -a SD_DanceAnim1Begin SnakeDance.hkx
 AAprefix sdc
 
 AAset _mt 1
-AAset _mtx 1
-AAset _mtidle 5
+AAset _mtx 1 
+' AAset _mtidle 5
 ' AAset _sneakidle 1
 ' AAset _sneakmt 1

@@ -67,6 +67,7 @@ Bool bSlaveDetectedByMaster
 Bool bSlaveDetectedByTarget
 Bool bTargetAllied
 Bool bTargetMaster
+Bool bSlaveInCombat ;Bane
 
 Float fPackageTime = 0.0
 Float fSlaveLastSeen
@@ -441,12 +442,15 @@ State monitor
 		Else
 			distanceAverage = ( distance + distanceAverage ) / 2
 		EndIf
-
 		kCombatTarget = kSlave.GetCombatTarget()
 		bSlaveDetectedByMaster = kSlave.IsDetectedBy(kMaster)
 		bSlaveDetectedByTarget = ( kCombatTarget && kSlave.IsDetectedBy(kCombatTarget) )
-		bTargetMaster = ( kCombatTarget && kCombatTarget == kMaster )
-		bTargetAllied = ( kCombatTarget && kCombatTarget != kMaster && fctFactions.actorFactionInList(kCombatTarget, _SDFLP_forced_allied) )
+		;Bane
+		kSlave.GetCombatState() ;This function is unreliable the first time it is called after a certain amount of time has passed. So call it on an empty line first before calling it for real.
+		bSlaveInCombat = ( kSlave.GetCombatState() == 1 )  ;Bane - Is the Slave actually in Combat!
+		
+		bTargetMaster = ( kCombatTarget && kCombatTarget == kMaster && bSlaveInCombat)
+		bTargetAllied = ( kCombatTarget && kCombatTarget != kMaster && fctFactions.actorFactionInList(kCombatTarget, _SDFLP_forced_allied) && bSlaveInCombat )
 		iCheckdemerits = _SDGVP_demerits.GetValueInt()
 		
 		If (kMasterCell.IsInterior())
@@ -571,7 +575,7 @@ State monitor
 				If (StorageUtil.GetIntValue(kMaster, "_SD_iMasterIsCreature") == 0)
 					Debug.Notification( "$You will regret this!" )
 				else
-					Debug.Notification( "$Your owner barks at you." )
+					Debug.Notification( "$Your owner growls at you." )
 				endif
 				; Punishment
 				;	_SDKP_sex.SendStoryEvent(akRef1 = kMaster, akRef2 = kSlave, aiValue1 = 3 )
@@ -586,7 +590,7 @@ State monitor
 				;	funct.SanguinePunishment( kMaster )
 
 				;	else
-						kMaster.SendModEvent("PCSubSex","Rough") 
+						kMaster.SendModEvent("PCSubSex","*Retaliation*") 
 				;	endif
 				;Else
 				;	If (StorageUtil.GetIntValue(kSlave, "_SD_iSlaveryPunishmentOn")==1)
@@ -785,7 +789,7 @@ State monitor
 						funct.SanguinePunishment( kMaster )
 
 					Else
-					 	kMaster.SendModEvent("PCSubSex","Rough") 
+					 	kMaster.SendModEvent("PCSubSex","*Retaliation*")  ;Bane Rough
 
 					EndIf
 				Endif

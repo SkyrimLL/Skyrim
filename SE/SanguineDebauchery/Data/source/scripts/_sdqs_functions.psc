@@ -421,6 +421,12 @@ Function SanguineRapeCreatureMenu ( Actor akSpeaker, Actor akTarget, string tags
 	Actor Player = Game.GetPlayer()
 ;	Game.ForceThirdPerson()
 ;	Debug.SendAnimationEvent(Player as ObjectReference, "bleedOutStart")
+	Bool bIsRetaliation
+
+	If tags == "*Retaliation*" ;Bane
+		bIsRetaliation = true
+		tags = "Rough"
+	EndIf
 
 	if (fLast == 0.0)	
 		fLast = GameTime.GetValue() 
@@ -428,7 +434,7 @@ Function SanguineRapeCreatureMenu ( Actor akSpeaker, Actor akTarget, string tags
 	Endif
 
 	; Prevent rapid fire attacks
-	if ( (GameTime.GetValue() - StorageUtil.GetFloatValue(Player, "_SD_iLastSexTime"))  < StorageUtil.GetFloatValue(Player, "_SD_iNextSexTime") )
+	if ( (GameTime.GetValue() - StorageUtil.GetFloatValue(Player, "_SD_iLastSexTime"))  < StorageUtil.GetFloatValue(Player, "_SD_iNextSexTime") && !bIsRetaliation )
 		Debug.Notification("(nevermind...)")
 		Debug.Trace("[SD]    Sex aborted - too soon since last sex scene")
 		Debug.Trace("[SD]      		(GameTime.GetValue() - fLast) : " + (GameTime.GetValue() - fLast))
@@ -479,6 +485,12 @@ INT Function SanguineRape(Actor akSpeaker, Actor akTarget, String SexLabInTags =
 	Actor kActor
 	Bool bIsTargetVictim = true
 	Bool bIsSpeakerVictim = false
+	Bool bIsRetaliation
+
+	If SexLabInTags == "*Retaliation*" ;Bane
+		bIsRetaliation = true
+		SexLabInTags = "Rough"
+	EndIf
 
 	INT iLimit = 222
 	If (!akSpeaker && !akTarget) ;Only one actor required (masturbation scene?). 
@@ -506,8 +518,8 @@ INT Function SanguineRape(Actor akSpeaker, Actor akTarget, String SexLabInTags =
 	Endif
 
 	; Prevent rapid fire attacks
-	if ( (GameTime.GetValue() - StorageUtil.GetFloatValue(Player, "_SD_iLastSexTime"))  < StorageUtil.GetFloatValue(Player, "_SD_iNextSexTime") )
-		Debug.Notification("$(nevermind...)")
+	if ( (GameTime.GetValue() - StorageUtil.GetFloatValue(Player, "_SD_iLastSexTime"))  < StorageUtil.GetFloatValue(Player, "_SD_iNextSexTime") && !bIsRetaliation )
+		Debug.Notification("$(Your aggressor loses interest...)")
 		Debug.Trace("[SD]    Sex aborted - too soon since last sex scene")
 		Debug.Trace("[SD]      		(GameTime.GetValue() - fLast) : " + (GameTime.GetValue() - fLast))
 		Debug.Trace("[SD]      		fNextAllowed : " + fNextAllowed)
@@ -538,15 +550,19 @@ INT Function SanguineRape(Actor akSpeaker, Actor akTarget, String SexLabInTags =
 	If (StorageUtil.GetIntValue(Player, "_SD_iEnslaved") ==1)
 		Actor kMaster = StorageUtil.GetFormValue(Player, "_SD_CurrentOwner") as Actor 
 		Int valueCount = StorageUtil.FormListCount(Player, "_SD_lEnslavedFollower")
-		int i = 0
+		
 		Actor thisActor = None
 
-		while(i < valueCount) && (thisActor == None)
-			thisActor = StorageUtil.FormListGet(Player, "_SD_lEnslavedFollower", i) as Actor
+		If valueCount > 0
+			int i = Utility.RandomInt(0, valueCount) ;Bane - randomly select a follower
 
-			i += 1
-		endwhile
 
+		;while(i < valueCount) && (thisActor == None)
+			thisActor = StorageUtil.FormListGet(Player, "_SD_lEnslavedFollower", i) as Actor 
+
+		;	i += 1
+		;endwhile
+		EndIf
 		Debug.Trace("[SD sex] Num followers slaves: " + valueCount as Int)
 
 		if (thisActor!=None) && !thisActor.IsDead()
@@ -554,13 +570,13 @@ INT Function SanguineRape(Actor akSpeaker, Actor akTarget, String SexLabInTags =
 			if (Utility.RandomInt(0,100)>(40 + StorageUtil.GetIntValue(Player, "_SD_iSlaveryLevel") * 5))   ; chance the owner will prefer to use a follower
 				Debug.Trace("[SD sex] Master using follower" )
 
-				if (Utility.RandomInt(0,100)>70) && (checkGenderRestriction(thisActor, akTarget))  ; chance of player + follower
+				if (Utility.RandomInt(0,100)>90) && (checkGenderRestriction(thisActor, akTarget))  ; chance of player + follower
 					akSpeaker = thisActor
-					Debug.Notification("(Your follower is compelled to use you)")
+					Debug.Notification( "Your Master orders" + thisActor.GetLeveledActorBase().GetName() + " to use you)")
 
 				elseif (checkGenderRestriction(akSpeaker, thisActor))  ; chance of master + follower
 					akTarget = thisActor
-					Debug.Notification("(Your follower is used in front of you)")
+					;Debug.Notification("(Your follower is used in front of you)")
 
 				else 
 					Debug.Trace("[SD]  Your follower is not compatible - " + thisActor)

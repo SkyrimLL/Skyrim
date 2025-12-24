@@ -352,11 +352,11 @@ event OnPageReset(string a_page)
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
 		AddHeaderOption("$ Triggers ")
-		if (iChaurusQueenStage==0)
+		; if (iChaurusQueenStage==0)
 			AddToggleOptionST("STATE_CHAURUSQUEENDEBUG_TOGGLE","$Unlock Chaurus Queen items", _toggleChaurusQueenDebug as Float)
-		else
-			AddToggleOptionST("STATE_CHAURUSQUEENDEBUG_TOGGLE","$Unlock Chaurus Queen items", _toggleChaurusQueenDebug as Float, OPTION_FLAG_DISABLED)
-		endif
+		; else
+		;	AddToggleOptionST("STATE_CHAURUSQUEENDEBUG_TOGGLE","$Unlock Chaurus Queen items", _toggleChaurusQueenDebug as Float, OPTION_FLAG_DISABLED)
+		; endif
 		
 		if (_toggleChaurusQueenDebug) || (iChaurusQueenStage>0)
 			AddToggleOptionST("STATE_CHAURUSQUEENVAG_TOGGLE","$Infect/Cure Vaginal Chaurus Queen", _toggleChaurusQueenVag as Float)
