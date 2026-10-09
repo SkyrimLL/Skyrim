@@ -15,14 +15,18 @@ ObjectReference Property CaptorsChestREF  Auto
 
 ObjectReference Property SybilReleaseTrigger  Auto  
 
+GlobalVariable Property FjotraFollowerPackageON  Auto  
+ 
+
 Event OnTriggerEnter(ObjectReference akActionRef)
       ; Only trigger when Sybil quest is active and Fjotra is actually there
-      
-      if (SybilQuest.GetStageDone(60)) || (SybilQuest.GetStageDone(70))
-      	ObjectReference SybilREF= SybilAlias.GetReference()
-      	Actor SybilActor= SybilAlias.GetActorRef() 
+      ObjectReference SybilREF= SybilAlias.GetReference()
+      Actor SybilActor= SybilAlias.GetActorRef() 
 
-            if ( (akActionRef == Game.GetPlayer())  && (SybilREF != None)  ) 
+      if ( (akActionRef == Game.GetPlayer())  && (SybilREF != None)  )       
+            if (SybilQuest.GetStageDone(80)==false)
+                  FjotraFollowerPackageON.SetValue(0) ; Disable Fjotra follower package
+
            		; Debug.Notification("Sybil is enabled:" + SybilREF)
 
                    ; SybilActor.removeallitems(CaptorsChestREF  )
@@ -53,16 +57,19 @@ Event OnTriggerEnter(ObjectReference akActionRef)
        
                   endif
 
-                  SybilREF.additem(MinerOutfit )
-                  SybilActor.equipitem(MinerOutfit ,False,False)
-                  utility.wait(0.5)
+            Else
+                  FjotraFollowerPackageON.SetValue(1) ; Disable Fjotra follower package
+
+                  ; SybilREF.additem(MinerOutfit )
+                  ; SybilActor.equipitem(MinerOutfit ,False,False)
+                  ; utility.wait(0.5)
                   
                   utility.wait(0.5)
 
 
-      		; Run once
-      		SybilReleaseTrigger.enable() 
-      		SybilInitTrigger.disable()
-      	EndIf
-      Endif
+                  ; Run once
+                  SybilReleaseTrigger.enable() 
+                  SybilInitTrigger.disable(); code
+            Endif
+      EndIf
 EndEvent

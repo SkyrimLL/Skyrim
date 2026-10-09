@@ -7,7 +7,7 @@ Function Fragment_0(Actor akActor)
 ;BEGIN CODE
 ; Actor akActor = SexBotRef as Actor
 
-akActor.RemoveFromFaction(FalmerFaction)
+; akActor.RemoveFromFaction(FalmerFaction)
 ;END CODE
 EndFunction
 ;END FRAGMENT

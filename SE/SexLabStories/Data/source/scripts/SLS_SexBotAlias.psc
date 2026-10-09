@@ -1,5 +1,6 @@
 Scriptname SLS_SexBotAlias extends ReferenceAlias  
-
+ 
+SLS_QST_SexBot Property SexBotControlQuest  Auto
 
 ReferenceAlias Property SexBotAlias  Auto  
 SexLabFramework Property SexLab  Auto  
@@ -27,12 +28,16 @@ Event OnLocationChange(Location akOldLoc, Location akNewLoc)
     ; Debug.notification("[SLS_SexBotAlias] Days since sex - " + iDaysSinceLastCheck)
 
     ; Exit conditions
-    If (iDaysSinceLastCheck >= 1) && (SLS_SexBotOnOff.GetValue() == 1)
+    If (iDaysSinceLastCheck >= 1) ; && (SLS_SexBotOnOff.GetValue() == 1)
         ; debug.notification("[SLS_SexBotAlias] time to update energy levels")
             StorageUtil.SetIntValue(SexBotActor, "_SLS_SexBotEnergyLevel", StorageUtil.GetIntValue(SexBotActor, "_SLS_SexBotEnergyLevel") - (iDaysSinceLastCheck * 2))
-            SexBotActor.ForceAV("Health", 100 + (StorageUtil.GetIntValue(SexBotActor, "_SLS_SexBotEnergyLevel") * 2) )
-            SexBotActor.ForceAV("Stamina", 10 + (StorageUtil.GetIntValue(SexBotActor, "_SLS_SexBotEnergyLevel") * 2) )
-            SexBotActor.ForceAV("Magicka", 50 + (StorageUtil.GetIntValue(SexBotActor, "_SLS_SexBotEnergyLevel") * 5) )
+            int iEnergyLevel = StorageUtil.GetIntValue(SexBotActor, "_SLS_SexBotEnergyLevel")
+
+            if (iEnergyLevel <= 0) 
+                StorageUtil.SetIntValue(SexBotActor, "_SLS_SexBotEnergyLevel", 0)
+            endif
+
+            SexBotControlQuest.UpdateSexBotState()
 
             iGameDateLastCheck = iDaysPassed
             StorageUtil.SetIntValue(SexBotActor, "_SLS_LastSexDate", iGameDateLastCheck)
@@ -59,17 +64,8 @@ Event OnHit(ObjectReference akAggressor, Form akSource, Projectile akProjectile,
     Actor kPlayer = Game.GetPlayer()
     Actor akAggressorActor = akAggressor as Actor
 
-    if !SexBotActor.IsInFaction(DwemerFaction)
-        If (akAggressor == Game.GetPlayer())
-
-            ;  Debug.Trace("SexBot is hitting")
-            If (Utility.RandomInt(0,100)>60) && akAggressorActor.IsInFaction(DwemerFaction)  
-                Debug.Notification( "Non Standard Animonculus detected - hostile posture canceled.") 
-
-                SexBotActor.AddToFaction(DwemerFaction)
-            EndIf
-
-        ElseIf (akAggressor != None)
+    if !SexBotActor.IsInFaction(DwemerFaction) && akAggressorActor.IsInFaction(DwemerFaction)  
+        If (akAggressor != None) && (akAggressor != Game.GetPlayer())
             ;  Debug.Trace("We were hit by " + akAggressor)
 
             If (Utility.RandomInt(0,100)>60) && akAggressorActor.IsInFaction(DwemerFaction) 

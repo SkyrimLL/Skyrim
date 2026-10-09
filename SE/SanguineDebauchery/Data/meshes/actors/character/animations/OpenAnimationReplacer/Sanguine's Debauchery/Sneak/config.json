@@ -1,0 +1,33 @@
+{
+    "name": "Sneaking",
+    "description": "Controls the player's submissive pose.",
+    "priority": 2123200000,
+    "conditions": [
+        {
+            "condition": "CompareValues",
+            "requiredVersion": "1.0.0.0",
+            "Value A": {
+                "form": {
+                    "pluginName": "SexLab_Dialogues.esp",
+                    "formID": "2DDB3"
+                }
+            },
+            "Comparison": "!=",
+            "Value B": {
+                "value": 0.0
+            }
+        },
+        {
+            "condition": "IsSneaking",
+            "requiredVersion": "1.0.0.0"
+        },
+        {
+            "condition": "IsForm",
+            "requiredVersion": "1.0.0.0",
+            "Form": {
+                "pluginName": "Skyrim.esm",
+                "formID": "14"
+            }
+        }
+    ]
+}

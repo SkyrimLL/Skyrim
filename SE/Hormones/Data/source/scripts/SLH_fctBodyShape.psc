@@ -7,7 +7,7 @@ SLH_fctColor Property fctColor Auto
 SLH_fctUtil Property fctUtil Auto
 SLH_fctHormonesLevels Property fctHormones Auto
 
-SOS_API _SOS
+; SOS_API _SOS
 
 ; String                   Property NINODE_SCHLONG	 	= "NPC Genitals01 [Gen01]" AutoReadOnly
 string                   Property SLH_KEY               = "SexLab_Hormones.esp" AutoReadOnly
@@ -211,14 +211,14 @@ Bool Property isSlifInstalled Auto
 
 ;-----------------------------------
 
-SOS_API Property SOS
-  SOS_API Function Get()
-    If !_SOS
-      _SOS = SOS_API.Get()
-    EndIf
-    Return _SOS
-  EndFunction
-EndProperty
+; SOS_API Property SOS
+;   SOS_API Function Get()
+;     If !_SOS
+;       _SOS = SOS_API.Get()
+;     EndIf
+;     Return _SOS
+;   EndFunction
+; EndProperty
 
 
 Bool Function isSoSAPI()
@@ -230,30 +230,30 @@ Bool Function isSoSAPI()
 Endfunction
 
 Bool Function isSchlongSet(Actor kActor)
-	if !isSoSAPI()
-		Return False
-	Endif
+	; if !isSoSAPI()
+	; 	Return False
+	; Endif
 
-	Return SOS.isSchlonged(kActor)
+	; Return SOS.isSchlonged(kActor)
 Endfunction
 
 Function setSchlong(Actor kActor, string schlongLabel)
-	Form schlong
+	; Form schlong
 
-	if !isSoSAPI()
-		Return
-	Endif
+	; if !isSoSAPI()
+	; 	Return
+	; Endif
 
-	if (schlongLabel == "Any") || (schlongLabel == "")
-		; Get first addon available for now... add code to better select later
-		schlong =  SOS_Data.GetAddon(0)
-	else
-		schlong = SOS.FindSchlongByName(schlongLabel)
-	endif
+	; if (schlongLabel == "Any") || (schlongLabel == "")
+	; 	; Get first addon available for now... add code to better select later
+	; 	schlong =  SOS_Data.GetAddon(0)
+	; else
+	; 	schlong = SOS.FindSchlongByName(schlongLabel)
+	; endif
  
- 	if (schlong != None)
-    	SOS.SetSchlong(kActor, schlong)
-    endIf
+ 	; if (schlong != None)
+    ; 	SOS.SetSchlong(kActor, schlong)
+    ; endIf
 
     ;/
     Other ways for getting a schlong ref
@@ -264,15 +264,15 @@ Function setSchlong(Actor kActor, string schlongLabel)
 Endfunction
 
 Function removeSchlong(Actor kActor)
-	if !isSoSAPI()
-		Return
-	Endif
+	; if !isSoSAPI()
+	; 	Return
+	; Endif
 
-	Form schlong = SOS.GetSchlong(kActor)
+	; Form schlong = SOS.GetSchlong(kActor)
  
- 	if (schlong != None)
-    	SOS.RemoveSchlong(kActor)
-    endIf
+ 	; if (schlong != None)
+    ; 	SOS.RemoveSchlong(kActor)
+    ; endIf
 Endfunction
 
  

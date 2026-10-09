@@ -1,5 +1,31 @@
 {
-  "name": "Sanguine's Debauchery",
-  "description": "",
-  "author": "Bane"
+    "name": "Sanguine's Debauchery",
+    "author": "jbezorg and Bane",
+    "description": "OAR Pose Mod\n\nRequires SexLab_Dialogues.esp and SexLabAroused.esm",
+    "conditionPresets": [
+        {
+            "name": "Is Player",
+            "conditions": [
+                {
+                    "condition": "AND",
+                    "requiredVersion": "1.0.0.0",
+                    "Conditions": [
+                        {
+                            "condition": "IsForm",
+                            "requiredVersion": "1.0.0.0",
+                            "Form": {
+                                "pluginName": "Skyrim.esm",
+                                "formID": "14"
+                            }
+                        },
+                        {
+                            "condition": "IsChild",
+                            "requiredVersion": "1.0.0.0",
+                            "negated": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }
