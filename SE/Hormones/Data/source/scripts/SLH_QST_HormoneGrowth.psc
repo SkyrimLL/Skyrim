@@ -222,6 +222,9 @@ Function Maintenance()
 		fctBodyShape.applyBodyShapeChanges(PlayerActor)
 	EndIf
 
+	; Poll pregnancy state on game load
+	updatePregnancyState(PlayerActor)
+
 	setHormonesState(PlayerActor)
 	; Debug.Notification("[Hormones] s:" + iSexCountToday + " - v:" + iVaginalCountToday + " - a:" + iAnalCountToday + " - o:" + iOralCountToday)
 
@@ -844,6 +847,9 @@ Event OnUpdate()
 			fctBodyShape.getShapeFromNodes(PlayerActor)
 			fctColor.getColorFromSkin(PlayerActor)
 		EndIf
+
+		; Poll pregnancy state once a day / after sleep
+		updatePregnancyState(PlayerActor)
 
 		; After midnight
 		applyHormonalChanges(PlayerActor)
@@ -2495,14 +2501,8 @@ function setHormonesSexualState(Actor kActor)
 		StorageUtil.SetIntValue(kActor, "_SLH_iLactating", 0)
 	endIf
 
-	if 	( fctUtil.isPregnantBySoulGemOven(kActor) || fctUtil.isPregnantBySimplePregnancy(kActor) || fctUtil.isPregnantByBeeingFemale(kActor) || fctUtil.isPregnantByEstrusChaurus(kActor) || ((StorageUtil.GetIntValue(kPlayer, "PSQ_SuccubusON") == 1) && (StorageUtil.GetIntValue(kPlayer, "PSQ_SoulGemPregnancyON") == 1)) )
-		StorageUtil.SetIntValue(kActor, "_SLH_isPregnant", 1)
-		GV_isPregnant.SetValue(1)
-
-	Else
-		StorageUtil.SetIntValue(kActor, "_SLH_isPregnant", 0)
-		GV_isPregnant.SetValue(0)
-	EndIf
+	; Pregnancy polling is expensive (checks several external mods) - refreshed by updatePregnancyState() on load and once a day after sleep
+	GV_isPregnant.SetValue(StorageUtil.GetIntValue(kActor, "_SLH_isPregnant"))
 
 	if 	(GV_isSuccubus.GetValue() == 1) || ((StorageUtil.GetIntValue(kPlayer, "PSQ_SuccubusON") == 1))
 		StorageUtil.SetIntValue(kActor, "_SLH_isSuccubus", 1)
@@ -2537,6 +2537,26 @@ function setHormonesSexualState(Actor kActor)
 
 	StorageUtil.SetIntValue(kActor, "_SLH_iShowStatus", GV_showStatus.GetValueInt() as Int) 
 
+endFunction
+
+function updatePregnancyState(Actor kActor)
+	Actor kPlayer = Game.GetPlayer()
+
+	fctUtil.checkGender(kActor)
+
+	if fctUtil.isMale(kActor)
+		StorageUtil.SetIntValue(kActor, "_SLH_isPregnant", 0)
+		GV_isPregnant.SetValue(0)
+		Return
+	endIf
+
+	if 	( fctUtil.isPregnantBySoulGemOven(kActor) || fctUtil.isPregnantBySimplePregnancy(kActor) || fctUtil.isPregnantByBeeingFemale(kActor) || fctUtil.isPregnantByEstrusChaurus(kActor) || ((StorageUtil.GetIntValue(kPlayer, "PSQ_SuccubusON") == 1) && (StorageUtil.GetIntValue(kPlayer, "PSQ_SoulGemPregnancyON") == 1)) )
+		StorageUtil.SetIntValue(kActor, "_SLH_isPregnant", 1)
+		GV_isPregnant.SetValue(1)
+	Else
+		StorageUtil.SetIntValue(kActor, "_SLH_isPregnant", 0)
+		GV_isPregnant.SetValue(0)
+	EndIf
 endFunction
 
 function getHormonesSexualState(Actor kActor)

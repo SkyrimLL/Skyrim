@@ -400,10 +400,12 @@ bool function isExternalChangeModActive(actor kActor)
 	Float fCurrentWeight
 	Actor kPlayer = Game.GetPlayer()
 
+	debugTrace(" == Check External Body Changes: " + kActor)
+
 	if kActor && kActor != none
 		ActorBase pActorBase = kActor.GetActorBase()
 		fCurrentWeight = pActorBase.GetWeight()
-		bIsPregnant = ( isPregnantBySoulGemOven(kActor) || isPregnantBySimplePregnancy(kActor) || isPregnantByBeeingFemale(kActor)  || isPregnantByFertilityMode(kActor) || isPregnantByEstrusChaurus(kActor))
+		bIsPregnant = (StorageUtil.GetIntValue(kActor, "_SLH_isPregnant") == 1)
 		bIsActorWeigth = ((fCurrentWeight!=StorageUtil.GetFloatValue(kActor, "_SLH_fWeight")) && (StorageUtil.GetFloatValue(kActor, "_SLH_fManualWeightChange") == -1))
 	endIf
 
@@ -412,14 +414,13 @@ bool function isExternalChangeModActive(actor kActor)
 
 	bIsExternalChanges = bIsPregnant || (GV_changeOverrideToggle.GetValue() == 0) || bIsActorWeigth
 
-	debugTrace(" == Check External Body Changes")
 	debugTrace(" bIsPregnant: " + bIsPregnant)
 	debugTrace(" GV_changeOverrideToggle.GetValue(): " + GV_changeOverrideToggle.GetValue())
 	debugTrace(" fCurrentWeight: " + fCurrentWeight)
 	debugTrace(" _SLH_fWeight: " + StorageUtil.GetFloatValue(kActor, "_SLH_fWeight"))
 	debugTrace(" _SLH_fManualWeightChange: " + StorageUtil.GetFloatValue(kActor, "_SLH_fManualWeightChange"))
 	debugTrace(" bIsActorWeigth: " + bIsActorWeigth)
-	debugTrace(" --> External change flag: " + bIsExternalChanges)
+	debugTrace(" ==> External change flag: " + bIsExternalChanges)
 
 	return bIsExternalChanges
 endFunction
