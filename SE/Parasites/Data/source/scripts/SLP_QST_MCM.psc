@@ -471,6 +471,10 @@ event OnPageReset(string a_page)
 		AddTextOption("    NiNodeOverride: " + StorageUtil.GetIntValue(none, "_SLH_NiNodeOverrideON") as Int, "", OPTION_FLAG_DISABLED)
 		AddTextOption("     SexLab Inflation Framework: " + StorageUtil.GetIntValue(none, "_SLH_SlifON")  as Int, "", OPTION_FLAG_DISABLED)
 
+		AddHeaderOption("$ Animation check")
+		AddTextOption("    Furo Tub  (ZAP): " + fctUtils.hasFuroTubAnimations(1) as Int, "", OPTION_FLAG_DISABLED)
+		AddTextOption("    Estrus Tentacles (Estrus): " + fctUtils.hasEstrusAnimations(1) as Int, "", OPTION_FLAG_DISABLED)
+
 		SetCursorPosition(1)
 		AddHeaderOption("$ Maintenance ")
 		AddToggleOptionST("STATE_REFRESH_ALL","$Refresh all equipped parasites", _toggleRefreshAll as Float)

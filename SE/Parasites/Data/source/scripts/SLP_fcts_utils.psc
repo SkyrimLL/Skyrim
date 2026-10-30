@@ -324,6 +324,56 @@ bool function isEstrusChaurusON()
 	endif
 endFunction
 
+; True when SexLab has at least one registered animation tagged 'Estrus' for the
+; given actor count. Estrus Chaurus aborts with a fatal thread error when none exist.
+Bool Function hasEstrusAnimations(Int iActorCount = 1)
+	If (SexLab == None)
+		Return False
+	EndIf
+
+	sslBaseAnimation[] anims = SexLab.GetAnimationsByTags(iActorCount, "Estrus")
+
+	Return (anims && anims.Length > 0)
+EndFunction
+
+; True when SexLab has at least one registered animation tagged 'Furo', i.e. the furo
+; tub monster animations registered by the Zaz Animation Pack.
+Bool Function hasFuroTubAnimations(Int iActorCount = 1)
+	If (SexLab == None)
+		Return False
+	EndIf
+
+	sslBaseAnimation[] anims = SexLab.GetAnimationsByTags(iActorCount, "Furo")
+
+	Return (anims && anims.Length > 0)
+EndFunction
+
+; Starts the ZAP furo tub SexLab animation on kActor, optionally aligned on kCenterOn.
+; Returns False when SexLab or the ZAP furo animations are unavailable, or when the actor
+; cannot take part in a SexLab scene - callers can then use their own fallback.
+Bool Function playFuroTubAnimation(Actor kActor, ObjectReference kCenterOn = None)
+	If (kActor == None) || (SexLab == None)
+		Return False
+	EndIf
+
+	sslBaseAnimation[] anims = SexLab.GetAnimationsByTags(1, "Furo")
+
+	If (!anims) || (anims.Length == 0)
+		Debug.Trace("[SLP] No SexLab animation registered with the 'Furo' tag - skipping furo tub animation")
+		Return False
+	EndIf
+
+	If (SexLab.ValidateActor(kActor) <= 0)
+		Debug.Trace("[SLP] Actor not ready - skipping furo tub animation")
+		Return False
+	EndIf
+
+	Actor[] sexActors = new Actor[1]
+	sexActors[0] = kActor
+
+	Return (SexLab.StartSex(sexActors, anims, Victim = kActor, CenterOn = kCenterOn, AllowBed = False) >= 0)
+EndFunction
+
 ;------------------------------------------------------------------------------
 function SLIF_inflate(Actor kActor, String sKey, float value, String NiOString)
 	int SLIF_event = ModEvent.Create("SLIF_inflate")

@@ -1473,7 +1473,7 @@ Endfunction
 Function ParasiteSex(Actor kActor, Actor kParasite)
 	If  (SexLab.ValidateActor( kActor ) > 0) &&  (SexLab.ValidateActor(kParasite) > 0) 
 
-		SexLab.QuickStart(kActor,  kParasite, AnimationTags = "Sex")
+		SexLab.QuickStart(kActor,  kParasite, AnimationTags = "Sex,Bestiality")
 	EndIf
 EndFunction
 

@@ -35,6 +35,38 @@ Keyword Function getDeviousKeywordByString(String deviousKeyword = ""  )
 EndFunction
 
 ;------------------------------------------------------------------------------
+; Sends the Estrus Chaurus "ECStartAnimation" event.
+; iAnimation: -1 = Impregnation only with No Animation, 0 = Tentacles, 1 = Machines, 2 = Slime, 3 = Ooze
+; Returns False when Estrus Chaurus is unavailable, or when an animation is requested
+; while SexLab has no registered animation tagged 'Estrus' (which would make the EC
+; thread fail with "Unable to find valid default animations").
+Bool Function _sendEstrusChaurusAnimation( Actor kActor, Int iAnimation )
+  	Actor PlayerActor = Game.GetPlayer()
+
+	If (iAnimation >= 0) && (!fctUtils.hasEstrusAnimations())
+		Debug.Trace("[SLP] No SexLab animation registered with the 'Estrus' tag - skipping Estrus Chaurus animation")
+		Return False
+	EndIf
+
+	Int ECTrap = ModEvent.Create("ECStartAnimation")  ; Int  Does not have to be named "ECTrap" any name would do
+
+	If (!ECTrap)
+		Return False
+	EndIf
+
+	ModEvent.PushForm(ECTrap, PlayerActor)  ; Form (Some SendModEvent scripting "black magic" - required)
+	ModEvent.PushForm(ECTrap, kActor)       ; Form The animation target
+	ModEvent.PushInt(ECTrap, iAnimation)    ; Int The animation required -1 = Impregnation only with No Animation,
+                                            ; 0 = Tentacles, 1 = Machines 2 = Slime 3 = Ooze
+	ModEvent.PushBool(ECTrap, true)         ; Bool Apply the linked EC effect (Ovipostion for Tentacles, Exhaustion for Machine)
+	ModEvent.PushInt(ECTrap, 500)           ; Int  Alarm radius in units (0 to disable)
+	ModEvent.PushBool(ECTrap, true)         ; Bool Use EC (basic) crowd control on hostiles
+	ModEvent.Send(ECTrap)
+
+	Return True
+EndFunction
+
+;------------------------------------------------------------------------------
 Bool Function infectEstrusTentacles( Actor kActor  )
   	Actor PlayerActor = Game.GetPlayer()
  
@@ -69,24 +101,12 @@ Bool Function infectEstrusTentacles( Actor kActor  )
 		Debug.Trace("[SLP]  Chance infection: " + StorageUtil.GetFloatValue(PlayerActor, "_SLP_chanceTentacleMonster" ))
 	EndIf
 
-	int ECTrap = ModEvent.Create("ECStartAnimation")  ; Int  Does not have to be named "ECTrap" any name would do
-
-	if (ECTrap) 
-	    ModEvent.PushForm(ECTrap, PlayerActor)             ; Form (Some SendModEvent scripting "black magic" - required)
-	    ModEvent.PushForm(ECTrap, kActor)  ; Form The animation target
-	    ModEvent.PushInt(ECTrap, 0)    			; Int The animation required -1 = Impregnation only with No Animation,
-                                                ; 0 = Tentacles, 1 = Machines 2 = Slime 3 = Ooze
-	    ModEvent.PushBool(ECTrap, true)         ; Bool Apply the linked EC effect (Ovipostion for Tentacles, Exhaustion for Machine) 
-	    ModEvent.Pushint(ECTrap, 500)           ; Int  Alarm radius in units (0 to disable) 
-	    ModEvent.PushBool(ECTrap, true)         ; Bool Use EC (basic) crowd control on hostiles 
-	    ModEvent.Send(ECtrap)
-
+	if (_sendEstrusChaurusAnimation( kActor, 0 ))
 		Debug.Trace("[SLP] Estrus Chaurus Tentacles infection sent")
 	else
 		triggerFuroTub( PlayerActor, "")
 
-
-		Debug.Trace("[SLP] Estrus Chaurus Tentacles infection failed")
+		Debug.Trace("[SLP] Estrus Chaurus Tentacles infection failed - Furo tub fallback used")
 	endif
 
 	Return applyEstrusTentacles( kActor  )
@@ -157,23 +177,12 @@ Bool Function infectEstrusSlime( Actor kActor  )
 		Debug.Trace("[SLP]  Chance infection: " + StorageUtil.GetFloatValue(PlayerActor, "_SLP_chanceLivingArmor" ))
 	EndIf
 
-	int ECTrap = ModEvent.Create("ECStartAnimation")  ; Int  Does not have to be named "ECTrap" any name would do
-
-	if (ECTrap) 
-	    ModEvent.PushForm(ECTrap, PlayerActor)             ; Form (Some SendModEvent scripting "black magic" - required)
-	    ModEvent.PushForm(ECTrap, kActor)  ; Form The animation target
-	    ModEvent.PushInt(ECTrap, Utility.randomInt(2,3))    	; Int The animation required -1 = Impregnation only with No Animation,
-                                                ; 0 = Tentacles, 1 = Machines 2 = Slime 3 = Ooze
-	    ModEvent.PushBool(ECTrap, true)         ; Bool Apply the linked EC effect (Ovipostion for Tentacles, Exhaustion for Machine) 
-	    ModEvent.Pushint(ECTrap, 500)           ; Int  Alarm radius in units (0 to disable) 
-	    ModEvent.PushBool(ECTrap, true)         ; Bool Use EC (basic) crowd control on hostiles 
-	    ModEvent.Send(ECtrap)
-
+	if (_sendEstrusChaurusAnimation( kActor, Utility.randomInt(2,3) ))
 		Debug.Trace("[SLP] Estrus Slime infection sent")
 	else
 		triggerFuroTub( PlayerActor, "")
 
-		Debug.Trace("[SLP] Estrus Slime infection failed")
+		Debug.Trace("[SLP] Estrus Slime infection failed - Furo tub fallback used")
 	endif
 
 	Return applyEstrusSlime( kActor  )
@@ -231,21 +240,10 @@ Bool Function infectEstrusChaurusEgg( Actor kActor )
 	;	Return
 	; Endif
 
-	int ECTrap = ModEvent.Create("ECStartAnimation")  ; Int  Does not have to be named "ECTrap" any name would do
-
-	if (ECTrap) 
-	    ModEvent.PushForm(ECTrap,PlayerActor)             ; Form (Some SendModEvent scripting "black magic" - required)
-	    ModEvent.PushForm(ECTrap, kActor)  ; Form The animation target
-	    ModEvent.PushInt(ECTrap, iAnimation)    	; Int The animation required -1 = Impregnation only with No Animation,
-                                                ; 0 = Tentacles, 1 = Machines 2 = Slime 3 = Ooze
-	    ModEvent.PushBool(ECTrap, true)         ; Bool Apply the linked EC effect (Ovipostion for Tentacles, Exhaustion for Machine) 
-	    ModEvent.Pushint(ECTrap, 500)           ; Int  Alarm radius in units (0 to disable) 
-	    ModEvent.PushBool(ECTrap, true)         ; Bool Use EC (basic) crowd control on hostiles 
-	    ModEvent.Send(ECtrap)
-
+	if (_sendEstrusChaurusAnimation( kActor, iAnimation ))
 		Debug.Trace("[SLP] Estrus Chaurus Egg infection sent")
 	Else
-		Debug.Trace("[SLP] Estrus Chaurus Egg infection failed")
+		Debug.Trace("[SLP] Estrus Chaurus Egg infection failed - Furo tub fallback used")
 		triggerFuroTub( PlayerActor, "")
 	endif
 
@@ -271,21 +269,10 @@ Bool Function infectEstrusChaurusEggSilent( Actor kActor )
 	;	Return
 	; Endif
 
-	int ECTrap = ModEvent.Create("ECStartAnimation")  ; Int  Does not have to be named "ECTrap" any name would do
-
-	if (ECTrap) 
-	    ModEvent.PushForm(ECTrap,PlayerActor)             ; Form (Some SendModEvent scripting "black magic" - required)
-	    ModEvent.PushForm(ECTrap, kActor)  ; Form The animation target
-	    ModEvent.PushInt(ECTrap, iAnimation)    	; Int The animation required -1 = Impregnation only with No Animation,
-                                                ; 0 = Tentacles, 1 = Machines 2 = Slime 3 = Ooze
-	    ModEvent.PushBool(ECTrap, true)         ; Bool Apply the linked EC effect (Ovipostion for Tentacles, Exhaustion for Machine) 
-	    ModEvent.Pushint(ECTrap, 500)           ; Int  Alarm radius in units (0 to disable) 
-	    ModEvent.PushBool(ECTrap, true)         ; Bool Use EC (basic) crowd control on hostiles 
-	    ModEvent.Send(ECtrap)
-
+	if (_sendEstrusChaurusAnimation( kActor, iAnimation ))
 		Debug.Trace("[SLP] Estrus Chaurus Silent Egg infection sent")
 	Else
-		Debug.Trace("[SLP] Estrus Chaurus Silent Egg infection failed")
+		Debug.Trace("[SLP] Estrus Chaurus Silent Egg infection failed - Furo tub fallback used")
 		triggerFuroTub( PlayerActor, "")
 	endif
 
@@ -384,10 +371,10 @@ Function triggerEstrusChaurusBirth( Actor kActor, String  sParasite, Int iBirthI
 		else
 			Debug.Trace("[SLP] 		Fallback animation")
 		    ;EC is not installed
-            Debug.SendAnimationEvent(PlayerRef, "bleedOutStart")
+            Debug.SendAnimationEvent(kActor, "bleedOutStart")
             utility.wait(4)
-            Debug.SendAnimationEvent(PlayerRef, "IdleForceDefaultState")
-		    PlayerRef.PlaceAtMe(fBirthItem, iBirthItemCount)
+            Debug.SendAnimationEvent(kActor, "IdleForceDefaultState")
+		    kActor.PlaceAtMe(fBirthItem, iBirthItemCount)
 		endIf
 		;
 		;   **NB** The birth event will not fire if the actor is already infected with the Chaurus Parasite effect
@@ -398,21 +385,28 @@ Function triggerEstrusChaurusBirth( Actor kActor, String  sParasite, Int iBirthI
 EndFunction
 
 ;------------------------------------------------------------------------------
+; Plays the ZAP furo tub scene on kActor, using the SexLab animation registered by the
+; Zaz Animation Pack. Falls back to the furo tub AI package when that animation is not
+; registered (ZAP missing or its SexLab registration disabled).
 Function triggerFuroTub( Actor kActor, String  sParasite)
   	Actor PlayerActor = Game.GetPlayer()
-  	Form fBirthItem = None
 
   	if (kActor == None)
   		kActor = PlayerActor
   	endIf
 
-	_SLP_GV_ZAPFuroTubOn.SetValue(1)
-	 
-	PlayerActor.EvaluatePackage()
+	If (fctUtils.playFuroTubAnimation( kActor ))
+		Debug.Trace("[SLP] ZAP furo tub SexLab animation started")
+		Return
+	EndIf
 
-	Utility.Wait(10.0)
+	Debug.Trace("[SLP] ZAP furo tub SexLab animation unavailable - make sure to register ZAP animations with SexLab")
 
-	_SLP_GV_ZAPFuroTubOn.SetValue(0)
+	; Debug.Trace("[SLP] ZAP furo tub SexLab animation unavailable - using furo tub package")
+	; _SLP_GV_ZAPFuroTubOn.SetValue(1)
+	; kActor.EvaluatePackage()
+	; Utility.Wait(10.0)
+	;_SLP_GV_ZAPFuroTubOn.SetValue(0)
 
 EndFunction
 

@@ -134,6 +134,17 @@ Event OnSleepStart(float afSleepStartTime, float afDesiredSleepEndTime)
 	Else
 		Debug.Trace("[_sdras_dreamer]    Dreamworld auto start" )
 
+		; Abort immediately if the player is arrested, jailed, enslaved, or sleeping
+		; during a quest that blocks Dreamworld (e.g. Dark Brotherhood abduction),
+		; before running any of the expensive location/stat checks below.
+		; Location is re-read here because sleep can trigger a cell transition
+		; (e.g. an abduction) before this event finishes processing.
+		kLocation = kPlayer.GetCurrentLocation()
+		If ((dbe.pSleepyTime == 1) || (kPlayer.IsArrested() == True) || (StorageUtil.GetIntValue(kPlayer, "xpoPCinJail")==1) || (_SDGVP_enslaved.GetValueInt() == 1))
+			Debug.Trace("[_sdras_dreamer]         OnSleep event aborted (quest blocking, enslaved or arrested)" )
+			Return
+		EndIf
+
 		; After Night to remember quest (100% chance)
 		If  (!bSendToDreamworld) && (ANightQuest.IsCompleted())   
 			Debug.Trace("[_sdras_dreamer]         Sleep after A Night to Remember" )
@@ -261,12 +272,6 @@ Event OnSleepStart(float afSleepStartTime, float afDesiredSleepEndTime)
 				iDreamworldVisitModifier = iDreamworldVisitModifier + 10
 				bSendToDreamworld = True
 			endif
-		EndIf
-
-		; Abort dreamworld if player is arrested or sleeping during Dark Brotherhood quest
-		if (bSendToDreamworld &&  ((dbe.pSleepyTime == 1)  || (kPlayer.IsArrested() == True) || (StorageUtil.GetIntValue(kPlayer, "xpoPCinJail")==1) || (_SDGVP_enslaved.GetValueInt() == 1)) )
-			Debug.Trace("[_sdras_dreamer]         OnSleep event aborted (quest blocking, enslaved or arrested)" )
-			bSendToDreamworld = False
 		EndIf
 
 		If (kLocation)
